@@ -27,7 +27,7 @@ export function HeaderComponent(){
                     <div className="navBar">
                         <nav>
                             <ul>
-                                <li><a href="http://24.152.37.228/bancadeleads.php">Banca de Leads</a></li>
+                                <li><a href="https://moplanseguros.com.br/bancadeleads.php">Banca de Leads</a></li>
                             </ul>
                         </nav>
 

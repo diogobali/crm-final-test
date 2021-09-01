@@ -51,7 +51,7 @@ export function Crm(){
 
     const getProdutos= async () => {
 
-        fetch("http://24.152.37.228/index.php", optionsForm)
+        fetch("https://moplanseguros.com.br/index.php", optionsForm)
         .then((response) => response.json())
         .then((responseJson) => (
             setData(Object.values(responseJson))

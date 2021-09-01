@@ -81,7 +81,7 @@ const ModalSendAdm = () => {
         form_data.append('leadId', itemId);
         form_data.append('fileName', fileName);
 
-        fetch('http://24.152.37.228/attachdocuments.php', {
+        fetch('https://moplanseguros.com.br/attachdocuments.php', {
             method: "POST",
             body: form_data
         }).then(function(response){
@@ -97,7 +97,7 @@ const ModalSendAdm = () => {
         const form_data = new FormData();
         form_data.append('leadId', itemId);
 
-        fetch('http://24.152.37.228/attachdocuments.php', {
+        fetch('https://moplanseguros.com.br/attachdocuments.php', {
             method: "POST",
             body: form_data
         }).then(function(response){

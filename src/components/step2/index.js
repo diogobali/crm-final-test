@@ -93,7 +93,7 @@ const Step2 = ({ nextStep, itemId }) => {
                 comp: formInfo.comp,
             })
         };
-        fetch('http://24.152.37.228/setleadinfo.php', optionsForm)
+        fetch('https://moplanseguros.com.br/setleadinfo.php', optionsForm)
         .then(function(response) {
         })
 

@@ -21,7 +21,7 @@ const ModalDeclined = () => {
                 leadId: lead,
             })
         };
-        fetch('http://24.152.37.228/declinelead.php', optionsForm)
+        fetch('https://moplanseguros.com.br/declinelead.php', optionsForm)
         .then(function(response) {
         })
 

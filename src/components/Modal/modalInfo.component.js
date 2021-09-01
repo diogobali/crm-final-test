@@ -31,7 +31,7 @@ const ModalInfo = () => {
 
     async function fetchApi () {
         if(!infos.id && counterCalls === 0) {
-            const response = await fetch("http://24.152.37.228/getleadinfo.php", optionsForm)
+            const response = await fetch("https://moplanseguros.com.br/getleadinfo.php", optionsForm)
             const json = await response.json();
             
             setInfos(json);
