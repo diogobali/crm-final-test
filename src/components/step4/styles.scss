@@ -1,0 +1,68 @@
+.companyInfos{
+    display:flex;
+    flex-wrap:row;
+    flex-direction: column;
+    flex:1;
+    max-width: 100%  ;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2em;
+    max-height:100%;
+
+}
+
+
+.companyInfos > div {
+    display:flex;
+    justify-content: space-between;
+    width:100%;
+    box-shadow: none !important;
+}
+
+.companyMain {
+    display:flex;
+    flex-direction: column;
+    overflow: none;
+    height: auto;
+}
+
+.modal{
+    overflow:scroll !important;
+
+}
+
+.container{
+    height: auto !important;
+}
+
+.button-remove-company{
+    display:flex;
+    justify-content: space-between;
+    
+    button{
+        
+        border:none;
+        margin-bottom: 12px;
+        padding: 10px;
+        background: none;
+
+        img{
+            width: 30px;
+        }
+    }
+
+}
+
+.button-add-company{
+    display:flex;
+    justify-content: space-between;
+
+    button{
+        background: none;
+        border:none;
+
+        img{
+            width: 25px;
+        }
+    }
+}

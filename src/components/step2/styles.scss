@@ -1,0 +1,163 @@
+.step1, .step2, .step3{
+    display:block;
+
+    .title{
+        justify-content: center;
+        width:100%;
+    }
+
+    input {
+        width: 250px;
+        padding: 0.5em;
+        border-radius: 2px;
+        border: 1px solid #ccc;
+        
+    }
+    select {
+        width: 250px;
+        padding: 0.5em;
+        border-radius: 2px;
+        border: 1px solid #ccc;
+    }
+    div:not(:last-child) {
+        box-shadow: 0px 1px rgba(0,0,0, 0.05);
+    }
+}
+
+.step1 > div, .step2 > div, .step3 > div{
+    display:flex;
+    justify-content: space-between;
+    width:100%;
+    padding-bottom: 25px;
+    margin-bottom: 10px;
+    text-align:center;
+
+}
+
+form > div:not(:last-child) {
+    box-shadow: 0px 1px rgba(0,0,0, 0.05);
+}
+
+.content--idades--in{
+    display:flex;
+    gap: 1em;
+
+    input {
+        width: 45px !important;
+        padding: 0.2em;
+    }
+
+    margin-bottom: 15px;
+    margin-top: 10px;
+    > div {
+        display:block;
+    }
+}
+
+.content--idades{
+    display:block !important;
+}
+
+
+.step2{
+    display:none;
+}
+.step3{
+    display:none;
+}
+
+
+form{
+    display:block;
+
+    .title{
+        justify-content: center;
+        width:100%;
+    }
+
+    input {
+        width: 250px;
+        padding: 0.5em;
+        border-radius: 2px;
+        border: 1px solid #ccc;
+        
+    }
+    select {
+        width: 250px;
+        padding: 0.5em;
+        border-radius: 2px;
+        border: 1px solid #ccc;
+    }
+    div:not(:last-child) {
+        box-shadow: 0px 1px rgba(0,0,0, 0.05);
+    }
+}
+
+form > div{
+    display:flex;
+    justify-content: space-between;
+    width:100%;
+    padding-bottom: 25px;
+    margin-bottom: 10px;
+    text-align:center;
+}
+
+.button-add-company{
+    display:flex;
+    justify-content: space-between;
+
+    button{
+        background: none;
+        border:none;
+
+        img{
+            width: 25px;
+        }
+    }
+}
+
+.button-remove-company{
+    display:flex;
+    justify-content: space-between;
+    
+    button{
+        
+        border:none;
+        margin-bottom: 12px;
+        padding: 10px;
+        background: none;
+
+        img{
+            width: 30px;
+        }
+    }
+
+}
+
+.companyInfos{
+    display:flex;
+    flex-wrap:row;
+    flex-direction: column;
+    flex:1;
+    max-width: 100%  ;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2em;
+    max-height:100%;
+
+}
+
+
+.companyInfos > div {
+    display:flex;
+    justify-content: space-between;
+    width:100%;
+    box-shadow: none !important;
+}
+
+.companyMain {
+    display:flex;
+    flex-direction: column;
+    overflow: none;
+    height: auto;
+}
