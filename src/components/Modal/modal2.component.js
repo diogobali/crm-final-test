@@ -39,7 +39,7 @@ const Modal2 = () => {
                 primeiroretorno: formInfo.primeiroretorno,
             })
         };
-        fetch('http://localhost/recieveform_orcamento.php', optionsForm)
+        fetch('http://24.152.37.228/recieveform_orcamento.php', optionsForm)
         .then(function(response) {
         })
 

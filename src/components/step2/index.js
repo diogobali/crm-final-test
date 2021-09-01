@@ -93,7 +93,7 @@ const Step2 = ({ nextStep, itemId }) => {
                 comp: formInfo.comp,
             })
         };
-        fetch('http://localhost/setleadinfo.php', optionsForm)
+        fetch('http://24.152.37.228/setleadinfo.php', optionsForm)
         .then(function(response) {
         })
 
@@ -157,7 +157,7 @@ const Step2 = ({ nextStep, itemId }) => {
     return(
             <div className="modal">
                 <div className="container">
-                <form action="http://localhost/setleadinfo.php" method="post">
+                <form action="http://24.152.37.228/setleadinfo.php" method="post">
                     <div className="step1">
                     <div className="title">
                         <h1>Coleta de Informações</h1>

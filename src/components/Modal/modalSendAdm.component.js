@@ -81,7 +81,7 @@ const ModalSendAdm = () => {
         form_data.append('leadId', itemId);
         form_data.append('fileName', fileName);
 
-        fetch('http://localhost/attachdocuments.php', {
+        fetch('http://24.152.37.228/attachdocuments.php', {
             method: "POST",
             body: form_data
         }).then(function(response){
@@ -97,7 +97,7 @@ const ModalSendAdm = () => {
         const form_data = new FormData();
         form_data.append('leadId', itemId);
 
-        fetch('http://localhost/attachdocuments.php', {
+        fetch('http://24.152.37.228/attachdocuments.php', {
             method: "POST",
             body: form_data
         }).then(function(response){
@@ -122,7 +122,7 @@ const ModalSendAdm = () => {
                         <h1>Anexar Documentação</h1>
                     </div>
                     <div className="content">
-                        <form method="post" action="http://localhost/attachdocuments.php" enctype="multipart/form-data">
+                        <form method="post" action="http://24.152.37.228/attachdocuments.php" enctype="multipart/form-data">
                         <div id="msg" className="msg">
 
                         </div>

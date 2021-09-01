@@ -27,7 +27,7 @@ export default function Login(){
         
 
         e.preventDefault();
-        fetch("http://localhost/login/login.php", optionsForm)
+        fetch("http://24.152.37.228/login/login.php", optionsForm)
         .then((response) => response.json())
         .then((responseJson) => {
             setUserData(Object.values(responseJson));

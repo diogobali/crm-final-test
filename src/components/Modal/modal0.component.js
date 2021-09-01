@@ -26,7 +26,7 @@ const Modal0 = () => {
                 leadId: lead,
             })
         };
-        fetch('http://localhost/recieveform.php', optionsForm)
+        fetch('http://24.152.37.228/recieveform.php', optionsForm)
         .then(function(response) {
         })
 

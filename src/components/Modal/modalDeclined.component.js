@@ -21,7 +21,7 @@ const ModalDeclined = () => {
                 leadId: lead,
             })
         };
-        fetch('http://localhost/declinelead.php', optionsForm)
+        fetch('http://24.152.37.228/declinelead.php', optionsForm)
         .then(function(response) {
         })
 

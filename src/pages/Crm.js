@@ -25,7 +25,7 @@ import SaveFormProvider, { SaveFormContext } from '../contexts/SaveFormContext';
 
 import { useUserContext } from '../contexts/userContext';
 
-import { useHistory } from 'react-router-dom';
+
 
 
 
@@ -33,7 +33,6 @@ import { useHistory } from 'react-router-dom';
 
 
 export function Crm(){
-    let history = useHistory();
     const { userData, setUserData } = useUserContext();
 
 
@@ -52,7 +51,7 @@ export function Crm(){
 
     const getProdutos= async () => {
 
-        fetch("http://localhost/index.php", optionsForm)
+        fetch("http://24.152.37.228/index.php", optionsForm)
         .then((response) => response.json())
         .then((responseJson) => (
             setData(Object.values(responseJson))
