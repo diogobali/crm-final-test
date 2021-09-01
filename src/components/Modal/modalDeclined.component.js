@@ -23,7 +23,6 @@ const ModalDeclined = () => {
         };
         fetch('http://localhost/declinelead.php', optionsForm)
         .then(function(response) {
-            console.log(response)
         })
 
     }

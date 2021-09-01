@@ -37,11 +37,10 @@ const ModalInfo = () => {
             setInfos(json);
             setCounterCalls(counterCalls + 1);
         }
-        console.log(infos)
-        console.log('fui chamado ' + counterCalls)
     }
 
     if(!infos.id && counterCalls === 0) fetchApi();
+
 
     if(!visible) return null;
     return( 

@@ -25,7 +25,6 @@ const Modal3 = () => {
 
     const sendForm = (e) => {
         const lead = document.querySelector('.lead3').value
-        console.log(lead)
         const optionsForm = {
             method: 'POST',
             body: JSON.stringify({  
@@ -41,7 +40,6 @@ const Modal3 = () => {
         };
         fetch('http://localhost/recieveform_orcamento.php', optionsForm)
         .then(function(response) {
-            console.log(response)
         })
 
     }

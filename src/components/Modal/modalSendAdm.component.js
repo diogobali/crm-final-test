@@ -89,13 +89,11 @@ const ModalSendAdm = () => {
         }).then(response => response.json())
         .then(response => {
             setResponseApi(response);
-            console.log(responseApi);
         });
     }
 
 
     const load_image = () => {
-        console.log("entrou")
         const form_data = new FormData();
         form_data.append('leadId', itemId);
 
@@ -107,12 +105,10 @@ const ModalSendAdm = () => {
         }).then(response => response.json())
         .then(response => {
             setResponseApi(response);
-            console.log(responseApi);
         });
     }
     useEffect(() => {
         load_image() 
-        console.log(responseApi) 
     }, [itemId]);
 
 

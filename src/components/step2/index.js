@@ -8,7 +8,6 @@ import './styles.scss';
 
 const Step2 = ({ nextStep, itemId }) => {
 
-    console.log(itemId);
 
     function refreshPage(){
         window.location.reload();   
@@ -96,7 +95,6 @@ const Step2 = ({ nextStep, itemId }) => {
         };
         fetch('http://localhost/setleadinfo.php', optionsForm)
         .then(function(response) {
-            console.log(response)
         })
 
     }
@@ -137,13 +135,11 @@ const Step2 = ({ nextStep, itemId }) => {
 
     function sendForm(e){
         e.preventDefault();
-        console.log(comp);
 
         
     }
 
     const tellId = (id, value) => {
-        console.log(comp)
         const teste = comp.map(x => {
             if(x.id == id){
                 return{
@@ -154,9 +150,7 @@ const Step2 = ({ nextStep, itemId }) => {
             }
             return x;
         });
-        console.log(teste);
-        console.log(id)
-        console.log(value)
+
     }
 
 

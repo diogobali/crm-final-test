@@ -18,7 +18,6 @@ const Modal0 = () => {
 
     const sendForm = (e) => {
         const lead = document.querySelector('.lead').value
-        console.log(lead)
         const optionsForm = {
             method: 'POST',
             body: JSON.stringify({
@@ -29,7 +28,6 @@ const Modal0 = () => {
         };
         fetch('http://localhost/recieveform.php', optionsForm)
         .then(function(response) {
-            console.log(response)
         })
 
     }

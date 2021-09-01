@@ -18,8 +18,6 @@ export default function Board(props){
 
     const data2 = props.dadosleads
 
-    console.log(data2);
-
     const [lists, setLists] = useState(Object.values(data2));
 
     useEffect(() => {
