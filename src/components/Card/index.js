@@ -15,9 +15,17 @@ import { useModalContext4 } from '../Modal/modal4.context';
 import { useModalContextInfo } from '../Modal/modalInfo.context';
 import { useModalContextDeclined } from '../Modal/modalDeclined.context';
 import { useModalContextSendAdm } from '../Modal/modalSendAdm.context';
+import { useModalContextReproveAdm } from '../Modal/modalReproveAdm.context';
+import { useModalContextRegularizarAction} from '../Modal/modalRegularizarAction.context';
 
 
-export default function Card({ data, index, listIndex, button, status, sendAdm, key, className }){
+import { useUserContext } from '../../contexts/userContext';
+
+
+export default function Card({ data, index, listIndex, button, status, sendAdm, key, className, isAdmAction, isRegularizarAction }){
+
+    const { userData, setUserData } = useUserContext();
+
 
     const ref = useRef();
     const{ move } = useContext(BoardContext);
@@ -48,6 +56,12 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
 
         const { openModalSendAdm } = useModalContextSendAdm();
         const openModalSendAdms = (itemId) => openModalSendAdm({ message: 'Send Adm', itemId: itemId});
+
+        const { openModalReproveAdm } = useModalContextReproveAdm();
+        const openModalReproveAdms = (itemId) => openModalReproveAdm({ message: 'Reprove Adm', itemId: itemId});
+
+        const { openModalRegularizarAction } = useModalContextRegularizarAction();
+        const openModalRegularizarActions = (itemId, status) => openModalRegularizarAction({ message: 'Regularizar Pendencias', itemId: itemId, status: status});
 
 
 
@@ -120,7 +134,12 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 }
 
                 if(targetListIndex == 8){
-                    openModalDeclineds(itemId);
+                    if(userData.perfil == 0){
+                        openModalDeclineds(itemId);
+                    } else {
+                        alert("Apenas vendedores podem declinar leads");
+                        return;                        
+                    }
                 }
             }
             if(item.status != 0 || item.status > 1){
@@ -138,28 +157,67 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             }
 
             if(targetListIndex == 1){
-               openModalZero(itemId);
-               console.log(item.status)
+                if(userData.perfil == 0){
+                    openModalZero(itemId);
+                } else {
+                    alert("Apenas vendedores podem criar um agendamento.");
+                    return;
+                }
             }
 
             if(targetListIndex == 2){
-                console.log("From: " + fromListIndex);
-               openModalUm(itemId);
+                if(userData.perfil == 0){
+                   openModalUm(itemId);
+                } else {
+                    alert("Apenas vendedores podem coletar informações");
+                    return;
+                }
             }
 
             if(targetListIndex == 3){
-                openModalDois(itemId);
+                if(userData.perfil == 0){
+                    openModalDois(itemId);
+                } else {
+                    alert("Apenas vendedores podem enviar orçamentos");
+                    return;
+                }
             }
 
             if(targetListIndex == 4){
-                openModalQuatro(itemId);
+                if(userData.perfil == 0){
+                    openModalQuatro(itemId);
+                } else {
+                    alert("Apenas vendedores podem aprovar orçamentos");
+                    return;
+                }
             }
 
-            if(targetListIndex > 4 && targetListIndex < 8){
-                alert("Coluna disponível apenas para o administrativo.")
-                return;
+
+            if(targetListIndex == 5){
+                if(userData.perfil == 2){
+                    // openModalCinco(itemId);
+                } else {
+                    alert("Apenas o administrativo pode usar essa coluna");
+                    return;
+                }
             }
 
+            if(targetListIndex == 6){
+                if(userData.perfil == 2){
+                    // openModalSeis(itemId);
+                } else {
+                    alert("Apenas o administrativo pode usar essa coluna");
+                    return;
+                }
+            }
+            if(targetListIndex == 7){
+                if(userData.perfil == 2){
+                    // openModalSete(itemId);
+                } else {
+                    alert("Apenas o administrativo pode usar essa coluna");
+                    return;
+                }
+            }
          }
         })
 
@@ -187,7 +245,33 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             }
 
             {sendAdm &&
-                <button type="button" className="btn-sendAdm" onClick={() => openModalSendAdms(data.id)}>Enviar</button>
+                <button type="button" className="btn-sendAdm" onClick={() => openModalSendAdms(data.id)}>Enviar para ADM</button>
+            }
+
+            {isAdmAction &&
+                <>
+                <div className="buttonsAdm">
+                    <button
+                        type="button"
+                    >Aprovar</button>
+                    <button
+                        type="button"
+                        onClick={() => openModalReproveAdms(data.id)}
+                    >Recusar</button>
+                </div>
+                </>
+            }
+
+            {isRegularizarAction &&
+                <>
+                <div className="buttonsAdm">
+                    <button
+                        type="button"
+                        onClick={() => openModalRegularizarActions(data.id, data.status)}
+                    >Regularizar</button>
+                </div>
+
+                </>
             }
 
             

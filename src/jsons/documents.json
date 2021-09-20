@@ -1,0 +1,27 @@
+[
+    {
+        "label": "CNH",
+        "name": "CNH",
+        "id": "1"
+    },
+    {
+        "label": "RG",
+        "name": "RG",
+        "id": "2"
+    },
+    {
+        "label": "Comprovante de Residencia",
+        "name": "RES",
+        "id": "3"
+    },
+    {
+        "label": "Certidão de Casamento",
+        "name": "CERT.CAS",
+        "id": "4"
+    },
+    {
+        "label": "Certidão de Nascimento",
+        "name": "CERT.NASC",
+        "id": "5"
+    }
+]

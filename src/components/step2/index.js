@@ -1,16 +1,128 @@
-import React, { createContext, useState, useContext, useCallback } from 'react'
-
+import { exit } from 'process';
+import React, { createContext, useState, useContext, useCallback, useEffect } from 'react'
+import CurrencyFormat from 'react-currency-format';
+import * as yup from 'yup';
 
 import './styles.scss';
 // import nextStep from '../Signup';
+let validateForm1 = yup.object().shape({
+    selectedType: yup
+        .string()
+        .required("Selecione uma opção em tipo de contrato"),
+    titularId: yup
+        .string()
+        .when('selectedType', {
+            is: (selectedType) => selectedType == 'adesao',
+            then: yup
+                .string()
+                .min(11)
+                .required("Informe o CPF do titular")
+        })
+        .when('selectedType', {
+            is: (selectedType) => selectedType == 'empresarial',
+            then: yup
+                .string()
+                .min(14)
+                .required("Informe o CNPJ do titular")
+        }),    
+    firstAge: yup
+        .string()
+        .required("Preencha o campo vidas de 0 a 18 anos"),
+    secondAge: yup
+        .string()
+        .required("Preencha o campo vidas de 19 a 23 anos"),
+    thirdAge: yup
+        .string()
+        .required("Preencha o campo vidas de 24 a 28 anos"),
+    fourthAge: yup
+        .string()
+        .required("Preencha o campo vidas de 29 a 33 anos"),
+    fifthAge: yup
+        .string()
+        .required("Preencha o campo vidas de 34 a 38 anos"),
+    sixthAge: yup
+        .string()
+        .required("Preencha o campo vidas de 39 a 43 anos"),
+    seventhAge: yup
+        .string()
+        .required("Preencha o campo vidas de 44 a 48 anos"),
+    eighthAge: yup
+        .string()
+        .required("Preencha o campo vidas de 49 a 53 anos"),
+    ninethAge: yup
+        .string()
+        .required("Preencha o campo vidas de 54 a 58 anos"),
+    tenthAge: yup
+        .string()
+        .required("Preencha o campo vidas acima de 59 anos"),
+    zone: yup
+        .string()
+        .required("Preencha o campo bairro ou zona"),
+    hospitals: yup
+        .string()
+        .required("Preencha o campo hospitais de preferência"),
+    labs: yup
+        .string()
+        .required("Preencha o campo laboratórios de preferência"),
+    illness: yup
+        .string()
+        .required("Preencha o campo doença pre-existente"),
+});
+
+let validateForm2 = yup.object().shape({
+    previousPlan: yup
+        .string()
+        .required("Selecione uma opção em plano anterior"),
+    operator: yup
+        .string()
+        .when('previousPlan', {
+            is: (previousPlan) => previousPlan == 'true',
+            then: yup
+                .string()
+                .required("Preencha o campo operadora")
+        }),
+    plan: yup
+        .string()
+        .when('previousPlan', {
+            is: (previousPlan) => previousPlan == 'true',
+            then: yup
+                .string()
+                .required("Preencha o campo plano")
+        }),
+    value: yup
+        .string()
+        .when('previousPlan', {
+            is: (previousPlan) => previousPlan == 'true',
+            then: yup
+                .string()
+                .required("Preencha o campo valor")
+        }),
+    time: yup
+        .string()
+        .when('previousPlan', {
+            is: (previousPlan) => previousPlan == 'true',
+            then: yup
+                .string()
+                .required("Preencha o campo tempo")
+        }),
+    
+});
 
 
+
+
+let validateForm3 = yup.object().shape({
+    comp: yup
+        .string()
+        .required("Selecione uma opção em CNPJ Coligado")
+    
+});
 
 const Step2 = ({ nextStep, itemId }) => {
 
 
     function refreshPage(){
-        window.location.reload();   
+        window.location.reload();
     } 
 
     function Previous1(){
@@ -23,24 +135,47 @@ const Step2 = ({ nextStep, itemId }) => {
         document.querySelector('.step2').style.display = 'block';
     }
 
-    function Continue1(){
+    const Continue1 = async () => {
+        console.log(formInfo)
+
+        try {
+            await validateForm1.validate(formInfo);
+            console.log("Deu bom");
+        } catch (err) {
+            console.log(err);
+            alert(err);
+            return;
+        }
+        
+
         document.querySelector('.step1').style.display = 'none';
         document.querySelector('.step2').style.display = 'block';
     }
 
-    function Continue2(){
+    const Continue2 = async () => {
+
+        console.log(formInfo)
+
+        try {
+            await validateForm2.validate(formInfo);
+            console.log("Deu bom");
+        } catch (err) {
+            console.log(err);
+            alert(err);
+            return;
+        }
+
+
         document.querySelector('.step2').style.display = 'none';
         document.querySelector('.step3').style.display = 'block';
     }
 
     const valorInput = e => setFormInfo({ ...formInfo, [e.target.name]: e.target.value })
 
-
-
     const [formInfo, setFormInfo] = useState({
         leadId: itemId,
+        titularId: '',
         selectedType: '',
-        totalAge: '',
         firstAge: '',
         secondAge: '',
         thirdAge: '',
@@ -60,17 +195,20 @@ const Step2 = ({ nextStep, itemId }) => {
         plan: '',
         value: '',
         time: '',
-        comp: '',
+        isComp: '',
 
     });
 
     const sendFormx = (e) => {
+        e.preventDefault();
         const optionsForm = {
             method: 'POST',
             body: JSON.stringify({
                 leadId: formInfo.leadId,
+                titularId: formInfo.titularId,
                 selectedType: formInfo.selectedType,
-                totalAge: formInfo.totalAge,
+                parentes: parentes,
+                titulares: titulares,
                 firstAge: formInfo.firstAge,
                 secondAge: formInfo.secondAge,
                 thirdAge: formInfo.thirdAge,
@@ -90,14 +228,75 @@ const Step2 = ({ nextStep, itemId }) => {
                 plan: formInfo.plan,
                 value: formInfo.value,
                 time: formInfo.time,
-                comp: formInfo.comp,
+                isComp: formInfo.isComp,
+                ...(formInfo.isComp === "true" &&  { comp } )
+                
+                
+                // if: { "isComp": 'true'},
+                // then: { "comp": comp}
             })
         };
+        console.log(JSON.stringify(optionsForm))
         fetch('https://moplanseguros.com.br/setleadinfo.php', optionsForm)
         .then(function(response) {
+            console.log(response)
+            window.location.reload();
+
         })
+        .catch((error) => {
+            console.log(error)
+        });  
 
     }
+
+    const [parenteType, setParenteType] = useState();
+    const [parenteName, setParenteName] = useState();
+    const [titularForParente, setTitularForParente] = useState();
+    const [parentes, setParentes] = useState([]);
+
+
+    const [titularName, setTitularName] = useState();
+    const [titulares, setTitulares] = useState([]);
+
+
+    const newTitular = useCallback(() => {
+        setTitulares((prevState) => [
+            ...prevState,
+            {
+                id: prevState.length + 1,
+                nome: titularName,
+            }
+        ]);
+        console.log(titulares);
+    }, [titulares, titularName]);
+
+    const newParente = useCallback(() => {
+        setParentes((prevState) => [
+            ...prevState,
+            {
+                id: prevState.length + 1,
+                nome: parenteName,
+                type: parenteType,
+                titularId: titularForParente,
+            }
+        ]);
+        console.log(parentes);
+    }, [parentes, parenteName, parenteType, titularForParente]);
+
+    const removeTitular = useCallback(
+        (id) => {
+            setTitulares(titulares.filter((c) => c.id !== id));
+        },
+        [titulares]
+    );
+
+    const removeParente = useCallback(
+        (id) => {
+            setParentes(parentes.filter((c) => c.id !== id));
+        },
+        [parentes]
+    );
+
 
     const [previousPlan, setPreviousPlan] = useState("none");
 
@@ -115,7 +314,9 @@ const Step2 = ({ nextStep, itemId }) => {
                 uf: '',
             }     
         ]);
-    }, []);
+        console.log(comp)
+    }, [comp]);
+
 
     const removeComp = useCallback(
         (id) => {
@@ -125,31 +326,65 @@ const Step2 = ({ nextStep, itemId }) => {
     );
 
 
-    
-
-    const newTotalAge = () => {
-        // const total = parseInt(firstAge) + parseInt(secondAge) + parseInt(thirdAge) + parseInt(fourthAge) + parseInt(fifthAge) + parseInt(sixthAge) + parseInt(seventhAge) + parseInt(eighthAge) + parseInt(ninethAge) + parseInt(tenthAge)
-        // setFormInfo({ ...formInfo, [totalAge]: total })
-    }
-
-
-    function sendForm(e){
-        e.preventDefault();
-
-        
-    }
-
     const tellId = (id, value) => {
-        const teste = comp.map(x => {
+        const compData = comp.map(x => {
             if(x.id == id){
                 return{
-                    id: x.id,
-                    cnpj: x.cnpj,
-                    type: x.type,
+                    ...x,
+                    ...value
                 };
             }
             return x;
         });
+        console.log(compData);
+        setComp(compData);
+        
+
+    }
+
+
+    const [ value, handleValue ] = useState(0);
+    var valor = 0;
+    function valueMask(e) {
+        
+        valor = e+ '';
+        valor = parseInt(valor.replace(/[\D]+/g, ''))
+        valor = valor + '';
+        valor = valor.replace(/([0-9]{2})$/g, ",$1");
+        if (valor.length > 6) {
+            valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+        }
+
+        if (valor == 'NaN'){
+            valor = '';
+        }
+
+        const finalValue = 'R$ ' + valor;
+        console.log(valor)
+        handleValue(finalValue)
+    }
+
+    useEffect(() => { 
+        console.log(formInfo.isComp.construtor)
+
+        console.log(formInfo.isComp === "true")
+        console.log(formInfo.isComp)
+      }, [formInfo.isComp]);
+
+    const checkSelected = (e) =>{
+        const selected = e.target.value;
+        if(selected === 'adesao'){
+            document.querySelector('#divCPF').style.display = 'flex';
+            document.querySelector('#divCNPJ').style.display = 'none';
+        
+        } else if (selected === 'empresarial'){
+            document.querySelector('#divCPF').style.display = 'none';
+            document.querySelector('#divCNPJ').style.display = 'flex';
+            
+        } else if (selected === ''){
+            document.querySelector('#divCPF').style.display = 'none';
+            document.querySelector('#divCNPJ').style.display = 'none';
+        }
 
     }
 
@@ -157,8 +392,16 @@ const Step2 = ({ nextStep, itemId }) => {
     return(
             <div className="modal">
                 <div className="container">
-                <form action="http://24.152.37.228/setleadinfo.php" method="post">
-                    <div className="step1">
+                <form onSubmit={sendFormx}>
+                    <div className="step1"
+                        onKeyPress={ (e) => {
+                            if(e.key === 'Enter' && e.target.id !== 'insertPeople' && e.target.id !== 'insertParente'){
+                                e.preventDefault();
+                                Continue1();
+                            }
+
+                        }}
+                    >
                     <div className="title">
                         <h1>Coleta de Informações</h1>
                     </div>
@@ -176,7 +419,8 @@ const Step2 = ({ nextStep, itemId }) => {
                                 }
                                 <span>Tipo de Contrato (*):</span>
                                 <select
-                                    onChange={valorInput}
+                                    onBlur={valorInput}
+                                    onChange={checkSelected}
                                     name="selectedType"
                                 >
                                     
@@ -185,7 +429,176 @@ const Step2 = ({ nextStep, itemId }) => {
                                     <option value="empresarial">Empresarial</option>
                                 </select>
                             </div>
+                            <div
+                                id="divCPF"
+                            >
+                                <span>CPF do Titular (*):</span>
+                                <input
+                                    type="text"
+                                    placeholder="000.000.000-00"
+                                    name="titularId"
+                                    onChange={(e) => {e.target.value = e.target.value.replace(/\D/g, '')}}
+                                    onBlur={valorInput}
+                                    maxlength="11"
+                                />
+                            </div>
+                            <div
+                                id="divCNPJ"
+                            >
+                                <span>CNPJ do Titular (*):</span>
+                                <input
+                                    type="text"
+                                    placeholder="00.000.000/0000-00"
+                                    name="titularId"
+                                    onChange={(e) => {e.target.value = e.target.value.replace(/\D/g, '')}}
+                                    onBlur={valorInput}
+                                    maxlength="14"
+                                />
+                            </div>
 
+                            <div
+                                id="divParentescos"
+                            >
+                                <div>
+                                    <span>
+                                        Insira os titulares
+                                    </span>
+                                    
+                                    <input
+                                        type="text"
+                                        placeholder="Nome"
+                                        id="insertPeople"
+                                        onChange={(e) => {setTitularName(e.target.value)}}
+                                        onKeyPress={(e) => {
+                                            if(e.key == 'Enter'){
+                                                newTitular();
+                                                e.preventDefault();
+                                            }
+                                        }}
+                                    ></input>
+                                </div>
+                                <div>
+                                    <button
+                                        type="button"
+                                        onClick={newTitular}
+                                    >Inserir</button>
+                                </div>
+                            </div>
+                            <div
+                                id="divParentescos"
+                            >
+                                <div>
+                                    <div>
+                                        <span>
+                                            Insira os parentes
+                                        </span>
+                                            <input
+                                                type="text"
+                                                placeholder="Nome"
+                                                id="insertParente"
+                                                onChange={(e) => {setParenteName(e.target.value)}}
+                                                onKeyPress={(e) => {
+                                                    if(e.key == 'Enter'){
+                                                        newParente();
+                                                        e.preventDefault();
+                                                    }
+                                                }}
+                                            ></input>
+                                            <select
+                                                onChange={(e) => {setParenteType(e.target.value)}}
+                                            >
+                                                <option value="">Parentesco</option>
+                                                <option value="Pai">Pai</option>
+                                                <option value="Mãe">Mãe</option>
+                                                <option value="Avo">Avô (a)</option>
+                                                <option value="Filho">Filho (a)</option>
+                                                <option value="Tio">Tio (a)</option>
+                                                <option value="Primo">Primo (a)</option>
+                                                <option value="Sobrinho">Sobrinho (a)</option>
+                                                <option value="Neto">Neto (a)</option>
+                                                <option value="Conjuge">Conjuge</option>
+                                                <option value="Cunhado">Cunhado (a)</option>
+                                                <option value="Enteado">Enteado (a)</option>
+                                            </select>
+                                            <span>de</span>
+                                            <select
+                                                onChange={(e) => {setTitularForParente(e.target.value)}}
+                                            >
+                                                {
+                                                    titulares.map(item => {
+                                                        return(
+                                                            <option value={item.id}>{item.nome}</option>
+                                                        )
+                                                    })
+                                                }
+                                            </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button
+                                        type="button"
+                                        onClick={newParente}
+                                    >Inserir</button>
+                                </div>
+                            </div>
+                            <div className="title">
+                                    <h2>Titulares</h2>
+                            </div>
+                            <div
+                                id="showTitulares"
+                            >
+                                <ul>
+                                {titulares.map((r) => (
+                                        <>
+                                        
+                                            <li>
+                                            <div>
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => removeTitular(r.id)}
+                                                >x</button>
+                                                <div>
+                                                    <div>
+                                                        <span><strong>{r.nome}</strong></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </li>   
+                                        </>
+                                    ))}
+                                </ul>
+                            </div>
+                            <div className="title">
+                                <h2>Parentes</h2>
+                            </div>
+                            <div
+                                id="showTitulares"
+                            >
+                                <ul>
+                                {parentes.map((r) => (
+                                        <>
+                                            <li>
+                                            <div>
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => removeParente(r.id)}
+                                                >x</button>
+                                                <div>
+                                                    <div className="parentes">
+                                                        <div>
+                                                            <span><span>Titular:</span><strong>{r.titular}</strong></span>
+                                                        </div>
+                                                        <div>
+                                                            <span>{r.nome} ( {r.type} )</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </li>   
+                                        </>
+                                    ))}
+                                </ul>
+                            </div>
                             <div className="content--idades">
                                 <span>Quantidade de vidas por faixa etaria:</span>
                                 <div className="content--idades--in">
@@ -197,7 +610,6 @@ const Step2 = ({ nextStep, itemId }) => {
                                             id="idade_0_18" 
                                             min="0"
                                             onChange={valorInput}
-                                            onBlur={newTotalAge}
                                         />
                                     </div>
                                     <div>
@@ -208,7 +620,6 @@ const Step2 = ({ nextStep, itemId }) => {
                                             min="0"
                                             name="secondAge"
                                             onChange={valorInput}
-                                            onBlur={newTotalAge}
                                         />
                                     </div>
                                     <div>
@@ -219,7 +630,6 @@ const Step2 = ({ nextStep, itemId }) => {
                                             min="0"
                                             name="thirdAge"
                                             onChange={valorInput}
-                                            onBlur={newTotalAge}
                                         />
                                     </div>
                                     <div>
@@ -230,7 +640,6 @@ const Step2 = ({ nextStep, itemId }) => {
                                             min="0"
                                             name="fourthAge"
                                             onChange={valorInput}
-                                            onBlur={newTotalAge}
                                         />
                                     </div>
                                     <div>
@@ -241,7 +650,6 @@ const Step2 = ({ nextStep, itemId }) => {
                                             min="0"
                                             name="fifthAge"
                                             onChange={valorInput}
-                                            onBlur={newTotalAge}
                                         />
                                     </div>
                                     <div>
@@ -252,7 +660,6 @@ const Step2 = ({ nextStep, itemId }) => {
                                             min="0"
                                             name="sixthAge"
                                             onChange={valorInput}
-                                            onBlur={newTotalAge}
                                         />
                                     </div>
                                     <div>
@@ -263,7 +670,6 @@ const Step2 = ({ nextStep, itemId }) => {
                                             min="0"
                                             name="seventhAge"
                                             onChange={valorInput}
-                                            onBlur={newTotalAge}
                                         />
                                     </div>
                                     <div>
@@ -274,7 +680,6 @@ const Step2 = ({ nextStep, itemId }) => {
                                             min="0"
                                             name="eighthAge"
                                             onChange={valorInput}
-                                            onBlur={newTotalAge}
                                         />
                                     </div>
                                     <div>
@@ -285,7 +690,6 @@ const Step2 = ({ nextStep, itemId }) => {
                                             min="0"
                                             name="ninethAge"
                                             onChange={valorInput}
-                                            onBlur={newTotalAge}
                                         />
                                     </div>
                                     <div>
@@ -295,18 +699,6 @@ const Step2 = ({ nextStep, itemId }) => {
                                             id="idade_59" 
                                             min="0"
                                             name="tenthAge"
-                                            onChange={valorInput}
-                                            onBlur={newTotalAge}
-                                        />
-                                    </div>
-                                    <div>
-                                        <span>Total</span>
-                                        <input 
-                                            type="number"
-                                            id="idade_total" 
-                                            min="0" 
-                                            disabled
-                                            name="totalAge"
                                             onChange={valorInput}
                                         />
                                     </div>
@@ -358,7 +750,15 @@ const Step2 = ({ nextStep, itemId }) => {
                             </div>
                     </div>
                     </div>
-                    <div className="step2">
+                    <div className="step2"
+                        onKeyPress={ (e) => {
+                            if(e.key === 'Enter'){
+                                e.preventDefault();
+                                Continue2();
+                            }
+
+                        }}
+                    >
                         <div className="title">
                             <h1>Informações sobre plano anterior</h1>
                         </div>
@@ -400,17 +800,19 @@ const Step2 = ({ nextStep, itemId }) => {
                                 </div>
 
                                 <div>
-                                    <span>Valor</span>
+                                    <span>Valor</span>  
+
                                     <input 
-                                        type="text" 
-                                        placeholder="Escreva o valor pago" 
-                                        disabled={previousPlan == "false" || previousPlan == "none" ? "false" : ""}
+                                        type="text"
+                                        value={value}
+                                        onChange={(e) => valueMask(e.target.value)}
+                                        onBlur={valorInput}
+                                        maxLength="13"
                                         name="value"
-                                        onChange={valorInput}
                                     />
                                 </div>
 
-                                <div>
+                                <div>   
                                     <span>Tempo</span>
                                     <input 
                                         type="text" 
@@ -422,12 +824,15 @@ const Step2 = ({ nextStep, itemId }) => {
                                 </div>
 
                                 <div className="content-buttons">
+                                    <button type="button" className="btn-cancelar" onClick={ refreshPage }><img src="../../../btn-cancel.svg"></img> </button>
                                     <button type="button" className="btn-cancelar" onClick={ Previous1 }><img src="../../../back-arrow.svg"></img> </button>
                                     <button type="button" className="btn-confirmar" onClick={ Continue2 }><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button>
                                 </div>
                         </div>
                         </div>
-                        <div className="step3">
+                        <div className="step3"
+                        
+                        >
                         <div className="title">
                             <h1>Informações sobre CNPJ Coligado</h1>
                         </div>
@@ -436,7 +841,7 @@ const Step2 = ({ nextStep, itemId }) => {
                             <div>
                                 <span>Possui CNPJ Coligado?</span>
                                 <select
-                                    name="comp"
+                                    name="isComp"
                                     onChange={valorInput}
                                 >
                                     <option value="">Selecione...</option>
@@ -476,7 +881,7 @@ const Step2 = ({ nextStep, itemId }) => {
                                                 <input 
                                                     type="text"
                                                     placeholder="CNPJ"
-                                                    onChange={(e) => tellId(r.id, e.target.value)}
+                                                    onChange={(e) => tellId(r.id, {cnpj: e.target.value})}
                                                 ></input>
                                             </div>
                                             <div>
@@ -484,11 +889,14 @@ const Step2 = ({ nextStep, itemId }) => {
                                                 <input
                                                     type="text"
                                                     placeholder="0"
+                                                    onChange={(e) => tellId(r.id, {vidas: e.target.value})}
                                                 ></input>
                                             </div>
                                             <div>
                                                 <span>UF:</span>
-                                                <select>
+                                                <select
+                                                    onChange={(e) => tellId(r.id, {uf: e.target.value})}
+                                                >
                                                     <option>Selecione...</option>
                                                     <option>SP</option>
                                                     <option>RJ</option>
@@ -496,7 +904,12 @@ const Step2 = ({ nextStep, itemId }) => {
                                             </div>
                                             <div className="button-remove-company">
                                                 <div></div>
-                                                <button type="button" onClick={() => removeComp(r.id)}><img src="../../../btn-remove-company.svg"></img></button>
+                                                <button 
+                                                    type="button" 
+                                                    onClick={() => removeComp(r.id)}
+                                                ><img 
+                                                    src="../../../btn-remove-company.svg"
+                                                ></img></button>
                                             </div>
                                         </div>
                                         </>
@@ -505,6 +918,7 @@ const Step2 = ({ nextStep, itemId }) => {
                             </div>
                             
                             <div className="content-buttons">
+                                <button type="button" className="btn-cancelar" onClick={ refreshPage }><img src="../../../btn-cancel.svg"></img> </button>
                                 <button type="button" className="btn-cancelar" onClick={ Previous2 }><img src="../../../back-arrow.svg"></img> </button>
                                 <button type="submit" className="btn-confirmar"><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button>
                             </div>

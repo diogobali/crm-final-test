@@ -2,12 +2,25 @@ import React, { useState } from 'react';
 import { Modal as ModalComponent } from 'antd';
 import { useModalContext0 } from './modal0.context'
 import './styles.scss';
+import * as yup from 'yup';
+
+
+let validateForm = yup.object().shape({
+    contactWay: yup
+        .string()
+        .required("Selecione uma opção em forma de contato"),
+    date: yup
+        .string()
+        .required("Selecione uma data válida")
+    });
+
 
 
 
 const Modal0 = () => {
 
 
+    const valorInput = e => setFormInfo({ ...formInfo, [e.target.name]: e.target.value })
 
 
     const [formInfo, setFormInfo] = useState({
@@ -16,13 +29,24 @@ const Modal0 = () => {
         lead: '',
     });
 
-    const sendForm = (e) => {
+    const sendForm = async (e) => {
+        e.preventDefault();
+        try {
+            await validateForm.validate(formInfo);
+            console.log("Deu bom");
+        } catch (err) {
+            console.log(err);
+            alert(err);
+            return;
+        }
+
+
         const lead = document.querySelector('.lead').value
         const optionsForm = {
             method: 'POST',
             body: JSON.stringify({
-                contactWay: contactWay,
-                date: date,
+                contactWay: formInfo.contactWay,
+                date: formInfo.date,
                 leadId: lead,
             })
         };
@@ -41,13 +65,7 @@ const Modal0 = () => {
 
     function refreshPage(){
         window.location.reload();
-    } 
-
-    const [contactWay, setContactWay] = useState(null);
-    const [date, setDate] = useState(null);
-
-
-    
+    }     
     
     if(!visible) return null;
 
@@ -73,9 +91,8 @@ const Modal0 = () => {
                             }
                             <span>Forma de contato:</span>
                             <select
-                                value={contactWay}
-                                onChange={(e) => setContactWay(e.target.value)}
-                                required
+                                onChange={valorInput}
+                                name="contactWay"
                             >
                                 <option value="">Selecione...</option>
                                 <option value="wpp">WhatsApp</option>
@@ -86,9 +103,8 @@ const Modal0 = () => {
                         <div>
                             <span>Data e horário:</span>
                             <input
-                                value={date}
-                                onChange={(e) => setDate(e.target.value)}
-                                required
+                                name="date"
+                                onChange={valorInput}
                                 type="datetime-local"
                             ></input>
                         </div>

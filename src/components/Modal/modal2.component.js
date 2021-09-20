@@ -1,6 +1,34 @@
 import React, { useState } from 'react';
 import { Modal as ModalComponent2 } from 'antd';
 import { useModalContext2 } from './modal2.context'
+import * as yup from 'yup';
+import companies from '../../jsons/companies.json'
+
+let validateForm = yup.object().shape({
+    operadora: yup
+        .string()
+        .required("Selecione uma operadora válida"),
+    plano: yup
+        .string()
+        .required("Informe um plano"),
+    cobertura: yup
+        .string()
+        .required("Informe um tipo de cobertura"),
+    coparticipacao: yup
+        .string()
+        .required("Selecione uma opção em Coparticipacao"),
+    valorMin: yup
+        .string()
+        .required("Informe um valor minimo"),
+    valorMax: yup
+        .string()
+        .required("Informe um valor máximo"),
+    primeiroretorno: yup
+        .string()
+        .required("Informe uma data para o primeiro retorno")
+    });
+        
+
 
 const Modal2 = () => {
     const { 
@@ -23,7 +51,20 @@ const Modal2 = () => {
 
     const valorInput = e => setFormInfo({ ...formInfo, [e.target.name]: e.target.value })
 
-    const sendForm = (e) => {
+    const sendForm = async (e) => {
+
+        e.preventDefault();
+
+        try {
+            await validateForm.validate(formInfo);
+            console.log("Deu bom");
+        } catch (err) {
+            console.log(err);
+            alert(err);
+            return;
+        }
+
+
         const lead = document.querySelector('.lead2').value
 
         const optionsForm = {
@@ -41,10 +82,12 @@ const Modal2 = () => {
         };
         fetch('https://moplanseguros.com.br/recieveform_orcamento.php', optionsForm)
         .then(function(response) {
+        window.location.reload();
+
         })
 
     }
-
+    console.log(companies);
 
     return(
         <ModalComponent2 
@@ -70,13 +113,14 @@ const Modal2 = () => {
                             <select
                                 name="operadora"
                                 onChange={valorInput}
-                                required
-
                             >
-                                <option value="">Selecione...</option>
-                                <option value="1">Operadora 1</option>
-                                <option value="2">Operadora 2</option>
-                                <option value="3">Operadora 3</option>
+                                {
+                                    companies.map(company => {
+                                        return(
+                                            <option value={company.value}>{company.name}</option>
+                                        )
+                                    })
+                                }
                             </select>
                         </div>
                         <div>
@@ -86,7 +130,6 @@ const Modal2 = () => {
                                 placeholder="AMIL 300"
                                 name="plano"
                                 onChange={valorInput}
-                                required
                             ></input>
                         </div>
                         <div>
@@ -96,7 +139,6 @@ const Modal2 = () => {
                                 placeholder="Tipo de Cobertura"
                                 name="cobertura"
                                 onChange={valorInput}
-                                required
                             ></input>
                         </div>
                         <div>
@@ -104,7 +146,6 @@ const Modal2 = () => {
                             <select
                                 name="coparticipacao"
                                 onChange={valorInput}
-                                required
                             >
                                 <option value="">Selecione...</option>
                                 <option value="sim">Sim</option>
@@ -119,14 +160,12 @@ const Modal2 = () => {
                                     placeholder="Valor Min"
                                     name="valorMin"
                                     onChange={valorInput}
-                                    required
                                 ></input>
                                 <input 
                                     type="text" 
                                     placeholder="Valor Max"
                                     name="valorMax"
                                     onChange={valorInput}
-                                    required
                                 ></input>
                             </div>
                         </div>
@@ -136,7 +175,6 @@ const Modal2 = () => {
                                 type="datetime-local"
                                 name="primeiroretorno"
                                 onChange={valorInput} 
-                                required   
                             ></input>
                         </div>
                         <div className="content-buttons">

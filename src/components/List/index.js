@@ -5,14 +5,17 @@ import { MdAdd } from 'react-icons/md';
 import Card from '../Card';
 import { useDrag, useDrop } from 'react-dnd';
 import { Container } from './styles';
+import { useUserContext } from '../../contexts/userContext';
 
-export default function List({ title, data, index: listIndex, adm, sendAdm }){
 
+export default function List({ title, data, index: listIndex, adm, sendAdm, isAdmAction, isRegularizarAction}){
+
+    const { userData, setUserData } = useUserContext();
 
     var aux = 0;
 
     return(
-        <Container adm={adm} sendAdm={sendAdm}>
+        <Container adm={adm} sendAdm={sendAdm} userData={userData} isAdmAction={isAdmAction} isRegularizarAction={isRegularizarAction}>
             <header>
                 <h2>{title}</h2>
             </header>
@@ -30,8 +33,10 @@ export default function List({ title, data, index: listIndex, adm, sendAdm }){
                                 data={card}
                                 listIndex={listIndex}
                                 button={data?.button}
-                                status={card.status} 
+                                status={card.status}
                                 sendAdm={sendAdm}
+                                isAdmAction={isAdmAction}
+                                isRegularizarAction={isRegularizarAction}
                             />
                             )
                         }

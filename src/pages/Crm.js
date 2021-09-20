@@ -11,6 +11,9 @@ import Modal4 from '../components/Modal/modal4.component';
 import ModalInfo from '../components/Modal/modalInfo.component';
 import ModalDeclined from '../components/Modal/modalDeclined.component';
 import ModalSendAdm from '../components/Modal/modalSendAdm.component';
+import ModalReproveAdm from '../components/Modal/modalReproveAdm.component';
+import ModalPendente from '../components/Modal/modalPendente.component';
+import ModalRegularizarAction from '../components/Modal/modalRegularizarAction.component';
 
 import { ModalProvider0 } from '../components/Modal/modal0.context';
 import { ModalProvider1 } from '../components/Modal/modal1.context';
@@ -20,6 +23,10 @@ import { ModalProvider4 } from '../components/Modal/modal4.context';
 import { ModalProviderInfo } from '../components/Modal/modalInfo.context';
 import { ModalProviderDeclined } from '../components/Modal/modalDeclined.context';
 import { ModalProviderSendAdm } from '../components/Modal/modalSendAdm.context';
+import { ModalProviderReproveAdm } from '../components/Modal/modalReproveAdm.context';
+import { ModalProviderPendente } from '../components/Modal/modalPendente.context';
+import { ModalProviderRegularizarAction } from '../components/Modal/modalRegularizarAction.context';
+
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import SaveFormProvider, { SaveFormContext } from '../contexts/SaveFormContext';
 
@@ -35,8 +42,6 @@ import { useUserContext } from '../contexts/userContext';
 export function Crm(){
     const { userData, setUserData } = useUserContext();
 
-
-
     const [data, setData] = useState([]);
 
 
@@ -44,25 +49,23 @@ export function Crm(){
         method: 'POST',
         body: JSON.stringify({
             user: userData.id,
-
+            perfil: userData.perfil
         })
     };
 
 
     const getProdutos= async () => {
-
         fetch("https://moplanseguros.com.br/index.php", optionsForm)
         .then((response) => response.json())
         .then((responseJson) => (
             setData(Object.values(responseJson))
         ));
+
     }
 
     useEffect(() => {
         getProdutos();
     },[])
-
-    
     
     return(
 
@@ -79,6 +82,10 @@ export function Crm(){
                 <ModalProviderInfo>
                 <ModalProviderDeclined>
                 <ModalProviderSendAdm>
+                <ModalProviderReproveAdm>
+                <ModalProviderPendente>
+                <ModalProviderRegularizarAction>
+
                     <HeaderComponent />
                     {data.length > 0 &&
                         <Board dadosleads={data}/>
@@ -91,7 +98,13 @@ export function Crm(){
                     <ModalInfo />
                     <ModalDeclined />
                     <ModalSendAdm />
-                    </ModalProviderSendAdm>
+                    <ModalReproveAdm />
+                    <ModalPendente />
+                    <ModalRegularizarAction />
+                </ModalProviderRegularizarAction>
+                </ModalProviderPendente>
+                </ModalProviderReproveAdm>
+                </ModalProviderSendAdm>
                 </ModalProviderDeclined>
                 </ModalProviderInfo>
                 </ModalProvider4>

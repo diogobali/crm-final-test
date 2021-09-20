@@ -58,6 +58,28 @@ export const Container= styled.div`
         
     }
 
+    .buttonsAdm{
+        display:flex;
+        gap: 8px;
+
+
+        button{
+            font-size: 0.8em;
+            padding: 0.3em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+    }
+
+    .btn-sendAdm{
+        font-size: 0.8em;
+        padding: 0.3em;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+
     .card-info{
         display:flex;
         align-items:center;

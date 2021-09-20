@@ -23,7 +23,7 @@ const Modal3 = () => {
 
     const valorInput = e => setFormInfo({ ...formInfo, [e.target.name]: e.target.value })
 
-    const sendForm = (e) => {
+    const sendForm = () => {
         const lead = document.querySelector('.lead3').value
         const optionsForm = {
             method: 'POST',
@@ -40,8 +40,12 @@ const Modal3 = () => {
         };
         fetch('https://moplanseguros.com.br/recieveform_orcamento.php', optionsForm)
         .then(function(response) {
+            console.log(response);
         })
-
+        .catch((error) => {
+            console.log(error)
+        });  
+        window.location.reload();
     }
 
     
@@ -52,7 +56,7 @@ const Modal3 = () => {
             <div className="modal">
                 <div className="container">
                     <div className="title">
-                        <h1>Enviar Orçamento</h1>
+                        <h1>Enviar Orçamentos</h1>
                     </div>
                     <div className="content">
                         <form onSubmit={sendForm}>

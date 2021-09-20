@@ -1,0 +1,24 @@
+[
+    {
+      "name": "Selecione...",
+      "value": ""
+    },
+    {
+      "name": "Bradesco",
+      "value": "bradesco",
+      "docs": [
+        "RG",
+        "CNH",
+        "RES"
+      ]
+    },
+    {
+      "name": "Amil",
+      "value": "amil",
+      "docs": [
+        "RG",
+        "RES"
+      ]
+    }
+    
+]

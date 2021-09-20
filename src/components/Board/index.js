@@ -45,9 +45,9 @@ export default function Board(props){
                 <List title="Informações coletadas" index="2"data={dataOk}/>
                 <List title="Orçamento Enviado / Ag. Retorno" index="3" data={dataOk}/>
                 <List title="Ag. Documento" index="4" data={dataOk} sendAdm={true}/>
-                <List title="Com Administrativo" index="5" data={dataOk} adm={true} />
+                <List title="Com Administrativo" index="5" data={dataOk} adm={true} isAdmAction={true} />
                 <List title="Implantados" index="6" data={dataOk} adm={true} />
-                <List title="Venda Declinada" index="7" data={dataOk} adm={true} />
+                <List title="Com pendência" index="7" data={dataOk} adm={true} isRegularizarAction={true} />
                 <List title="Lead Declinado" index="8" data={dataOk} />
             </Container>
         </BoardContext.Provider>

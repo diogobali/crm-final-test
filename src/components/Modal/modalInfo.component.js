@@ -16,7 +16,6 @@ const ModalInfo = () => {
         window.location.reload();
     } 
 
-
     const [infos, setInfos] = useState([]);
     const [counterCalls, setCounterCalls] = useState(0);
     const optionsForm = {
@@ -27,22 +26,45 @@ const ModalInfo = () => {
         })
     };
 
-    
-
     async function fetchApi () {
         if(!infos.id && counterCalls === 0) {
             const response = await fetch("https://moplanseguros.com.br/getleadinfo.php", optionsForm)
             const json = await response.json();
-            
             setInfos(json);
             setCounterCalls(counterCalls + 1);
         }
     }
 
+    const [responseApi, setResponseApi] = useState();
+
+    const load_image = () => {
+        const form_data = new FormData();
+        form_data.append('leadId', itemId);
+    
+        fetch('https://moplanseguros.com.br/attachdocuments.php', {
+            method: "POST",
+            body: form_data
+        }).then(function(response){
+            return response;
+        }).then(response => response.json())
+        .then(response => {
+            setResponseApi(response);
+        });
+    }
+    
+    useEffect(() => {
+        load_image()
+    }, [itemId]);   
+
+
     if(!infos.id && counterCalls === 0) fetchApi();
-
-
     if(!visible) return null;
+
+    
+    const teste = () => {
+        console.log(infos);
+    }    
+
     return( 
         <ModalComponent
             visible={visible}
@@ -56,7 +78,7 @@ const ModalInfo = () => {
                     <div className="content">
                         <form>
                         <div className="infos-final">
-
+                            <button type="button" onClick={teste}>Teste</button>
                             <div>
                                 <span>Nome:</span>
                                 {infos && infos.nome }
@@ -66,6 +88,29 @@ const ModalInfo = () => {
                             <div>
                                 <span>Tipo de Lead:</span>
                                 {infos.type}
+                            </div>
+                            </>
+                            }
+                            {infos.titularId &&
+                            <>
+                            <div>
+                                <ul id="listPeoples">
+                                {infos.parentescos &&
+                                    infos.parentescos.map(parentesco => {
+                                        return(
+                                            parentesco.map(item => {
+                                                console.log(item)
+                                                return(
+                                                    <li>
+                                                        <span>{item[1]}</span>
+                                                        <span>{item[0]}</span>
+                                                    </li>
+                                                )
+                                        })
+                                    )     
+                                })
+                                }
+                            </ul>
                             </div>
                             </>
                             }
@@ -167,9 +212,54 @@ const ModalInfo = () => {
                             </div>
                             </>
                             }
+                            {infos.pendencias &&
+                            <>
+                            <h1 className="title_pendencia">Pendencia</h1>
+                            <div>
+                                <span>Motivo:</span>
+                                {infos.pendencias[0].reason_id}
+                            </div>
+                            {infos.pendencias[0].reason_id == 1 &&
+                                <>
+                                    <div className="title_documentsMissing"><h4>DOCUMENTOS FALTANDO</h4></div>
+                                        <div className="showDocumentsMissing">
+                                            <ul>
+                                            {infos.pen_docs[0].map(item => {
+                                                return(
+                                                    <li>
+                                                        <span><strong>{item[3]}</strong></span> 
+                                                        <span>{item[4]}</span>
+                                                        <span>
+                                                            <input
+                                                                className="inputSendDocumentMissing"
+                                                                type="file"
+                                                                id="inputSendDocumentMissing"
+                                                            />
+                                                            <label for="inputSendDocumentMissing" className="labelSendDocumentMissing">Selecione o anexo</label>
+                                                        </span>
+                                                    </li>                                                
+                                                )
+
+                                            })
+                                            
+                                            }
+                                            
+                                            </ul>
+                                        </div>
+                               
+                            
+                                </>
+                            }
+                            </>
+                            }
                             {infos.operadora &&
                             <>
+                            {infos.status == 1 && 
+                            <h1>Pedido de venda</h1>
+                            }
+                            {infos.status == 0 &&
                             <h1>Orçamento</h1>
+                            }
                             <div>
                                 <span>Operadora:</span>
                                 {infos.operadora}
@@ -216,6 +306,15 @@ const ModalInfo = () => {
                             </div>
                             </>
                             }
+                            {infos.valorFechado &&
+                            <>
+                            <div>
+                                <span>Valor Fechado:</span>
+                                R$ {infos.valorFechado}
+                            </div>
+                            </>
+                            }
+
                             {infos.retorno &&
                             <>
                             <div>
@@ -393,7 +492,19 @@ const ModalInfo = () => {
                             </>
                             }
                         </div>
+                        {infos.status_doc &&
+                        <div className="documentsList">
+                            <span>Documentos anexados</span>
+                            <ul id="listDir">
+                                {responseApi &&
+                                    responseApi.map((item, index) => index > 1 &&   <li> <a href={item[0]+item[1]} download="Documentacao.pdf" target="_blank"> {item[1]} </a></li>)
+                                }
+                            </ul>
+                        </div>  
+                        }
                         
+
+
                         <div className="content-buttons">
                             <button type="button" className="btn-cancelar" onClick={refreshPage}><img src="../../../btn-cancel.svg"></img> </button>
                         </div>

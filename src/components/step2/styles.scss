@@ -38,6 +38,10 @@ form > div:not(:last-child) {
     box-shadow: 0px 1px rgba(0,0,0, 0.05);
 }
 
+#divCPF, #divCNPJ {
+    display:none;
+}
+
 .content--idades--in{
     display:flex;
     gap: 1em;
@@ -58,6 +62,114 @@ form > div:not(:last-child) {
     display:block !important;
 }
 
+#divParentescos{
+    div{
+        gap: 1.2em;
+        display:flex;
+        margin-bottom: 8px;
+        box-shadow:none;
+
+        button{
+            border:none;
+            padding: 0.7em;
+            border-radius: 5px;
+            background: #5dc979;
+            color: black;
+
+            &:hover{
+                filter: brightness(80%);
+            }
+        }
+    }
+}
+
+#showTitulares{
+    ul{
+        display:flex;
+        max-height: 250px;
+        flex-wrap: wrap;
+        list-style:none;
+        gap: 0.8em;
+        text-align: center;
+        
+        button{
+            border: none;
+            background: rgba(0,0,0, 0.05);
+            padding: 4px 6px;
+            border-radius: 100%;
+            font-size: 0.6em;
+
+            &:hover{
+                filter: brightness(80%);
+                color: #f31a1a;
+            }
+        }
+
+
+        span{
+            margin-right: 5px;
+            font-size: 1em;
+        }
+
+        li{
+            
+            display:block;
+            div {
+                box-shadow: none;
+                margin-left: 5px;
+                display:flex;
+            }
+
+            input{
+                width: 200px;
+            }
+        }
+    }
+}
+
+#showParentescos{
+
+    ul{
+        display:flex;
+        flex-direction: column;
+        max-height: 250px;
+        flex-wrap: wrap;
+        list-style:none;
+        gap: 0.8em;
+        text-align: center;
+        
+        button{
+            border: none;
+            background: rgba(0,0,0, 0.05);
+            padding: 4px 6px;
+            border-radius: 100%;
+            font-size: 0.6em;
+
+            &:hover{
+                filter: brightness(80%);
+                color: #f31a1a;
+            }
+        }
+
+
+        span{
+            margin-right: 5px;
+            font-size: 0.8em;
+        }
+
+        li{
+            
+            display:flex;
+            div {
+                box-shadow: none;
+                margin-left: 5px;
+                display:flex;
+                width: 150px;
+                justify-content: space-between;
+            }
+        }
+    }
+}
 
 .step2{
     display:none;
@@ -66,14 +178,18 @@ form > div:not(:last-child) {
     display:none;
 }
 
+.title{
+    justify-content: center !important;
+    width:100% !important;
+}
+
+.parentes{
+    display:flex;
+    flex-direction: column;
+}
 
 form{
     display:block;
-
-    .title{
-        justify-content: center;
-        width:100%;
-    }
 
     input {
         width: 250px;

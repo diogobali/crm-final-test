@@ -13,66 +13,9 @@ const ModalSendAdm = () => {
     } 
 
     const [responseApi, setResponseApi] = useState()
-
-    // const [selectedFile, setSelectedFile] = useState()
     const [fileName, setFileName] = useState()
-    // const [files, setFiles] = useState([])
-
-    // function handleSetAttachment(e) {
-    //     if(e.target.files) {
-    //         var file = e.target.files[0]
-    //         var nameraiz = file.name
-    //         var fileType = file.type
-    //         var blob = file.slice(0, file.size, 'image/png', );
-    //         const newFile = new File([blob], fileName, {type: fileType});
-    //         Object.assign(newFile, {nameraiz: nameraiz})
-    //         console.log(newFile)
-    //         setSelectedFile(newFile)
-    //     }
-    // }
-
-    // const addFileToList = () => {
-
-    //     if (!selectedFile){
-    //         alert("Selecione um arquivo");
-    //         return;
-    //     }
-
-    //     if (!fileName || fileName == ''){
-    //         alert("Selecione um nome");
-    //         return;
-    //     }
-
-    //     setFiles([...files, selectedFile])
-
-    //     // document.querySelector('#selectFileName').value = ''
-    //     document.querySelector('#selectfile').value = ''
-
-    //     // setFileName(undefined)
-    //     setSelectedFile(undefined);
-
-    //     console.log(files)
-        
-    //     // console.log(document.querySelector('#selectFileName').value)
-        
-    // }
-
-    // const sendForm = () => {
-    //     const data = new FormData()
-    //     data.append('leadId', itemId)
-    //     for(const file of files){
-    //         data.append('name', file.name)
-    //         data.append('nameraiz', file.nameraiz)
-    //     }
-
-    //     fetch('http://locahost/attachdocuments.php', {
-    //         method: 'POST',
-    //         body: data
-    //     })
-    // }
 
     const [image, setImage] = useState();
-
 
     const upload_image = () => {
         
@@ -111,6 +54,46 @@ const ModalSendAdm = () => {
         load_image() 
     }, [itemId]);
 
+    const [data, setData] = useState([]);
+    const [counterCalls, setCounterCalls] = useState(0);
+
+
+    async function fetchApi () {
+        const optionsFormGet = {
+            method: 'POST',
+            body: JSON.stringify({
+                leadId: itemId,
+            })
+        };
+
+        if(counterCalls === 0) {
+            const response = await fetch("https://moplanseguros.com.br/getorcamentos.php", optionsFormGet)
+            const json = await response.json();
+            
+            setData(json);
+            setCounterCalls(counterCalls + 1);
+        }
+
+        console.log(data.leadId)
+        
+    }
+
+    if(counterCalls === 0) fetchApi();
+
+    const sendAdm = () => {
+        const optionsForm = {
+            method: 'POST',
+            body: JSON.stringify({  
+                leadId: itemId,
+            })
+        };
+        fetch('https://moplanseguros.com.br/sendadm.php', optionsForm)
+        .then(function(response) {
+        window.location.reload();
+        })
+    }
+
+
 
     return(
         <ModalComponent
@@ -119,10 +102,25 @@ const ModalSendAdm = () => {
             <div className="modal">
                 <div className="container">
                     <div className="title">
-                        <h1>Anexar Documentação</h1>
+                        <h1>Finalizar</h1>
                     </div>
                     <div className="content">
-                        <form method="post" action="http://24.152.37.228/attachdocuments.php" enctype="multipart/form-data">
+                            <div>
+                                <span>Operadora:</span>
+                                <span>{data.operadora}</span>
+                            </div>
+                            <div>
+                                <span>Plano:</span>
+                                <span>{data.plano}</span>
+                            </div>
+                            <div>
+                                <span>Valor Fechado:</span>
+                                <span>{data.valorFechado}</span>
+                            </div>
+                            <div>
+                                <span>Documentos necessários:</span>
+                            </div>
+                        <form onSubmit={sendAdm}>
                         <div id="msg" className="msg">
 
                         </div>
@@ -162,7 +160,7 @@ const ModalSendAdm = () => {
                             
                         </div>
                         <div className="documentsList">
-                            <span>Documentos deste Lead</span>
+                            <span>Documentos anexados</span>
                         
                             <ul id="listDir">
                                 {responseApi &&
@@ -173,6 +171,22 @@ const ModalSendAdm = () => {
                         </div>  
                         <div className="content-buttons">
                             <button type="button" className="btn-cancelar" onClick={refreshPage}><img src="../../../btn-cancel.svg"></img> </button>
+                            
+                            <div className="confirm-documents-up">
+                            <button type="submit" className="btn-confirmar"><img src="../../../btn-confirm.svg"></img> </button>
+                                <div className="confirm-documents">
+                                    <input
+                                        type="checkbox"
+                                        required
+                                        name="is-documents-ok"
+                                        id="is-documents-ok"
+                                    ></input>
+                                    <label 
+                                        for="is-documents-ok"
+                                    >Confirmo que os documentos necessários foram anexados.</label>
+                                </div>
+
+                            </div>
                             {/* <button type="button" className="btn-confirmar" onClick={sendForm}><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button> */}
                         </div>
                         </form>

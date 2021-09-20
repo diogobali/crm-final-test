@@ -1,10 +1,19 @@
 import styled from 'styled-components';
 
+
+
 export const Container= styled.div`
     padding: 0 15px;
     height: 100%;
     flex: 1;
-    opacity: ${props => props.adm ? 0.6 : 1};
+    opacity: ${props => 
+        ((props.adm && props.userData.perfil == 0) ? 0.6 
+        : (!props.adm && props.userData.perfil == 0) ? 1
+        : (!props.adm && props.userData.perfil == 2) ? 0.6 
+        : (props.adm && props.userData.perfil == 2) ? 1 : null
+    )};
+
+
 
 
     & + div{
@@ -37,3 +46,4 @@ export const Container= styled.div`
             margin-top: 30px;
         }
 `;
+

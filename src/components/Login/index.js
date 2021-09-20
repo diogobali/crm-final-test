@@ -36,6 +36,7 @@ export default function Login(){
             localStorage.setItem('user', JSON.stringify(
                 user
             ));
+            console.log(userData)
             history.push("/crm");
             });
     }  
