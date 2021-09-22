@@ -12,6 +12,7 @@ import ModalInfo from '../components/Modal/modalInfo.component';
 import ModalDeclined from '../components/Modal/modalDeclined.component';
 import ModalSendAdm from '../components/Modal/modalSendAdm.component';
 import ModalReproveAdm from '../components/Modal/modalReproveAdm.component';
+import ModalApproveAdm from '../components/Modal/modalApproveAdm.component';
 import ModalPendente from '../components/Modal/modalPendente.component';
 import ModalRegularizarAction from '../components/Modal/modalRegularizarAction.component';
 
@@ -23,6 +24,7 @@ import { ModalProvider4 } from '../components/Modal/modal4.context';
 import { ModalProviderInfo } from '../components/Modal/modalInfo.context';
 import { ModalProviderDeclined } from '../components/Modal/modalDeclined.context';
 import { ModalProviderSendAdm } from '../components/Modal/modalSendAdm.context';
+import { ModalProviderApproveAdm } from '../components/Modal/modalApproveAdm.context';
 import { ModalProviderReproveAdm } from '../components/Modal/modalReproveAdm.context';
 import { ModalProviderPendente } from '../components/Modal/modalPendente.context';
 import { ModalProviderRegularizarAction } from '../components/Modal/modalRegularizarAction.context';
@@ -83,6 +85,7 @@ export function Crm(){
                 <ModalProviderDeclined>
                 <ModalProviderSendAdm>
                 <ModalProviderReproveAdm>
+                <ModalProviderApproveAdm>
                 <ModalProviderPendente>
                 <ModalProviderRegularizarAction>
 
@@ -98,11 +101,13 @@ export function Crm(){
                     <ModalInfo />
                     <ModalDeclined />
                     <ModalSendAdm />
+                    <ModalApproveAdm />
                     <ModalReproveAdm />
                     <ModalPendente />
                     <ModalRegularizarAction />
                 </ModalProviderRegularizarAction>
                 </ModalProviderPendente>
+                </ModalProviderApproveAdm>
                 </ModalProviderReproveAdm>
                 </ModalProviderSendAdm>
                 </ModalProviderDeclined>

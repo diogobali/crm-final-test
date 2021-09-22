@@ -16,6 +16,7 @@ import { useModalContextInfo } from '../Modal/modalInfo.context';
 import { useModalContextDeclined } from '../Modal/modalDeclined.context';
 import { useModalContextSendAdm } from '../Modal/modalSendAdm.context';
 import { useModalContextReproveAdm } from '../Modal/modalReproveAdm.context';
+import { useModalContextApproveAdm } from '../Modal/modalApproveAdm.context';
 import { useModalContextRegularizarAction} from '../Modal/modalRegularizarAction.context';
 
 
@@ -59,6 +60,9 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
 
         const { openModalReproveAdm } = useModalContextReproveAdm();
         const openModalReproveAdms = (itemId) => openModalReproveAdm({ message: 'Reprove Adm', itemId: itemId});
+
+        const { openModalApproveAdm } = useModalContextApproveAdm();
+        const openModalApproveAdms = (itemId) => openModalApproveAdm({ message: 'Approve Adm', itemId: itemId});
 
         const { openModalRegularizarAction } = useModalContextRegularizarAction();
         const openModalRegularizarActions = (itemId, status) => openModalRegularizarAction({ message: 'Regularizar Pendencias', itemId: itemId, status: status});
@@ -173,8 +177,8 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                     return;
                 }
             }
-
             if(targetListIndex == 3){
+                console.log(userData.perfil)
                 if(userData.perfil == 0){
                     openModalDois(itemId);
                 } else {
@@ -182,7 +186,6 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                     return;
                 }
             }
-
             if(targetListIndex == 4){
                 if(userData.perfil == 0){
                     openModalQuatro(itemId);
@@ -191,8 +194,6 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                     return;
                 }
             }
-
-
             if(targetListIndex == 5){
                 if(userData.perfil == 2){
                     // openModalCinco(itemId);
@@ -253,6 +254,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 <div className="buttonsAdm">
                     <button
                         type="button"
+                        onClick={() => openModalApproveAdms(data.id)}
                     >Aprovar</button>
                     <button
                         type="button"

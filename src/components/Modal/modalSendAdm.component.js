@@ -18,7 +18,6 @@ const ModalSendAdm = () => {
     const [image, setImage] = useState();
 
     const upload_image = () => {
-        
         const form_data = new FormData();
         form_data.append('attachment', image);
         form_data.append('leadId', itemId);
@@ -69,11 +68,9 @@ const ModalSendAdm = () => {
         if(counterCalls === 0) {
             const response = await fetch("https://moplanseguros.com.br/getorcamentos.php", optionsFormGet)
             const json = await response.json();
-            
             setData(json);
             setCounterCalls(counterCalls + 1);
         }
-
         console.log(data.leadId)
         
     }
@@ -157,21 +154,17 @@ const ModalSendAdm = () => {
                                 onClick={upload_image}
                                 className="btn-upload"                            
                             ><img src="../../../btn-send-black.svg"></img></button>
-                            
                         </div>
                         <div className="documentsList">
                             <span>Documentos anexados</span>
-                        
                             <ul id="listDir">
                                 {responseApi &&
                                     responseApi.map((item, index) => index > 1 &&   <li> <a href={item[0]+item[1]} download="Documentacao.pdf" target="_blank"> {item[1]} </a></li>)
                                 }
                             </ul>
-                           
                         </div>  
                         <div className="content-buttons">
                             <button type="button" className="btn-cancelar" onClick={refreshPage}><img src="../../../btn-cancel.svg"></img> </button>
-                            
                             <div className="confirm-documents-up">
                             <button type="submit" className="btn-confirmar"><img src="../../../btn-confirm.svg"></img> </button>
                                 <div className="confirm-documents">
@@ -185,7 +178,6 @@ const ModalSendAdm = () => {
                                         for="is-documents-ok"
                                     >Confirmo que os documentos necessários foram anexados.</label>
                                 </div>
-
                             </div>
                             {/* <button type="button" className="btn-confirmar" onClick={sendForm}><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button> */}
                         </div>

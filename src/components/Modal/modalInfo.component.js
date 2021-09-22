@@ -60,10 +60,7 @@ const ModalInfo = () => {
     if(!infos.id && counterCalls === 0) fetchApi();
     if(!visible) return null;
 
-    
-    const teste = () => {
-        console.log(infos);
-    }    
+
 
     return( 
         <ModalComponent
@@ -78,7 +75,6 @@ const ModalInfo = () => {
                     <div className="content">
                         <form>
                         <div className="infos-final">
-                            <button type="button" onClick={teste}>Teste</button>
                             <div>
                                 <span>Nome:</span>
                                 {infos && infos.nome }
@@ -212,11 +208,11 @@ const ModalInfo = () => {
                             </div>
                             </>
                             }
-                            {infos.pendencias &&
+                            {infos.pendencias && infos.pendencias[0] &&
                             <>
                             <h1 className="title_pendencia">Pendencia</h1>
                             <div>
-                                <span>Motivo:</span>
+                                <span>Motivo:</span>    
                                 {infos.pendencias[0].reason_id}
                             </div>
                             {infos.pendencias[0].reason_id == 1 &&
