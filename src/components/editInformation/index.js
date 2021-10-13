@@ -17,13 +17,13 @@ let validateForm1 = yup.object().shape({
             is: (selectedType) => selectedType == 'adesao',
             then: yup
                 .string()
-                .test('len', 'Insira um CPF válido.', titularId => titularId.length == 0 || titularId.length == 11)
+                .min(11, 'Insira um CPF válido.')
         })
         .when('selectedType', {
             is: (selectedType) => selectedType == 'empresarial',
             then: yup
                 .string()
-                .test('len', 'Insira um CNPJ válido.', titularId => titularId.length == 0 || titularId.length == 14)
+                .min(14, 'Insira um CNPJ válido.')
         }),    
     firstAge: yup
         .string()
@@ -116,8 +116,7 @@ let validateForm3 = yup.object().shape({
     
 });
 
-const Step2 = ({ nextStep, itemId }) => {
-
+const EditInfo = ({ nextStep, itemId, status }) => {
 
     function refreshPage(){
         window.location.reload();
@@ -168,6 +167,86 @@ const Step2 = ({ nextStep, itemId }) => {
         document.querySelector('.step3').style.display = 'block';
     }
 
+
+
+    const [infos, setInfos] = useState([]);
+        
+    async function fetchApi () {
+            const optionsForm = {
+                method: 'POST',
+                body: JSON.stringify({
+                    leadId: itemId,
+                    status: status,
+                })
+            };
+            const response = await fetch("https://moplanseguros.com.br/getleadinfo.php", optionsForm)
+            const json = await response.json();
+            console.log(json);
+            setInfos(json);
+            setFormInfo({...formInfo, 
+                titularId: json.titularId,
+                selectedType: json.type,
+                firstAge: json.vidas_0_18,
+                secondAge: json.vidas_19_23,
+                thirdAge: json.vidas_24_28,
+                fourthAge: json.vidas_29_33,
+                fifthAge: json.vidas_34_38,
+                sixthAge: json.vidas_39_43,
+                seventhAge: json.vidas_44_48,
+                eighthAge: json.vidas_49_53,
+                ninethAge: json.vidas_54_58,
+                tenthAge: json.vidas_59,
+                zone: json.zone,
+                hospitals: json.hospitals,
+                labs: json.labs,
+                illness: json.illness,
+                previousPlan: json.previousplan,
+                operator: json.operadora,
+                plan: json.plano,
+                value: json.valor,
+                time: json.time,
+                isComp: json.cnpj_coligado,
+                titulares: json.titulares,
+                parentes: json.dependentes,
+            })
+
+            json.titulares.map(item => {
+                return(
+                    item.map(item => {
+                        setTitulares((prevState) => [
+                            ...prevState,
+                            {
+                                id: prevState.length + 1,
+                                nome: item[0],
+                                idade: item[1],
+                            }
+                        ])
+                    })
+                )
+            })
+
+            json.dependentes.map(item => {
+                return(
+                    item.map(item => {
+                        setParentes((prevState) => [
+                            ...prevState,
+                            {
+                                id: prevState.length + 1,
+                                nome: item[0],
+                                type: item[1],
+                                titularId: item[3],
+                                idade: item[2],
+                            }
+                        ]);
+                    })
+                )
+            })
+    }
+
+    useEffect(async () => {
+        await fetchApi();
+    }, [itemId])
+
     const valorInput = e => setFormInfo({ ...formInfo, [e.target.name]: e.target.value })
 
     const [formInfo, setFormInfo] = useState({
@@ -194,6 +273,8 @@ const Step2 = ({ nextStep, itemId }) => {
         value: '',
         time: '',
         isComp: '',
+        titulares: '',
+        parentes: '',
 
     });
 
@@ -235,7 +316,7 @@ const Step2 = ({ nextStep, itemId }) => {
             })
         };
         console.log(JSON.stringify(optionsForm))
-        fetch('https://moplanseguros.com.br/setleadinfo.php', optionsForm)
+        fetch('https://moplanseguros.com.br/editleadinfo.php', optionsForm)
         .then(function(response) {
             console.log(response)
             window.location.reload();
@@ -424,6 +505,9 @@ const Step2 = ({ nextStep, itemId }) => {
 
 
 
+    const teste = () => {
+        console.log(formInfo.parentes)
+    }
 
     return(
             <div className="modal">
@@ -440,6 +524,7 @@ const Step2 = ({ nextStep, itemId }) => {
                     >
                     <div className="title">
                         <h1>Coleta de Informações</h1>
+                        <button type="button" onClick={teste}>Teste</button>
                     </div>
                     <div className="content">
                         
@@ -454,16 +539,21 @@ const Step2 = ({ nextStep, itemId }) => {
                                     />
                                 }
                                 <span>Tipo de Contrato (*):</span>
+                                {formInfo.selectedType &&
+                                
+                                
                                 <select
                                     onBlur={valorInput}
                                     onChange={checkSelected}
                                     name="selectedType"
+                                    defaultValue={formInfo.selectedType}
                                 >
-                                    
                                     <option value="">Selecione...</option>
-                                    <option value="adesao">Adesão</option>
-                                    <option value="empresarial">Empresarial</option>
+                                    <option value="Adesao">Adesão</option>
+                                    <option value="Empresarial">Empresarial</option>   
                                 </select>
+
+                            }
                             </div>
                             <div
                                 id="divCPF"
@@ -475,6 +565,7 @@ const Step2 = ({ nextStep, itemId }) => {
                                     name="titularId"
                                     onChange={(e) => {e.target.value = e.target.value.replace(/\D/g, '')}}
                                     onBlur={valorInput}
+                                    value={formInfo.titularId}
                                     maxlength="11"
                                 />
                             </div>
@@ -488,6 +579,7 @@ const Step2 = ({ nextStep, itemId }) => {
                                     name="titularId"
                                     onChange={(e) => {e.target.value = e.target.value.replace(/\D/g, '')}}
                                     onBlur={valorInput}
+                                    value={formInfo.titularId}
                                     maxlength="14"
                                 />
                             </div>
@@ -974,6 +1066,7 @@ const Step2 = ({ nextStep, itemId }) => {
                                     placeholder="Ipiranga ou Zona Sul"
                                     name="zone"
                                     onChange={valorInput}
+                                    value={formInfo.zone}
                                  />
                             </div>
 
@@ -984,6 +1077,7 @@ const Step2 = ({ nextStep, itemId }) => {
                                     placeholder="Oswaldo Cruz"
                                     name="hospitals"
                                     onChange={valorInput}
+                                    value={formInfo.hospitals}
                                  />
                             </div>
 
@@ -994,6 +1088,7 @@ const Step2 = ({ nextStep, itemId }) => {
                                     placeholder="Fleury" 
                                     name="labs"
                                     onChange={valorInput}
+                                    value={formInfo.labs}
                                 />
                             </div>
 
@@ -1013,6 +1108,7 @@ const Step2 = ({ nextStep, itemId }) => {
                                     placeholder="Esôfagite"
                                     name="illness"
                                     onChange={valorInput}
+                                    value={formInfo.illness}
                                 />
                                 
                             </div> 
@@ -1037,16 +1133,18 @@ const Step2 = ({ nextStep, itemId }) => {
                         <div className="content">      
                                 <div>
                                     <span>Possui plano anterior?</span>
+                                    {formInfo.previousPlan &&
                                     <select
-                                        
                                         name="previousPlan"
                                         onChange={valorInput}
                                         onBlur={(e) => setPreviousPlan(e.target.value)}
+                                        defaultValue={formInfo.previousPlan}
                                     >
-                                        <option value="none" selected>Selecione...</option>
+                                        <option value="">Selecione...</option>
                                         <option value="false">Não</option>
                                         <option value="true">Sim</option>
                                     </select>
+                                    }
                                 </div>
 
                                 <div>
@@ -1057,6 +1155,7 @@ const Step2 = ({ nextStep, itemId }) => {
                                         disabled={previousPlan == "false" || previousPlan == "none" ? "true" : ""}
                                         name="operator"
                                         onChange={valorInput}
+                                        value={formInfo.operator}
                                     />
                                 </div>
 
@@ -1068,6 +1167,7 @@ const Step2 = ({ nextStep, itemId }) => {
                                         disabled={previousPlan == "false" || previousPlan == "none" ? "false" : ""}
                                         name="plan"
                                         onChange={valorInput}
+                                        value={formInfo.plan}
                                     />
                                 </div>
 
@@ -1081,6 +1181,7 @@ const Step2 = ({ nextStep, itemId }) => {
                                         onBlur={valorInput}
                                         maxLength="13"
                                         name="value"
+                                        value={formInfo.value}
                                     />
                                 </div>
 
@@ -1092,6 +1193,7 @@ const Step2 = ({ nextStep, itemId }) => {
                                         disabled={previousPlan == "false" || previousPlan == "none" ? "false" : ""} 
                                         name="time"
                                         onChange={valorInput}
+                                        value={formInfo.time}
                                     />
                                 </div>
 
@@ -1112,14 +1214,17 @@ const Step2 = ({ nextStep, itemId }) => {
                              
                             <div>
                                 <span>Possui CNPJ Coligado?</span>
+                                {formInfo.isComp &&
                                 <select
                                     name="isComp"
                                     onChange={valorInput}
+                                    defaultValue={formInfo.isComp}
                                 >
                                     <option value="">Selecione...</option>
                                     <option value="false">Não</option>
                                     <option value="true">Sim</option>
                                 </select>
+                                }
                             </div>  
                             <div className="button-add-company">
                                 <div></div>
@@ -1204,4 +1309,4 @@ const Step2 = ({ nextStep, itemId }) => {
     )
 }
 
-export default Step2;
+export default EditInfo;

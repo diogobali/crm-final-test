@@ -30,7 +30,6 @@ const Modal0 = () => {
     });
 
     const sendForm = async (e) => {
-        e.preventDefault();
         try {
             await validateForm.validate(formInfo);
             console.log("Deu bom");

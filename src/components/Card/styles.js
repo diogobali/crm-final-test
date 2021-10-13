@@ -101,6 +101,18 @@ export const Container= styled.div`
         }
     `}
 
+    ${props => props.hasStatus == 'Status 1' && css`
+        background-color:red;
+    `}
+    
+    ${props => props.hasStatus == 'Status 2' && css`
+        background-color:yellow;
+    `}
+
+    ${props => props.hasStatus == 'Status 3' && css`
+        background-color:lime;
+    `}
+
 
 `;
 

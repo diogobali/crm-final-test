@@ -2,6 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Modal as ModalComponent } from 'antd';
 import { useModalContextInfo } from './modalInfo.context'
 import './styles.scss';
+import { useModalContextEditInfo } from '../Modal/modalEditInfo.context';
+
+
 
 
 
@@ -15,6 +18,9 @@ const ModalInfo = () => {
     function refreshPage(){
         window.location.reload();
     } 
+
+    const { openModalEditInfo } = useModalContextEditInfo();
+    const openModaleditInfo = () =>  openModalEditInfo({ message: 'Modal Edit Info', itemId: itemId, status: status });
 
     const [infos, setInfos] = useState([]);
     const [counterCalls, setCounterCalls] = useState(0);
@@ -35,7 +41,39 @@ const ModalInfo = () => {
         }
     }
 
-    const [responseApi, setResponseApi] = useState();
+    const [observacao, setObservacao] = useState();
+    const [displayObservacoes, setDisplayObservacoes] = useState([]);
+    const sendObservacao = () => {
+        const optionsForm = {
+            method: 'POST',
+            body: JSON.stringify({
+                leadId: itemId,
+                message: observacao
+            })
+        };
+
+        fetch('https://moplanseguros.com.br/recieveform_observacao.php', optionsForm)
+        .then(function(response) {
+            setObservacao('');
+            loadObservacao();
+            
+        })
+    }
+
+    async function loadObservacao () {
+        const optionsForm = {
+            method: 'POST',
+            body: JSON.stringify({
+                leadId: itemId
+            })
+        };
+        const response = await fetch('https://moplanseguros.com.br/getobservacoes.php', optionsForm)
+        const json = await response.json();
+         setDisplayObservacoes(json);
+            
+    }
+
+    const [responseApi, setResponseApi] = useState([]);
 
     const load_image = () => {
         const form_data = new FormData();
@@ -54,8 +92,13 @@ const ModalInfo = () => {
     
     useEffect(() => {
         load_image()
+        loadObservacao()
     }, [itemId]);   
 
+
+    const teste = () => {
+        console.log(infos);
+    }
 
     if(!infos.id && counterCalls === 0) fetchApi();
     if(!visible) return null;
@@ -70,6 +113,7 @@ const ModalInfo = () => {
                 <div className="container">
                     <div className="title">
                         <h1>Geral</h1>
+                        <button type="button" onClick={teste}>Teste</button>
                     </div>
 
                     <div className="content">
@@ -128,6 +172,7 @@ const ModalInfo = () => {
                             }
                             {infos.lifes &&
                             <>
+                            
                             <div>
                                 <span>Vidas:</span>
                                 {infos.lifes}
@@ -248,77 +293,7 @@ const ModalInfo = () => {
                             }
                             </>
                             }
-                            {infos.operadora &&
-                            <>
-                            {infos.status == 1 && 
-                            <h1>Pedido de venda</h1>
-                            }
-                            {infos.status == 0 &&
-                            <h1>Orçamento</h1>
-                            }
-                            <div>
-                                <span>Operadora:</span>
-                                {infos.operadora}
-                            </div>
-                            </>
-                            }
-                            {infos.plano &&
-                            <>
-                            <div>
-                                <span>Plano:</span>
-                                {infos.plano}
-                            </div>
-                            </>
-                            }
-                            {infos.cobertura &&
-                            <>
-                            <div>
-                                <span>Cobertura:</span>
-                                {infos.cobertura}
-                            </div>
-                            </>
-                            }
-                            {infos.coparticipacao &&
-                            <>
-                            <div>
-                                <span>Coparticipacao:</span>
-                                {infos.coparticipacao}
-                            </div>
-                            </>
-                            }
-                            {infos.valorMin &&
-                            <>
-                            <div>
-                                <span>Valor Min:</span>
-                                {infos.valorMin}
-                            </div>
-                            </>
-                            }
-                            {infos.valorMax &&
-                            <>
-                            <div>
-                                <span>Valor Max:</span>
-                                {infos.valorMax}
-                            </div>
-                            </>
-                            }
-                            {infos.valorFechado &&
-                            <>
-                            <div>
-                                <span>Valor Fechado:</span>
-                                R$ {infos.valorFechado}
-                            </div>
-                            </>
-                            }
-
-                            {infos.retorno &&
-                            <>
-                            <div>
-                                <span>Retorno:</span>
-                                {infos.retorno}
-                            </div>
-                            </>
-                            }
+                            
                             {infos.tipo &&
                             <>
                             <h1>Coletadas</h1>
@@ -330,10 +305,7 @@ const ModalInfo = () => {
                             }
                             {infos.vidas_total &&
                             <>
-                            <div>
-                                <span>Vidas:</span>
-                                {infos.vidas_total}
-                            </div>
+                            <h1>Informações Coletadas</h1>
                             </>
                             }
                             {infos.vidas_0_18 &&
@@ -416,6 +388,48 @@ const ModalInfo = () => {
                             </div>
                             </>
                             }
+                            {infos.vidas_total &&
+                            <>
+                            <div>
+                                <span>Total de Vidas:</span>
+                                {infos.vidas_total}
+                            </div>
+                            </>
+                            }
+
+                            {infos.titulares &&
+                            <>
+                                <div className="displayPessoas">
+                                    <div>
+                                        <span><strong>Titulares</strong></span>
+                                        {infos.titulares.map(item => {
+                                            return(
+                                                item.map(item => {
+                                                    return(
+                                                        <span>{item[0]}</span>
+                                                    )
+                                                })
+                                                
+                                            )
+                                        })}
+                                    </div>
+                                    <div>
+                                        <span><strong>Dependentes</strong></span>
+                                        {infos.dependentes.map(item => {
+                                            return(
+                                                item.map(item => {
+                                                    return(
+                                                        <span>{item[0]} ({item[2]} anos), {item[1]} de {item[3]}</span>
+                                                    )
+                                                })
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            </>
+                            }
+
+
                             {infos.zone &&
                             <>
                             <div>
@@ -452,7 +466,16 @@ const ModalInfo = () => {
                             <>
                             <div>
                                 <span>Possui plano anterior:</span>
-                                {infos.previousplan}
+                                {infos.previousplan == "true" &&
+                                <>
+                                    Sim
+                                </>
+                                }
+                                {infos.previousplan == "false" &&
+                                <>
+                                    Não
+                                </>
+                                }
                             </div>
                             </>
                             }
@@ -483,25 +506,111 @@ const ModalInfo = () => {
                             <>
                             <div>
                                 <span>Possui CNPJ Coligado:</span>
-                                {infos.cnpj_coligado}
+                                {infos.cnpj_coligado == 'true' &&
+                                    <>
+                                        Sim
+                                    </>
+                                }
+                                {infos.cnpj_coligado == 'false' &&
+                                    <>
+                                        Não
+                                    </>
+                                }
                             </div>
                             </>
                             }
+                            <h1>Orçamentos</h1>
+                            <div className="showOrcamentos">
+                            
+                            <ul>
+                                {infos.orcamentos &&
+                                infos.orcamentos.map((r) => {
+                                    return(
+                                        r.map(r => {
+                                            return(
+                                            <>
+                                            <li>
+                                            <div>
+                                                <div>
+                                                    <div className="showOrcamento">
+                                                        <span>Operadora: {r[0]}</span>
+                                                        <span>Plano: {r[1]}</span>
+                                                        <span>Acomodação: {r[2]}</span>
+                                                        <span>Coparticipação: {r[3]}</span>
+                                                        <span>Valor: {r[4]}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </li>   
+                                            </>
+                                            )
+                                        })
+                                    )
+                                        
+                                    })
+                                }
+                                
+                            </ul>
+                            </div>                
+
                         </div>
                         {infos.status_doc &&
                         <div className="documentsList">
-                            <span>Documentos anexados</span>
-                            <ul id="listDir">
-                                {responseApi &&
-                                    responseApi.map((item, index) => index > 1 &&   <li> <a href={item[0]+item[1]} download="Documentacao.pdf" target="_blank"> {item[1]} </a></li>)
-                                }
-                            </ul>
+                            <div>
+                                <h3>Documentos Empresa</h3>
+                                <ul id="listDir">
+                                    {responseApi.empresa &&
+                                        responseApi.empresa.map((item, index) => index > 1 &&   <li> <a href={`https://moplanseguros.com.br/uploads/${itemId}/empresa/${item[1]}`} download target="_blank">{item[1]}</a></li>)
+                                    }
+                                </ul>
+                            </div>
+                            <div>
+                                <h3>Documentos Titulares e Dependentes</h3>
+                                <ul id="listDir">
+                                    {responseApi.geral &&
+                                        responseApi.geral.map((item, index) => index > 1 &&   <li> <a href={`https://moplanseguros.com.br/uploads/${itemId}/${item[1]}`} download target="_blank"> {item[1]} </a></li>)
+                                    }
+                                </ul>
+                            </div>
                         </div>  
                         }
+                        <div className="insertObservacoes">
+                            <textarea
+                                onChange={(e) => setObservacao(e.target.value)}
+                                value={observacao}
+                            ></textarea>
+                            <button
+                                type="button"
+                                onClick={sendObservacao}
+                            >Nova Observação
+                            </button>
+                        </div>
+                       
+                            {displayObservacoes.message &&
+                                displayObservacoes.message.map(item => {
+                                    return(
+                                        item.map(item => {
+                                            return(
+                                                <>
+                                                 <div className="observacoes">
+                                                    <span>
+                                                        {item[2]}
+                                                    </span>
+                                                    <span>
+                                                        {item[1]}
+                                                    </span>
+                                                </div>
+                                                </>
+                                            )
+                                        })
+                                    )
+                                })
+                            }
                         
 
 
                         <div className="content-buttons">
+                            <button type="button" className="btn-edit"  onClick={openModaleditInfo} title="Editar informações"><img src="../../../btn-edit.svg"></img></button>  
                             <button type="button" className="btn-cancelar" onClick={refreshPage}><img src="../../../btn-cancel.svg"></img> </button>
                         </div>
                         </form>

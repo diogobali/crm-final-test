@@ -16,8 +16,7 @@ const Modal3 = () => {
         plano: '',
         cobertura: '',
         coparticipacao: '',
-        valorMin: '',
-        valorMax: '',
+        valor: '',
         primeiroretorno: '',
     });
 
@@ -33,8 +32,7 @@ const Modal3 = () => {
                 plano: formInfo.plano,
                 cobertura: formInfo.cobertura,
                 coparticipacao: formInfo.coparticipacao,
-                valorMin: formInfo.valorMin,
-                valorMax: formInfo.valorMax,
+                valor: formInfo.valor,
                 primeiroretorno: formInfo.primeiroretorno,
             })
         };
@@ -56,7 +54,7 @@ const Modal3 = () => {
             <div className="modal">
                 <div className="container">
                     <div className="title">
-                        <h1>Enviar Orçamentos</h1>
+                        <h1>Enviar Orçamentossss</h1>
                     </div>
                     <div className="content">
                         <form onSubmit={sendForm}>
@@ -117,15 +115,8 @@ const Modal3 = () => {
                             <div>
                                 <input 
                                     type="text"
-                                    placeholder="Valor Min"
-                                    name="valorMin"
-                                    onChange={valorInput}
-                                    required
-                                ></input>
-                                <input 
-                                    type="text"
-                                    placeholder="Valor Max"
-                                    name="valorMax"
+                                    placeholder="Valor"
+                                    name="valor"
                                     onChange={valorInput}
                                     required
                                 ></input>

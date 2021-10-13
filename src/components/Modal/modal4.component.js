@@ -43,8 +43,7 @@ const Modal4 = () => {
                 plano: formInfo.plano,
                 cobertura: formInfo.cobertura,
                 coparticipacao: formInfo.coparticipacao,
-                valorMin: formInfo.valorMin,
-                valorMax: formInfo.valorMax,
+                valor: formInfo.valor,
             })
         }
         ;
@@ -58,7 +57,7 @@ const Modal4 = () => {
             method: 'POST',
             body: JSON.stringify({  
                 leadId: itemId,
-                orcamentoId: data.id,
+                orcamentoId: selectedOrcamento[0].id,
                 valorFechado: valorFechado,
             })
         };
@@ -115,6 +114,24 @@ const Modal4 = () => {
 
     if(counterCalls === 0) fetchApi();
 
+    const teste = () => {
+        console.log(selectedOrcamento);
+    }
+
+    const [selectedOrcamento, setSelectedOrcamento] = useState([]);
+
+    const selectOrcamento = (r) => {
+        setSelectedOrcamento(() => [
+            {
+                operadora: r[0],
+                plano: r[1],
+                cobertura: r[2],
+                coparticipacao: r[3],
+                valor: r[4],
+                id: r[6]
+            }
+        ])
+    }
 
     return(
         <ModalComponent4 
@@ -123,42 +140,69 @@ const Modal4 = () => {
             <div className="modal">
                 <div className="container_orcamento">
                             <div className="title">
-                                <h2>Orçamento em aberto</h2>
+                                <h2>Orçamentos em aberto</h2>
+                                <button type="button" onClick={teste}>Teste</button>
                             </div>
+                            <div className="showOrcamentos">
+                            
+                            <ul>
+                                {data.orcamentos &&
+                                data.orcamentos.map((r) => {
+                                    return(
+                                        r.map(r => {
+                                            return(
+                                            <>
+                                            <li>
+                                            <div>
+                                                <div>
+                                                    <div 
+                                                        className="showOrcamento"
+                                                        onClick={() => selectOrcamento(r)}
+                                                    >
+                                                        <span>Operadora: {r[0]}</span>
+                                                        <span>Plano: {r[1]}</span>
+                                                        <span>Acomodação: {r[2]}</span>
+                                                        <span>Coparticipação: {r[3]}</span>
+                                                        <span>Valor: {r[4]}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </li>   
+                                            </>
+                                            )
+                                        })
+                                    )
+                                        
+                                    })
+                                }
+                                
+                            </ul>
+                            </div>          
                             <div className="content_orcamento">
-                            {data.id &&
-                            <>
-                                <div>
-                                    <span>ID: </span>
-                                    <span>{data.id}</span>
-                                </div>
-                                <div>
-                                    <span>Status: </span>
-                                    <span>{data.status}</span>
-                                </div>
+                            {selectedOrcamento &&
+
+                            selectedOrcamento.map(selectedOrcamento => {
+                                return(
+                                <>
                                 <div>                                
                                     <span>Operadora: </span>
-                                    <span>{data.operadora}</span>
+                                    <span>{selectedOrcamento[0].operadora}</span>
                                 </div>
                                 <div>    
                                     <span>Plano:</span>
-                                    <span>{data.plano}</span>
+                                    <span>{selectedOrcamento[0].plano}</span>
                                 </div>
                                 <div>    
                                     <span>Cobertura: </span>
-                                    <span>{data.cobertura}</span>
+                                    <span>{selectedOrcamento[0].cobertura}</span>
                                 </div>
                                 <div> 
                                     <span>Coparticipacao: </span>
-                                    <span>{data.coparticipacao}</span>
+                                    <span>{selectedOrcamento[0].coparticipacao}</span>
                                 </div>
                                 <div> 
-                                    <span>Valor Minimo: </span>
-                                    <span>{data.valorMin}</span>
-                                </div>
-                                <div> 
-                                    <span>Valor Maximo: </span>
-                                    <span>{data.valorMax}</span>
+                                    <span>Valor: </span>
+                                    <span>{selectedOrcamento[0].valor}</span>
                                 </div>
                                 <div>
                                     <span>Valor fechado</span>  
@@ -172,7 +216,9 @@ const Modal4 = () => {
                                         name="value"
                                     />
                                 </div>
-                            </>
+                                </>
+                                )
+                            })
                             }
                             <div className="content-buttons">
                                 <button type="button" className="btn-cancelar" onClick={refreshPage} title="Voltar"><img src="../../../btn-cancel.svg"></img> </button>
@@ -259,15 +305,8 @@ const Modal4 = () => {
                             <div>
                                 <input 
                                     type="text"
-                                    placeholder="Valor Min"
-                                    name="valorMin"
-                                    onChange={valorInput}
-                                    required
-                                ></input>
-                                <input 
-                                    type="text"
-                                    placeholder="Valor Max"
-                                    name="valorMax"
+                                    placeholder="Valor"
+                                    name="valor"
                                     onChange={valorInput}
                                     required
                                 ></input>

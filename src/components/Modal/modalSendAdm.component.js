@@ -12,8 +12,9 @@ const ModalSendAdm = () => {
         window.location.reload();
     } 
 
-    const [responseApi, setResponseApi] = useState()
+    const [responseApi, setResponseApi] = useState([])
     const [fileName, setFileName] = useState()
+    const [fileOwner, setFileOwner] = useState()
 
     const [image, setImage] = useState();
 
@@ -22,6 +23,7 @@ const ModalSendAdm = () => {
         form_data.append('attachment', image);
         form_data.append('leadId', itemId);
         form_data.append('fileName', fileName);
+        form_data.append('fileOwner', fileOwner);
 
         fetch('https://moplanseguros.com.br/attachdocuments.php', {
             method: "POST",
@@ -34,6 +36,18 @@ const ModalSendAdm = () => {
         });
     }
 
+    const [people, setPeople] = useState([]);
+    async function load_people() {
+        const optionsForm = {
+            method: 'POST',
+            body: JSON.stringify({
+                leadId: itemId,
+            })
+        };
+        const response = await fetch("https://moplanseguros.com.br/getpeople.php", optionsForm)
+        const json = await response.json();
+        setPeople(json);
+    }
 
     const load_image = () => {
         const form_data = new FormData();
@@ -51,6 +65,7 @@ const ModalSendAdm = () => {
     }
     useEffect(() => {
         load_image() 
+        load_people()
     }, [itemId]);
 
     const [data, setData] = useState([]);
@@ -62,6 +77,7 @@ const ModalSendAdm = () => {
             method: 'POST',
             body: JSON.stringify({
                 leadId: itemId,
+                final: '1',
             })
         };
 
@@ -82,15 +98,18 @@ const ModalSendAdm = () => {
             method: 'POST',
             body: JSON.stringify({  
                 leadId: itemId,
+                
             })
         };
         fetch('https://moplanseguros.com.br/sendadm.php', optionsForm)
         .then(function(response) {
-        window.location.reload();
+            console.log(response);
         })
     }
 
-
+    const teste = () => {
+        console.log(data);
+    }
 
     return(
         <ModalComponent
@@ -100,23 +119,34 @@ const ModalSendAdm = () => {
                 <div className="container">
                     <div className="title">
                         <h1>Finalizar</h1>
+                        <button type="button" onClick={teste}>Teste</button>
                     </div>
                     <div className="content">
-                            <div>
-                                <span>Operadora:</span>
-                                <span>{data.operadora}</span>
-                            </div>
-                            <div>
-                                <span>Plano:</span>
-                                <span>{data.plano}</span>
-                            </div>
-                            <div>
-                                <span>Valor Fechado:</span>
-                                <span>{data.valorFechado}</span>
-                            </div>
-                            <div>
-                                <span>Documentos necessários:</span>
-                            </div>
+                        {data.orcamentos &&
+                        data.orcamentos.map(data => {
+                            return(
+                                data.map(data => {
+                                    return(
+                                        <>
+                                        <div>
+                                            <span>Operadora:</span>
+                                            <span>{data[0]}</span>
+                                        </div>
+                                        <div>
+                                            <span>Plano:</span>
+                                            <span>{data[1]}</span>
+                                        </div>
+                                        <div>
+                                            <span>Valor Fechado:</span>
+                                            <span>{data.[4]}</span>
+                                        </div>
+                                        </>
+                                    )
+                                })
+                           
+                            )
+                        })}
+                            
                         <form onSubmit={sendAdm}>
                         <div id="msg" className="msg">
 
@@ -140,6 +170,39 @@ const ModalSendAdm = () => {
                                 <option value="RG">RG</option>
                                 <option value="CNH">CNH</option>
                                 <option value="Comprov">COMPROVANTE DE RESIDENCIA</option>
+                                <option value="CARTEIRINHA">CARTEIRINHA</option>
+                            </select>
+                            <select
+                                onChange={(e) => setFileOwner(e.target.value)}
+                            >
+                                <option value="">Selecione o dono do documento</option>
+                                <option value="empresa">Empresa</option>
+                                {
+                                    people.titulares && 
+                                    people.titulares.map(item => {
+                                        return(
+                                            item.map(item => {
+                                                return(
+                                                    <option value={item[0]}>{item[0]} (Titular)</option>
+                                                )
+                                            })
+                                        )
+                                    })
+                                }
+                                {
+                                    people.dependentes &&
+                                    people.dependentes.map(item => {
+                                        return(
+                                            item.map(item => {
+                                                return(
+                                                    <option value={item[0]}>{item[0]} ({item[1]} de {item[3]})</option>
+                                                )
+                                            })
+                                        )
+                                    })
+                                }
+                                
+
                             </select>
                             <input 
                                 type="file"
@@ -156,29 +219,39 @@ const ModalSendAdm = () => {
                             ><img src="../../../btn-send-black.svg"></img></button>
                         </div>
                         <div className="documentsList">
-                            <span>Documentos anexados</span>
-                            <ul id="listDir">
-                                {responseApi &&
-                                    responseApi.map((item, index) => index > 1 &&   <li> <a href={item[0]+item[1]} download="Documentacao.pdf" target="_blank"> {item[1]} </a></li>)
-                                }
-                            </ul>
+                            <div>
+                                <h3>Documentos Empresa</h3>
+                                <ul id="listDir">
+                                    {responseApi.empresa &&
+                                        responseApi.empresa.map((item, index) => index > 1 &&   <li> <a href={`https://moplanseguros.com.br/uploads/${itemId}/empresa/${item[1]}`} download target="_blank">{item[1]}</a></li>)
+                                    }
+                                </ul>
+                            </div>
+                            <div>
+                                <h3>Documentos Titulares e Dependentes</h3>
+                                <ul id="listDir">
+                                    {responseApi.geral &&
+                                        responseApi.geral.map((item, index) => index > 1 &&   <li> <a href={`https://moplanseguros.com.br/uploads/${itemId}/${item[1]}`} download target="_blank"> {item[1]} </a></li>)
+                                    }
+                                </ul>
+                            </div>
                         </div>  
                         <div className="content-buttons">
                             <button type="button" className="btn-cancelar" onClick={refreshPage}><img src="../../../btn-cancel.svg"></img> </button>
                             <div className="confirm-documents-up">
                             <button type="submit" className="btn-confirmar"><img src="../../../btn-confirm.svg"></img> </button>
-                                <div className="confirm-documents">
-                                    <input
-                                        type="checkbox"
-                                        required
-                                        name="is-documents-ok"
-                                        id="is-documents-ok"
-                                    ></input>
-                                    <label 
-                                        for="is-documents-ok"
-                                    >Confirmo que os documentos necessários foram anexados.</label>
-                                </div>
+                            <div className="confirm-documents">
+                                <input
+                                    type="checkbox"
+                                    required
+                                    name="is-documents-ok"
+                                    id="is-documents-ok"
+                                ></input>
+                                <label 
+                                    for="is-documents-ok"
+                                >Confirmo que os documentos necessários foram anexados.</label>
                             </div>
+                        </div>
                             {/* <button type="button" className="btn-confirmar" onClick={sendForm}><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button> */}
                         </div>
                         </form>

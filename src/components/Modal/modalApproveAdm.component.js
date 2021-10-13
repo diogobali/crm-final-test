@@ -28,8 +28,11 @@ const ModalApproveAdm = () => {
             setData(json);
             setCounterCalls(counterCalls + 1);
         }
-        console.log(data.leadId)   
     }
+
+    const [plataforma, setPlataforma] = useState();
+    const [proposta, setProposta] = useState();
+    const [valor, setValor] = useState();
 
     const sendForm = (e) => {
         e.preventDefault();
@@ -37,6 +40,9 @@ const ModalApproveAdm = () => {
             method: 'POST',
             body: JSON.stringify({  
                 leadId: itemId,
+                plataforma: plataforma,
+                proposta: proposta,
+                valor: valor,
             })
         };
         fetch('https://moplanseguros.com.br/approveadm.php', optionsForm)
@@ -48,6 +54,10 @@ const ModalApproveAdm = () => {
 
     if(counterCalls === 0) fetchApi();
 
+    const teste = () => {
+        console.log(data)
+    }
+
     return(
         <ModalComponent
             visible={visible}
@@ -56,6 +66,7 @@ const ModalApproveAdm = () => {
                 <div className="container">
                     <div className="title">
                         <h1>Aprovar Venda</h1>
+                        <button type="button" onClick={teste}>Teste</button>
                     </div>
                     <div className="content">
                         <form>
@@ -63,35 +74,79 @@ const ModalApproveAdm = () => {
                             <div className="title">
                                 Informacoes do Plano
                             </div>
-                            {data.id &&
+                            {data.orcamentos &&
                             <>
-                                <div>
-                                    <span>ID: </span>
-                                    <span>{data.id}</span>
-                                </div>
-                                <div>
-                                    <span>Status: </span>
-                                    <span>{data.status}</span>
-                                </div>
                                 <div>                                
                                     <span>Operadora: </span>
-                                    <span>{data.operadora}</span>
+                                    <span>{data.orcamentos.map(item => {
+                                        return(
+                                            item.map(item => {
+                                                return(
+                                                    item[0]
+                                                )
+                                            })
+                                        )
+                                    })}</span>
                                 </div>
                                 <div>    
                                     <span>Plano:</span>
-                                    <span>{data.plano}</span>
+                                    <span>{data.orcamentos.map(item => {
+                                        return(
+                                            item.map(item => {
+                                                return(
+                                                    item[1]
+                                                )
+                                            })
+                                        )
+                                    })}</span>
                                 </div>
                                 <div>    
-                                    <span>Cobertura: </span>
-                                    <span>{data.cobertura}</span>
+                                    <span>Acomodação: </span>
+                                    <span>{data.orcamentos.map(item => {
+                                        return(
+                                            item.map(item => {
+                                                return(
+                                                    item[2]
+                                                )
+                                            })
+                                        )
+                                    })}</span>
                                 </div>
                                 <div> 
                                     <span>Coparticipacao: </span>
-                                    <span>{data.coparticipacao}</span>
+                                    <span>{data.orcamentos.map(item => {
+                                        return(
+                                            item.map(item => {
+                                                return(
+                                                    item[3]
+                                                )
+                                            })
+                                        )
+                                    })}</span>
                                 </div>
                                 <div> 
-                                    <span>Valor Fechado: </span>
-                                    <span>{data.valorFechado}</span>
+                                    <span>Valor Real: </span>
+                                    <input
+                                        type="number"
+                                        onChange={(e) => setValor(e.target.value)}
+                                    />
+                                </div>
+                                <div>
+                                    <span>Plataforma:</span>
+                                    <select
+                                        onChange={(e) => setPlataforma(e.target.value)}
+                                    >
+                                        <option value="">Selecione...</option>
+                                        <option value="viva">Viva</option>
+                                    </select>
+
+                                </div>
+                                <div>
+                                    <span>Nº da Proposta</span>
+                                    <input 
+                                        type="text"
+                                        onChange={(e) => setProposta(e.target.value)}
+                                    />
                                 </div>
 
                                 </>

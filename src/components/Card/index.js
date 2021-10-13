@@ -23,7 +23,7 @@ import { useModalContextRegularizarAction} from '../Modal/modalRegularizarAction
 import { useUserContext } from '../../contexts/userContext';
 
 
-export default function Card({ data, index, listIndex, button, status, sendAdm, key, className, isAdmAction, isRegularizarAction }){
+export default function Card({ data, index, listIndex, button, status, sendAdm, key, className, isAdmAction, isRegularizarAction, hasStatus }){
 
     const { userData, setUserData } = useUserContext();
 
@@ -228,7 +228,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
 
     return(
         
-        <Container ref={ref} isDragging={isDragging} className={className}    >
+        <Container ref={ref} isDragging={isDragging} className={className} hasStatus={data.status_implantacao}>
             <header>
 
             </header>
@@ -243,6 +243,10 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                         <button type="button" className="btn-info" onClick={() => openModalInfos(data.id, data.status)}><img src="../../../info-icon.svg" alt="Informações" /></button>
                     </div>
                     
+            }
+
+            {hasStatus &&
+                <span>{data.status_implantacao}</span>
             }
 
             {sendAdm &&

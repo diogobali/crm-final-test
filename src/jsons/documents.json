@@ -23,5 +23,10 @@
         "label": "Certidão de Nascimento",
         "name": "CERT.NASC",
         "id": "5"
+    },
+    {
+        "label": "Carteirinha",
+        "name": "CARTEIRINHA",
+        "id": "6"
     }
 ]

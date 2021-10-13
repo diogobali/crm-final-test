@@ -31,7 +31,7 @@ const ModalReproveAdm = () => {
     const [titulares, setTitulares] = useState()
     const [parentes, setParentes] = useState()
 
-    const [responseApi, setResponseApi] = useState()
+    const [responseApi, setResponseApi] = useState([])
     
     const load_image = () => {
         const form_data = new FormData();
@@ -186,6 +186,31 @@ const ModalReproveAdm = () => {
         })
     }
 
+    const [docsGeralPendentes, setDocsGeralPendentes] = useState([]);
+    const [docsEmpresaPendentes, setDocsEmpresaPendentes] = useState([]);
+
+    const auxDocsGeralPendentes = (e) => {
+        if(e.target.checked){
+            setDocsGeralPendentes((prevState) => [
+                ...prevState,
+                e.target.value
+            ])
+        } else {
+            setDocsGeralPendentes(docsGeralPendentes.filter((c) => c != e.target.value))
+        }
+    }
+
+    const auxDocsEmpresaPendentes = (e) => {
+        if(e.target.checked){
+            setDocsEmpresaPendentes((prevState) => [
+                ...prevState,
+                e.target.value
+            ])
+        } else {
+            setDocsEmpresaPendentes(docsEmpresaPendentes.filter((c) => c != e.target.value))
+        }
+    }
+
     const sendPendencia = (e) => {
         e.preventDefault();
         const optionsForm = {
@@ -196,6 +221,8 @@ const ModalReproveAdm = () => {
                 docsParentesNonExistent: docsParentesNonexistent,
                 docsTitularesNonExistent: docsNonexistent,
                 docsUnreadable: docsUnreadable,
+                docsGeralPendentes: docsGeralPendentes,
+                docsEmpresaPendentes: docsEmpresaPendentes,
             })
         };
         fetch('https://moplanseguros.com.br/sendpendencia.php', optionsForm)
@@ -235,154 +262,58 @@ const ModalReproveAdm = () => {
                                     }
                                 </select>
                             </div>
-                            {divWhichDoc === "2" &&
+                            {divWhichDoc === "1" &&
                                 <div className="divWhichDocUnreadable">
-                                    <ul id="listDir">
-                                        {responseApi &&
-                                            responseApi.map((item, index) => index > 1 &&   <li> <input type="checkbox" id={item[1]} value={item[1]} onChange={(e) => newDocUnreadable(e)} /><label for={item[1]}>{item[1]}</label></li>)
-                                        }
-                                    </ul>
-                                </div>
+                                    <div>
+                                        <h3>Documentos Empresa</h3>
+                                        <ul id="listDir">
+                                            {responseApi.empresa &&
+                                                responseApi.empresa.map((item, index) => index > 1 &&   
+                                                <li>
+                                                    <input 
+                                                        type="checkbox"
+                                                        name="documentosPendentes"
+                                                        id={item[1]}
+                                                        value={item[1]}
+                                                        onChange={(e) => auxDocsEmpresaPendentes(e)}
+                                                    />
+                                                    <label
+                                                        for={item[1]}
+                                                    >
+                                                    {item[1]}
+                                                    </label>
+                                                </li>
+                                                )
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h3>Documentos Titulares e Dependentes</h3>
+                                        <ul id="listDir">
+                                            {responseApi.geral &&
+                                                responseApi.geral.map((item, index) => index > 1 &&   
+                                                <li>
+                                                    <input
+                                                        type="checkbox"
+                                                        name="documentosPendentes"
+                                                        id={item[1]}
+                                                        value={item[1]}
+                                                        onChange={(e) => auxDocsGeralPendentes(e)}
+                                                    />
+                                                    <label
+                                                        for={item[1]}
+                                                    >
+                                                    {item[1]}
+                                                    </label>
+                                                </li>
+                                                )
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>  
                             }
-                            {divWhichDoc === '1' &&
-                            <>
-                                <div className="title">
-                                    <h2>Titulares</h2>
-                                </div>
-                                <div className="divWhicDocNonexistent">
-                                    
-                                    <select
-                                        onChange={(e) => setDocNonexistent(e.target.value)}
-                                    >
-                                        <option value="">Selecione o documento</option>
-                                        {
-                                            documents.map(item => {
-                                                return(
-                                                    <option value={item.name}>{item.label}</option>
-                                                )
-                                            })
-                                        }
-
-                                    </select>
-                                    <select
-                                        onChange={(e) => docOwnerAux(e.target.value)}
-                                    >
-                                        <option value="">De quem?</option>
-                                        {
-                                            titulares.map((item) => {
-                                                return(
-                                                    item.map(item => {
-                                                        return(
-                                                            <option value={item[1]}>{item[0]}</option>
-                                                        )
-                                                    })
-                                                )
-                                            })
-                                        }
-
-                                    </select>
-
-                                    <button
-                                        type="button"
-                                        onClick={newDocNonexistent}
-                                    >Inserir</button>
-                                </div>
-                                <div className="title">
-                                    <h2>Parentes</h2>
-                                </div>
-                                <div className="divWhicDocNonexistent">
-                                    
-                                    <select
-                                        onChange={(e) => setDocParentesNonexistent(e.target.value)}
-                                    >
-                                        <option value="">Selecione o documento</option>
-                                        {
-                                            documents.map(item => {
-                                                return(
-                                                    <option value={item.name}>{item.label}</option>
-                                                )
-                                            })
-                                        }
-
-                                    </select>
-                                    <select
-                                        onChange={(e) => docParentesOwnerAux(e.target.value)}
-                                    >
-                                        <option value="">De quem?</option>
-                                        {
-                                            parentes.map((item) => {
-                                                return(
-                                                    item.map(item => {
-                                                        return(
-                                                            <option value={item[1]}>{item[0]}</option>
-                                                        )
-                                                    })
-                                                )
-                                            })
-                                        }
-
-                                    </select>
-
-                                    <button
-                                        type="button"
-                                        onClick={newDocParentesNonexistent}
-                                    >Inserir</button>
-                                </div>
-                                <div className="title">
-                                        <h2>Pendencias - Titulares</h2>
-                                </div>
-                                <div className="showTitulares">
-                                    
-                                    <ul>
-                                    {docsNonexistent.length > 0 &&
-                                       docsNonexistent.map((r) => (
-                                        <>
-                                            <li>
-                                            <div>
-                                                <button 
-                                                    type="button" 
-                                                    onClick={() => removeDocsNonexistent(r.id)}
-                                                >x</button>
-                                                <div>
-                                                    <div>
-                                                        <span><strong>{r.owner}</strong> - {r.doc}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            </li>   
-                                        </>
-                                    )) 
-                                    }
-                                    </ul>
-                                </div> 
-                                <div className="title">
-                                    <h2>Pendencias - Parentes</h2>
-                                </div>
-                                <div className="showTitulares">
-                                    <ul>
-                                    {docsParentesNonexistent.length > 0 &&
-                                       docsParentesNonexistent.map((r) => (
-                                        <>
-                                            <li>
-                                            <div>
-                                                <button 
-                                                    type="button" 
-                                                    onClick={() => removeDocsParentesNonexistent(r.id)}
-                                                >x</button>
-                                                <div>
-                                                    <div>
-                                                        <span>{r.owner} - {r.doc}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            </li>   
-                                        </>
-                                    )) 
-                                    }
-                                    </ul>
-                                </div>
-                            </>
-                            }
+                            
+                                
                             <div className="content-buttons">
                                 <button type="button" className="btn-cancelar" onClick={refreshPage} title="Voltar"><img src="../../../btn-cancel.svg"></img> </button>
                                 <button type="submit" className="btn-confirmar" onClick={(e) => sendPendencia(e)} title="Aprovar orçamento"><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button>

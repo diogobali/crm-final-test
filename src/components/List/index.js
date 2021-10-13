@@ -8,18 +8,16 @@ import { Container } from './styles';
 import { useUserContext } from '../../contexts/userContext';
 
 
-export default function List({ title, data, index: listIndex, adm, sendAdm, isAdmAction, isRegularizarAction}){
+export default function List({ title, data, index: listIndex, adm, sendAdm, isAdmAction, isRegularizarAction, hasStatus}){
 
     const { userData, setUserData } = useUserContext();
 
     var aux = 0;
-
     return(
-        <Container adm={adm} sendAdm={sendAdm} userData={userData} isAdmAction={isAdmAction} isRegularizarAction={isRegularizarAction}>
+        <Container adm={adm} sendAdm={sendAdm} userData={userData} isAdmAction={isAdmAction} isRegularizarAction={isRegularizarAction} hasStatus={hasStatus}>
             <header>
                 <h2>{title}</h2>
             </header>
-
             <ul>
                     { data.map((card, index) => {                    
                         if(card.status == listIndex){
@@ -37,6 +35,7 @@ export default function List({ title, data, index: listIndex, adm, sendAdm, isAd
                                 sendAdm={sendAdm}
                                 isAdmAction={isAdmAction}
                                 isRegularizarAction={isRegularizarAction}
+                                hasStatus={hasStatus}
                             />
                             )
                         }

@@ -183,6 +183,28 @@
         }
     }
 
+    .displayPessoas{
+        div{
+            display:flex;
+            flex-direction: column;
+        }
+    }
+
+    .observacoes{
+        display:grid;
+        grid-template-columns: 1fr 3fr;
+        text-align:start;
+        span{
+            
+        }
+    }
+
+    .insertObservacoes{
+        display:grid;
+        grid-template-columns: 3fr 1fr;
+        gap: 1em;
+        height: 8em;
+    }
     
     .container, .container_orcamento{
         max-height:95%;
@@ -190,7 +212,7 @@
         position:relative;
         background-color: #fff;
         font-family: 'Poppins', sans-serif;
-        width: auto;
+        width: 80% !important;
         max-width: 95%;
         height: 90%;
         box-shadow: 1px 1px rgba(0,0,0, 0.8);
@@ -304,7 +326,7 @@ h1{
     div{
         display:flex;
         justify-content: space-between;
-        padding: 0 300px;
+        padding: 0 10%;
         margin-bottom: 12px;
         text-transform:uppercase;
         align-items: center;
@@ -348,11 +370,14 @@ h1{
 }
 
 .documentsList {
-    display:block;
+    display:grid;
     list-style: none;
+    grid-template-columns: 1fr 1fr;
+    
     ul{
         li{
             margin-bottom: 5px;
+            text-align: center;
         }
     }
 
@@ -360,5 +385,26 @@ h1{
         text-decoration: none;
         color: black;
         
+    }
+}
+
+.showOrcamento{
+    display:grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    text-align:start !important;
+    gap: 0 1.8em !important;
+    margin-bottom: 12px !important;
+    box-shadow: 1px 1px 1px 2px rgba(0,0,0, 0.1) !important;
+    padding: 0.7em !important;
+    
+}
+
+.showOrcamentos{
+ 
+    ul{
+        display:grid !important;
+        grid-template-columns: 1fr 1fr !important; 
+        list-style:none !important;
+        gap: 0.5em !important;
     }
 }

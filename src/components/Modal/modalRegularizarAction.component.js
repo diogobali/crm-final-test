@@ -32,23 +32,23 @@ const ModalRegularizarAction = () => {
             const response = await fetch("https://moplanseguros.com.br/getleadinfo.php", optionsForm)
             const json = await response.json();
             setInfos(json);
-            setDocsPendentes(json.pen_docs[0].map(pen_doc => pen_doc[4]))
+            setDocsPendentes(json.pen_docs[0].map(pen_doc => pen_doc))
 
             console.log(infos);
         }
     }
 
     const [responseApi, setResponseApi] = useState()
-    const [fileName, setFileName] = useState()
-    const [fileType, setFileType] = useState()
+    const [file, setFile] = useState()
     const [image, setImage] = useState();
 
     const upload_image = () => {
         const form_data = new FormData();
         form_data.append('attachment', image);
         form_data.append('leadId', itemId);
-        form_data.append('type', fileType);
-        form_data.append('fileName', fileName);
+        form_data.append('type', file);
+        form_data.append('fileName', "NOVO " + file);
+        form_data.append('fileOwner', fileOwner);
 
         fetch('https://moplanseguros.com.br/attachdocuments.php', {
             method: "POST",
@@ -58,10 +58,45 @@ const ModalRegularizarAction = () => {
         }).then(response => response.json())
         .then(response => {
             setResponseApi(response);
-            
+            load_image();
         });
     }
 
+    const [people, setPeople] = useState([]);
+    const [fileOwner, setFileOwner] = useState()
+
+
+
+    async function load_people() {
+        const optionsForm = {
+            method: 'POST',
+            body: JSON.stringify({
+                leadId: itemId,
+            })
+        };
+        const response = await fetch("https://moplanseguros.com.br/getpeople.php", optionsForm)
+        const json = await response.json();
+        setPeople(json);
+    }
+
+    const load_image = () => {
+        const form_data = new FormData();
+        form_data.append('leadId', itemId);
+
+        fetch('https://moplanseguros.com.br/attachdocuments.php', {
+            method: "POST",
+            body: form_data
+        }).then(function(response){
+            return response;
+        }).then(response => response.json())
+        .then(response => {
+            setResponseApi(response);
+        });
+    }
+    useEffect(() => {
+        load_image() 
+        load_people()
+    }, [itemId]);
 
     const tessste = () => {
         console.log(docsPendentes)
@@ -83,25 +118,7 @@ const ModalRegularizarAction = () => {
         })
     }
 
-    useEffect(
-        function(){
-            if (!infos.pen_docs) return;
 
-            const dados = infos.pen_docs[0].map(pen_doc => pen_doc[3]);
-            const dadosFormatados = dados.filter(
-                (dado, index, array) => array.indexOf(dado) === index
-            );
-
-            const docs = infos.pen_docs[0].map(pen_doc => pen_doc[4]);
-            const docsFormatados = docs.filter(
-                (dado, index, array) => array.indexOf(dado) === index
-            );
-
-            setPessoasPendentes(dadosFormatados)
-            setDocsPendentes(docsFormatados)
-        },
-        [infos]
-    );
 
     if(!infos.id) fetchApi();
     
@@ -132,52 +149,69 @@ const ModalRegularizarAction = () => {
                                 <span>Documentos Pendentes</span>
                             </div>
                             <div>
+                                <ul id="listDir">
                                 {infos?.pen_docs?.map(item => {
                                     return(
                                         item.map(item => {
-                                            console.log(item)
                                             return(
-                                                <span>{item[4]} de {item[3]}</span>
+                                                <li>{item[1]}</li>
                                             )
                                         })
-                                    )
+                                        )
+                                    
                                     
                                 })
                             }
+                            </ul>
                             </div>
                             <div>
                                 <div>
                                     <select
+                                        onChange={(e) => setFile(e.target.value)}
                                     >
                                         <option value="">Selecione...</option>
                                         {docsPendentes.map(function (docPendente){
                                             return(
-                                                <option key={docPendente} value={docPendente}>
-                                                    {docPendente}
+                                                <option key={docPendente} value={docPendente[1]}>
+                                                    {docPendente[1]}
                                                 </option>
                                             )
                                         })
                                             
                                         }
                                     </select>
-                                </div>
-                                <div>
-                                    <select 
-                                        onChange={(e) => setFileName(e.target.value)}
-                                        value={fileName}
-                                        id="selectFileName"
+                                    <select
+                                        onChange={(e) => setFileOwner(e.target.value)}
                                     >
-                                        <option value="">Selecione...</option>
-                                        {pessoasPendentes.map(function (pessoaPendente){
-                                            return(
-                                                <option key={pessoaPendente} value={pessoaPendente}>
-                                                    {pessoaPendente}
-                                                </option>
-                                            )
-                                        })
-                                        
-                                        }
-                                    </select>
+                                <option value="">Selecione o dono do documento</option>
+                                <option value="empresa">Empresa</option>
+                                {
+                                    people.titulares && 
+                                    people.titulares.map(item => {
+                                        return(
+                                            item.map(item => {
+                                                return(
+                                                    <option value={item[0]}>{item[0]} (Titular)</option>
+                                                )
+                                            })
+                                        )
+                                    })
+                                }
+                                {
+                                    people.dependentes &&
+                                    people.dependentes.map(item => {
+                                        return(
+                                            item.map(item => {
+                                                return(
+                                                    <option value={item[0]}>{item[0]} ({item[1]} de {item[3]})</option>
+                                                )
+                                            })
+                                        )
+                                    })
+                                }
+                                
+
+                            </select>
                                 </div>
                                 <div>
                                     <input 
@@ -197,13 +231,23 @@ const ModalRegularizarAction = () => {
                                 </div>
                             </div>
                             <div className="documentsList">
-                                <span>Documentos anexados</span>
+                            <div>
+                                <h3>Documentos Empresa</h3>
                                 <ul id="listDir">
-                                    {responseApi &&
-                                        responseApi.map((item, index) => index > 1 &&   <li> <a href={item[0]+item[1]} download="Documentacao.pdf" target="_blank"> {item[1]} </a></li>)
+                                    {responseApi?.empresa &&
+                                        responseApi.empresa.map((item, index) => index > 1 &&   <li> <a href={`https://moplanseguros.com.br/uploads/${itemId}/empresa/${item[1]}`} download target="_blank">{item[1]}</a></li>)
                                     }
                                 </ul>
-                            </div>  
+                            </div>
+                            <div>
+                                <h3>Documentos Titulares e Dependentes</h3>
+                                <ul id="listDir">
+                                    {responseApi?.geral &&
+                                        responseApi.geral.map((item, index) => index > 1 &&   <li> <a href={`https://moplanseguros.com.br/uploads/${itemId}/${item[1]}`} download target="_blank"> {item[1]} </a></li>)
+                                    }
+                                </ul>
+                            </div>
+                        </div>  
                             <div className="content-buttons">
                                 <button type="button" className="btn-cancelar" onClick={refreshPage}><img src="../../../btn-cancel.svg"></img> </button>
                                 <div className="confirm-documents-up">

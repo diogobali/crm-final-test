@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Modal as ModalComponent2 } from 'antd';
 import { useModalContext2 } from './modal2.context'
 import * as yup from 'yup';
@@ -17,12 +17,9 @@ let validateForm = yup.object().shape({
     coparticipacao: yup
         .string()
         .required("Selecione uma opção em Coparticipacao"),
-    valorMin: yup
+    valor: yup
         .string()
-        .required("Informe um valor minimo"),
-    valorMax: yup
-        .string()
-        .required("Informe um valor máximo"),
+        .required("Informe um valor"),
     primeiroretorno: yup
         .string()
         .required("Informe uma data para o primeiro retorno")
@@ -44,12 +41,36 @@ const Modal2 = () => {
         plano: '',
         cobertura: '',
         coparticipacao: '',
-        valorMin: '',
-        valorMax: '',
+        valor: '',
         primeiroretorno: '',
     });
 
     const valorInput = e => setFormInfo({ ...formInfo, [e.target.name]: e.target.value })
+
+    const [orcamentos, setOrcamentos] = useState([])
+
+    const newOrcamento = useCallback(() => {
+            setOrcamentos((prevState) => [
+                ...prevState,
+                {
+                    id: prevState.length + 1,
+                    operadora: formInfo.operadora,
+                    plano: formInfo.plano,
+                    cobertura: formInfo.cobertura,
+                    coparticipacao: formInfo.coparticipacao,
+                    valor: formInfo.valor,
+                }
+            ]);
+            console.log(orcamentos)
+    }, [orcamentos, setOrcamentos, formInfo]);
+
+    const removeOrcamento = useCallback(
+        (id) => {
+            setOrcamentos(orcamentos.filter((c) => c.id !== id));
+        },
+        [orcamentos]
+    );
+    
 
     const sendForm = async (e) => {
 
@@ -71,12 +92,7 @@ const Modal2 = () => {
             method: 'POST',
             body: JSON.stringify({
                 leadId: lead,
-                operadora: formInfo.operadora,
-                plano: formInfo.plano,
-                cobertura: formInfo.cobertura,
-                coparticipacao: formInfo.coparticipacao,
-                valorMin: formInfo.valorMin,
-                valorMax: formInfo.valorMax,
+                orcamentos: orcamentos,
                 primeiroretorno: formInfo.primeiroretorno,
             })
         };
@@ -96,7 +112,7 @@ const Modal2 = () => {
             <div className="modal">
                 <div className="container">
                     <div className="title">
-                        <h1>Enviar Orçamento</h1>
+                        <h1>Enviar Orçamentos</h1>
                     </div>
                     <div className="content">
                         <form onSubmit={sendForm}>
@@ -133,13 +149,16 @@ const Modal2 = () => {
                             ></input>
                         </div>
                         <div>
-                            <span>Cobertura: </span>
-                            <input 
-                                type="text" 
-                                placeholder="Tipo de Cobertura"
+                            <span>Acomodação: </span>
+                            <select
+                        
                                 name="cobertura"
                                 onChange={valorInput}
-                            ></input>
+                            >
+                                <option value="">Selecione....</option>
+                                <option value="apartamento">Apartamento</option>
+                                <option value="enfermaria">Enfermaria</option>
+                            </select>
                         </div>
                         <div>
                             <span>Coparticipação: </span>
@@ -157,14 +176,8 @@ const Modal2 = () => {
                             <div>
                                 <input 
                                     type="text" 
-                                    placeholder="Valor Min"
-                                    name="valorMin"
-                                    onChange={valorInput}
-                                ></input>
-                                <input 
-                                    type="text" 
-                                    placeholder="Valor Max"
-                                    name="valorMax"
+                                    placeholder="Valor"
+                                    name="valor"
                                     onChange={valorInput}
                                 ></input>
                             </div>
@@ -176,6 +189,39 @@ const Modal2 = () => {
                                 name="primeiroretorno"
                                 onChange={valorInput} 
                             ></input>
+                        </div>
+                        <div>
+                                <button
+                                    type="button"
+                                    onClick={newOrcamento}
+                                >Criar Orçamento</button>
+                        </div>
+
+                        <div className="showOrcamentos">
+                        <ul>
+                                {orcamentos.map((r) => (
+                                        <>
+                                            <li>
+                                            <div>
+                                                
+                                                <div>
+                                                    <div className="showOrcamento">
+                                                        <span>Operadora: {r.operadora}</span>
+                                                        <span>Plano: {r.plano}</span>
+                                                        <span>Acomodação: {r.cobertura}</span>
+                                                        <span>Coparticipação: {r.coparticipacao}</span>
+                                                        <span>Valor: {r.valor}</span>
+                                                        <button 
+                                                            type="button" 
+                                                            onClick={() => removeOrcamento(r.id)}
+                                                        >Remover</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </li>   
+                                        </>
+                                    ))}
+                            </ul>
                         </div>
                         <div className="content-buttons">
                             <button type="button" className="btn-cancelar" onClick={refreshPage}><img src="../../../btn-cancel.svg"></img> </button>

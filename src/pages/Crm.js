@@ -15,6 +15,7 @@ import ModalReproveAdm from '../components/Modal/modalReproveAdm.component';
 import ModalApproveAdm from '../components/Modal/modalApproveAdm.component';
 import ModalPendente from '../components/Modal/modalPendente.component';
 import ModalRegularizarAction from '../components/Modal/modalRegularizarAction.component';
+import ModalEditInfo from '../components/Modal/modalEditInfo.component';
 
 import { ModalProvider0 } from '../components/Modal/modal0.context';
 import { ModalProvider1 } from '../components/Modal/modal1.context';
@@ -28,6 +29,7 @@ import { ModalProviderApproveAdm } from '../components/Modal/modalApproveAdm.con
 import { ModalProviderReproveAdm } from '../components/Modal/modalReproveAdm.context';
 import { ModalProviderPendente } from '../components/Modal/modalPendente.context';
 import { ModalProviderRegularizarAction } from '../components/Modal/modalRegularizarAction.context';
+import { ModalProviderEditInfo } from '../components/Modal/modalEditInfo.context';
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import SaveFormProvider, { SaveFormContext } from '../contexts/SaveFormContext';
@@ -57,17 +59,22 @@ export function Crm(){
 
 
     const getProdutos= async () => {
-        fetch("https://moplanseguros.com.br/index.php", optionsForm)
+        await fetch("https://moplanseguros.com.br/index.php", optionsForm)
         .then((response) => response.json())
-        .then((responseJson) => (
-            setData(Object.values(responseJson))
-        ));
+        .then((responseJson) => {
+            const objData = Object.values(responseJson);
+            setData(objData);
+        });
 
     }
 
     useEffect(() => {
         getProdutos();
     },[])
+
+    const tesste = () => {
+        console.log(data)
+    }
     
     return(
 
@@ -88,11 +95,14 @@ export function Crm(){
                 <ModalProviderApproveAdm>
                 <ModalProviderPendente>
                 <ModalProviderRegularizarAction>
+                <ModalProviderEditInfo>
 
                     <HeaderComponent />
-                    {data.length > 0 &&
+                    {data ?
                         <Board dadosleads={data}/>
-                     }
+                    : null
+                    }
+                     
                     <Modal0 />
                     <Modal1 />
                     <Modal2 />
@@ -105,6 +115,8 @@ export function Crm(){
                     <ModalReproveAdm />
                     <ModalPendente />
                     <ModalRegularizarAction />
+                    <ModalEditInfo />
+                </ModalProviderEditInfo>
                 </ModalProviderRegularizarAction>
                 </ModalProviderPendente>
                 </ModalProviderApproveAdm>
