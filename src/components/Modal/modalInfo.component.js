@@ -119,6 +119,12 @@ const ModalInfo = () => {
                     <div className="content">
                         <form>
                         <div className="infos-final">
+                            {infos.origem &&
+                            <div>
+                                <span>Origem:</span>
+                                {infos.origem}
+                            </div>
+                            }
                             <div>
                                 <span>Nome:</span>
                                 {infos && infos.nome }
@@ -234,6 +240,9 @@ const ModalInfo = () => {
                                     {infos.city}
                                 </div>
                                 </>
+                            }
+                            {
+                            
                             }
                             {infos.date &&
                             <>
