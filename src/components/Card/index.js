@@ -281,6 +281,8 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             <>
                 <span><strong>{data.status_implantacao}</strong></span>
                 {userData.perfil == 2 &&
+                data.status_implantacao != 'Ag. Contrato Assinado' &&
+            
                 
                 <button
                     type="button"
@@ -288,6 +290,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 >Alterar Status</button>
                 }
                 {data.status_implantacao === 'Ag. Contrato Assinado' &&
+                    userData.perfil == 0 &&
                 <>
                     <span>
                         <input
@@ -305,6 +308,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 </>
                 }
                 {data.status_implantacao === 'Ag. Pagamento 1 Parcela' &&
+                    userData.perfil == 2 &&
                 <>
                 <span>
                     <input
