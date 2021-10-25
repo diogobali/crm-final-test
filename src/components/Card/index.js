@@ -308,7 +308,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 </>
                 }
                 {data.status_implantacao === 'Ag. Pagamento 1 Parcela' &&
-                    userData.perfil == 2 &&
+                    userData.perfil === 2 &&
                 <>
                 <span>
                     <input
@@ -337,6 +337,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             }
 
             {isAdmAction &&
+                userData.perfil === 2 &&
                 <>
                 <div className="buttonsAdm">
                     <button
