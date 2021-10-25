@@ -45,6 +45,7 @@ const ModalAddNewLead = () => {
         fetch('https://moplanseguros.com.br/addnewlead.php', optionsForm)
         .then(function(response) {
             console.log(response);
+            window.location.reload();
         })
     }
 
