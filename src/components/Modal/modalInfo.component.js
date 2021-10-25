@@ -260,7 +260,7 @@ const ModalInfo = () => {
                                 <span>Motivo:</span>    
                                 {infos.pendencias[0].reason_id}
                             </div>
-                            {infos.pendencias[0].reason_id == 1 &&
+                            {/* {infos.pendencias[0].reason_id == 1 &&
                                 <>
                                     <div className="title_documentsMissing"><h4>DOCUMENTOS FALTANDO</h4></div>
                                         <div className="showDocumentsMissing">
@@ -290,7 +290,7 @@ const ModalInfo = () => {
                                
                             
                                 </>
-                            }
+                            } */}
                             </>
                             }
                             
@@ -519,7 +519,9 @@ const ModalInfo = () => {
                             </div>
                             </>
                             }
+                            {infos.orcamentos &&
                             <h1>Orçamentos</h1>
+                            }
                             <div className="showOrcamentos">
                             
                             <ul>

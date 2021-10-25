@@ -98,7 +98,6 @@ const ModalSendAdm = () => {
             method: 'POST',
             body: JSON.stringify({  
                 leadId: itemId,
-                
             })
         };
         fetch('https://moplanseguros.com.br/sendadm.php', optionsForm)

@@ -18,12 +18,13 @@ import { useModalContextSendAdm } from '../Modal/modalSendAdm.context';
 import { useModalContextReproveAdm } from '../Modal/modalReproveAdm.context';
 import { useModalContextApproveAdm } from '../Modal/modalApproveAdm.context';
 import { useModalContextRegularizarAction} from '../Modal/modalRegularizarAction.context';
+import { useModalContextChangeStatus} from '../Modal/modalChangeStatus.context';
 
 
 import { useUserContext } from '../../contexts/userContext';
 
 
-export default function Card({ data, index, listIndex, button, status, sendAdm, key, className, isAdmAction, isRegularizarAction, hasStatus }){
+export default function Card({ data, index, listIndex, button, status, sendAdm, key, className, isAdmAction, isRegularizarAction, hasStatus, isScheduled }){
 
     const { userData, setUserData } = useUserContext();
 
@@ -66,6 +67,9 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
 
         const { openModalRegularizarAction } = useModalContextRegularizarAction();
         const openModalRegularizarActions = (itemId, status) => openModalRegularizarAction({ message: 'Regularizar Pendencias', itemId: itemId, status: status});
+        
+        const { openModalChangeStatus } = useModalContextChangeStatus();
+        const openModalChangeStatuss = (itemId) => openModalChangeStatus({ message: 'Alterar Status', itemId: itemId});
 
 
 
@@ -222,15 +226,43 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
          }
         })
 
+        const sendFile = (file, itemId) => {
+            const form_data = new FormData();
+            form_data.append('attachment', file);
+            form_data.append('leadId', itemId );
+            fetch('https://moplanseguros.com.br/attachsignedcontract.php',  {
+                method: "POST",
+                body: form_data
+            })
+            .then(function(response) {
+                console.log(response);
+                window.location.reload();
+            })
+        }
+
+        const sendComprovante = (file, itemId) => {
+            const form_data = new FormData();
+            form_data.append('attachment', file);
+            form_data.append('leadId', itemId );
+            fetch('https://moplanseguros.com.br/attachcomprovante.php',  {
+                method: "POST",
+                body: form_data
+            })
+            .then(function(response) {
+                console.log(response);
+                window.location.reload();
+            })
+        }
+
+
     
 
     dragRef(dropRef(ref));
 
     return(
         
-        <Container ref={ref} isDragging={isDragging} className={className} hasStatus={data.status_implantacao}>
+        <Container ref={ref} isDragging={isDragging} className={className} hasStatus={data.status_implantacao} isScheduled={isScheduled}>
             <header>
-
             </header>
             <p>
                 {data.content}
@@ -242,11 +274,58 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                         <p className="card--status">{data.nome}</p>
                         <button type="button" className="btn-info" onClick={() => openModalInfos(data.id, data.status)}><img src="../../../info-icon.svg" alt="Informações" /></button>
                     </div>
-                    
             }
 
             {hasStatus &&
-                <span>{data.status_implantacao}</span>
+                
+            <>
+                <span><strong>{data.status_implantacao}</strong></span>
+                {userData.perfil == 2 &&
+                
+                <button
+                    type="button"
+                    onClick={() => openModalChangeStatuss(data.id)}
+                >Alterar Status</button>
+                }
+                {data.status_implantacao === 'Ag. Contrato Assinado' &&
+                <>
+                    <span>
+                        <input
+                            className="inputSendDocumentMissing"
+                            type="file"
+                            id="inputSendDocumentMissing"
+                            name="attachment"
+                            onChange={(e) => sendFile(e.target.files[0], data.id)}
+                            accept=".jpg,.jpeg,.png,.pdf"
+                        />
+                        <p>
+                            <label for="inputSendDocumentMissing" className="labelSendDocumentMissing">Anexar</label>
+                        </p>
+                    </span>
+                </>
+                }
+                {data.status_implantacao === 'Ag. Pagamento 1 Parcela' &&
+                <>
+                <span>
+                    <input
+                        className="inputSendDocumentMissing"
+                        type="file"
+                        id="inputSendDocumentMissing"
+                        name="attachment"
+                        onChange={(e) => sendComprovante(e.target.files[0], data.id)}
+                        accept=".jpg,.jpeg,.png,.pdf"
+                    />
+                    <p>
+                        <label for="inputSendDocumentMissing" className="labelSendDocumentMissing">Anexar</label>
+                    </p>
+                </span>
+                </>
+                }
+            </>
+            }
+
+            {isScheduled &&
+                <span>{isScheduled}</span>
             }
 
             {sendAdm &&

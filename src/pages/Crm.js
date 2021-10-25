@@ -16,6 +16,8 @@ import ModalApproveAdm from '../components/Modal/modalApproveAdm.component';
 import ModalPendente from '../components/Modal/modalPendente.component';
 import ModalRegularizarAction from '../components/Modal/modalRegularizarAction.component';
 import ModalEditInfo from '../components/Modal/modalEditInfo.component';
+import ModalChangeStatus from '../components/Modal/modalChangeStatus.component';
+import ModalAddNewLead from '../components/Modal/modalAddNewLead.component';
 
 import { ModalProvider0 } from '../components/Modal/modal0.context';
 import { ModalProvider1 } from '../components/Modal/modal1.context';
@@ -30,6 +32,8 @@ import { ModalProviderReproveAdm } from '../components/Modal/modalReproveAdm.con
 import { ModalProviderPendente } from '../components/Modal/modalPendente.context';
 import { ModalProviderRegularizarAction } from '../components/Modal/modalRegularizarAction.context';
 import { ModalProviderEditInfo } from '../components/Modal/modalEditInfo.context';
+import { ModalProviderChangeStatus } from '../components/Modal/modalChangeStatus.context';
+import { ModalProviderAddNewLead } from '../components/Modal/modalAddNewLead.context';
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import SaveFormProvider, { SaveFormContext } from '../contexts/SaveFormContext';
@@ -96,6 +100,8 @@ export function Crm(){
                 <ModalProviderPendente>
                 <ModalProviderRegularizarAction>
                 <ModalProviderEditInfo>
+                <ModalProviderChangeStatus>
+                <ModalProviderAddNewLead>
 
                     <HeaderComponent />
                     {data ?
@@ -116,6 +122,10 @@ export function Crm(){
                     <ModalPendente />
                     <ModalRegularizarAction />
                     <ModalEditInfo />
+                    <ModalChangeStatus />
+                    <ModalAddNewLead />
+                </ModalProviderAddNewLead>
+                </ModalProviderChangeStatus>
                 </ModalProviderEditInfo>
                 </ModalProviderRegularizarAction>
                 </ModalProviderPendente>

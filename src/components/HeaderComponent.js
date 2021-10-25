@@ -30,7 +30,6 @@ export function HeaderComponent(){
                                 <li><a href="https://moplanseguros.com.br/bancadeleads.php">Banca de Leads</a></li>
                             </ul>
                         </nav>
-
                         <div className="header-buttons">
                             <strong>{userData.name}</strong>
                             <button

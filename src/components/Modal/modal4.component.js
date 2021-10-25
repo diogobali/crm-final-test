@@ -186,23 +186,23 @@ const Modal4 = () => {
                                 <>
                                 <div>                                
                                     <span>Operadora: </span>
-                                    <span>{selectedOrcamento[0].operadora}</span>
+                                    <span>{selectedOrcamento.operadora}</span>
                                 </div>
                                 <div>    
                                     <span>Plano:</span>
-                                    <span>{selectedOrcamento[0].plano}</span>
+                                    <span>{selectedOrcamento.plano}</span>
                                 </div>
                                 <div>    
                                     <span>Cobertura: </span>
-                                    <span>{selectedOrcamento[0].cobertura}</span>
+                                    <span>{selectedOrcamento.cobertura}</span>
                                 </div>
                                 <div> 
                                     <span>Coparticipacao: </span>
-                                    <span>{selectedOrcamento[0].coparticipacao}</span>
+                                    <span>{selectedOrcamento.coparticipacao}</span>
                                 </div>
                                 <div> 
                                     <span>Valor: </span>
-                                    <span>{selectedOrcamento[0].valor}</span>
+                                    <span>{selectedOrcamento.valor}</span>
                                 </div>
                                 <div>
                                     <span>Valor fechado</span>  
@@ -222,7 +222,7 @@ const Modal4 = () => {
                             }
                             <div className="content-buttons">
                                 <button type="button" className="btn-cancelar" onClick={refreshPage} title="Voltar"><img src="../../../btn-cancel.svg"></img> </button>
-                                <button type="button" className="btn-edit" onClick={editOrcamento} title="Editar orçamento"><img src="../../../btn-edit.svg"></img></button>
+                                {/* <button type="button" className="btn-edit" onClick={editOrcamento} title="Editar orçamento"><img src="../../../btn-edit.svg"></img></button> */}
                                 <button type="submit" className="btn-confirmar"onClick={acceptOrcamento} title="Aprovar orçamento"><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button>
                             </div>
                             </div>
@@ -279,14 +279,15 @@ const Modal4 = () => {
                             ></input>
                         </div>
                         <div>
-                            <span>Cobertura: </span>
-                            <input 
-                                type="text"
-                                placeholder="Cobertura"
+                            <span>Cobertura</span>
+                            <select
                                 name="cobertura"
                                 onChange={valorInput}
-                                required                                
-                            ></input>
+                            >
+                                <option value="">Selecione....</option>
+                                <option value="apartamento">Apartamento</option>
+                                <option value="enfermaria">Enfermaria</option>
+                            </select>
                         </div>
                         <div>
                             <span>Coparticipação: </span>

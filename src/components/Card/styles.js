@@ -58,6 +58,26 @@ export const Container= styled.div`
         
     }
 
+    #inputSendDocumentMissing{
+        display:none;
+    }
+
+    .labelSendDocumentMissing{
+        background: #f3f3f3;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 5px;
+        display:flex;
+        padding: 0.3em;
+        text-align:center;
+        align-items:center;
+        justify-content:center;
+
+        &:hover{
+            filter: brightness(80%);
+        }
+    }
+
     .buttonsAdm{
         display:flex;
         gap: 8px;
@@ -101,16 +121,20 @@ export const Container= styled.div`
         }
     `}
 
-    ${props => props.hasStatus == 'Status 1' && css`
+    ${props => props.hasStatus == 'Ag. Emissão de Contrato' && css`
         background-color:red;
     `}
     
-    ${props => props.hasStatus == 'Status 2' && css`
+    ${props => props.hasStatus == 'Ag. Contrato Assinado' && css`
         background-color:yellow;
     `}
 
-    ${props => props.hasStatus == 'Status 3' && css`
+    ${props => props.hasStatus == 'Ag. Analise de Documentos' && css`
         background-color:lime;
+    `}
+
+    ${props => props.hasStatus == 'Ag. Pagamento 1 Parcela' && css`
+        background-color:orange;
     `}
 
 
