@@ -57,7 +57,9 @@ export function Crm(){
         method: 'POST',
         body: JSON.stringify({
             user: userData.id,
+            nome: userData.user,
             perfil: userData.perfil
+
         })
     };
 

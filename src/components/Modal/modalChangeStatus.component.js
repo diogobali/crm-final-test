@@ -65,6 +65,18 @@ const ModalChangeStatus = () => {
                                 />
                             </div>
                         }
+                        {newStatus === "Ag. Contrato Assinado" &&
+                            <div>
+                                <input
+                                    type="file"
+                                    accept=".jpg,.jpeg,.png,.pdf"
+                                    id="selectfile"
+                                    // onChange={handleSetAttachment}
+                                    name="attachment"
+                                    onChange={(e) => setFile(e.target.files[0])}
+                                />
+                            </div>
+                        }
                         
 
                         <div className="content-buttons">

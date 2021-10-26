@@ -74,7 +74,7 @@ export const Container= styled.div`
         justify-content:center;
 
         &:hover{
-            filter: brightness(80%);
+            filter: bright  ness(80%);
         }
     }
 
