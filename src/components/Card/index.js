@@ -165,7 +165,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             }
 
             if(targetListIndex == 1){
-                if(userData.perfil == 0){
+                if(userData.perfil == 0 || userData.perfil == 1){
                     openModalZero(itemId);
                 } else {
                     alert("Apenas vendedores podem criar um agendamento.");
@@ -174,7 +174,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             }
 
             if(targetListIndex == 2){
-                if(userData.perfil == 0){
+                if(userData.perfil == 0 || userData.perfil == 1){
                    openModalUm(itemId);
                 } else {
                     alert("Apenas vendedores podem coletar informações");
@@ -183,7 +183,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             }
             if(targetListIndex == 3){
                 console.log(userData.perfil)
-                if(userData.perfil == 0){
+                if(userData.perfil == 0 || userData.perfil == 1){
                     openModalDois(itemId);
                 } else {
                     alert("Apenas vendedores podem enviar orçamentos");
@@ -191,7 +191,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 }
             }
             if(targetListIndex == 4){
-                if(userData.perfil == 0){
+                if(userData.perfil == 0 || userData.perfil == 1){
                     openModalQuatro(itemId);
                 } else {
                     alert("Apenas vendedores podem aprovar orçamentos");
