@@ -40,6 +40,7 @@ const ModalAddNewLead = () => {
                 uf: uf,
                 cidade: cidade,
                 user: userData.id,
+                team: userData.team,
             })
         };
         fetch('https://moplanseguros.com.br/addnewlead.php', optionsForm)
