@@ -4,7 +4,8 @@ import { useModalContextAddNewLead } from './modalAddNewLead.context'
 import { MdAddAlarm, MdSentimentVeryDissatisfied, MdSettingsPower } from 'react-icons/md';
 import { useUserContext } from '../../contexts/userContext';
 import origins from '../../jsons/origins.json';
-import tipos_de_contrato from '../../jsons/tipos_de_contrato.json'
+import tipos_de_contrato from '../../jsons/tipos_de_contrato.json';
+import estados_cidades from '../../jsons/estados-cidades.json';
 
 const ModalAddNewLead = () => {
 
@@ -28,6 +29,8 @@ const ModalAddNewLead = () => {
     const [uf, setUf] = useState();
     const [cidade, setCidade] = useState();
 
+    const [ listCity, setListCity ] = useState([]);
+
     const AddNewLead = () => {
         const optionsForm = {
             method: 'POST',
@@ -50,6 +53,16 @@ const ModalAddNewLead = () => {
             console.log(response);
             window.location.reload();
         })
+    }
+
+    const handleUf = (e) => {
+        setUf(e.target.value);
+        estados_cidades.estados.forEach(element => {
+            if(element.sigla === e.target.value){
+                setListCity(element.cidades.map(item => item))
+            }
+        })
+        console.log(listCity)
     }
 
     const teste = () => {
@@ -134,19 +147,35 @@ const ModalAddNewLead = () => {
                         </div>
                         <div>
                             <span>UF</span>
-                            <input
-                                type="text"
-                                placeholder="SP"
-                                onChange={(e) => setUf(e.target.value)}
-                            />
+                            <select
+                                onChange={handleUf}
+                            >
+                                <option value="">Selecione...</option>
+
+                                {estados_cidades.estados.map(item => {
+                                    return(
+                                        <option value={item.sigla}>{item.nome}</option>
+                                    )
+                                })}
+
+                            </select>
+                        
                         </div>
                         <div>
                             <span>Cidade</span>
-                            <input
-                                type="text"
-                                placeholder="São Paulo"
+                            <select 
                                 onChange={(e) => setCidade(e.target.value)}
-                            />
+                            >
+                                <option value="">Selecione...</option>
+
+                                {listCity.map(item => {
+                                    return(
+                                        <option value={item}>{item}</option>
+                                    )
+                                })
+
+                                }   
+                            </select>
                         </div>
                         <div className="content-buttons">
                             <button type="button" className="btn-cancelar" onClick={refreshPage}><img src="../../../btn-cancel.svg"></img> </button>

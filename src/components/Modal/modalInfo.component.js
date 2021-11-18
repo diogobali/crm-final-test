@@ -415,7 +415,7 @@ const ModalInfo = () => {
                                             return(
                                                 item.map(item => {
                                                     return(
-                                                        <span>{item[0]}</span>
+                                                        <span>{item[0]} ({item[1]} anos)</span>
                                                     )
                                                 })
                                                 

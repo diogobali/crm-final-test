@@ -102,6 +102,17 @@ const ModalSendAdm = () => {
                 leadId: itemId,
                 cancelamos: shallWeCancel,
                 dateToCancel: dateToCancel,
+                ageGroupValue1: ageGroupValue1,
+                ageGroupValue2: ageGroupValue2,
+                ageGroupValue3: ageGroupValue3,
+                ageGroupValue4: ageGroupValue4,
+                ageGroupValue5: ageGroupValue5,
+                ageGroupValue6: ageGroupValue6,
+                ageGroupValue7: ageGroupValue7,
+                ageGroupValue8: ageGroupValue8,
+                ageGroupValue9: ageGroupValue9,
+                ageGroupValue10: ageGroupValue10,
+                orcamentoId: data.orcamentos[0][6],
             })
         };
         fetch('https://moplanseguros.com.br/sendadm.php', optionsForm)
@@ -200,11 +211,11 @@ const ModalSendAdm = () => {
     const [ ageGroupValue10, setAgeGroupValue10 ] = useState();
     const [ totalValue, setTotalValue ] = useState();
     const [ valueTotal, setValueTotal ] = useState();
-    const [ discountValue, setDiscountValue ] = useState('R$ 0,00');
+    const [ discountValue, setDiscountValue ] = useState();
 
-    useEffect(() => {
-        setTotalValue((ageGroupValue1 + ageGroupValue2 + ageGroupValue3 + ageGroupValue4 + ageGroupValue5 + ageGroupValue6 + ageGroupValue7 + ageGroupValue8 + ageGroupValue9 + ageGroupValue10) - discountValue)
-    }, discountValue, ageGroupValue1, ageGroupValue10, ageGroupValue2, ageGroupValue3, ageGroupValue4, ageGroupValue5, ageGroupValue6, ageGroupValue7, ageGroupValue8, ageGroupValue9)
+    // useEffect(() => {
+    //     setTotalValue((ageGroupValue1 + ageGroupValue2 + ageGroupValue3 + ageGroupValue4 + ageGroupValue5 + ageGroupValue6 + ageGroupValue7 + ageGroupValue8 + ageGroupValue9 + ageGroupValue10) - discountValue)
+    // }, discountValue, ageGroupValue1, ageGroupValue10, ageGroupValue2, ageGroupValue3, ageGroupValue4, ageGroupValue5, ageGroupValue6, ageGroupValue7, ageGroupValue8, ageGroupValue9)
 
     function handleAgeGroupValue1(e){
         setAgeGroupValue1(mask(e.target.value, "###################", "value"))

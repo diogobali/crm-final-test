@@ -19,28 +19,28 @@ export function NotificationBar(props){
         })
     };
 
-    const optionsForm2 = {
-        method: 'POST',
-        body: JSON.stringify({
-            leadId: userData.user.id,
-            visualized: '1'
-        })
-    };
+    
 
     async function fetchApi () {
-        counterApi = 1;
+
+        const optionsForm2 = {
+            method: 'POST',
+            body: JSON.stringify({
+                leadId: userData.user.id,
+                visualized: '1'
+            })
+        };
+        
         const response = await fetch("https://moplanseguros.com.br/getnotificacoes.php", optionsForm)
         const json = await response.json()
         .then(await fetch("https://moplanseguros.com.br/getnotificacoes.php", optionsForm2))
-        
         setNotifications(json);
         
         
     }
 
-    var counterApi = 0;
     useEffect(() => {
-        if(counterApi == 0){
+        if(props.visible){
             fetchApi();
         }
     },[props.visible])
