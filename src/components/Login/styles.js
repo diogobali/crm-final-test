@@ -20,6 +20,24 @@ export const Container= styled.div`
         }
     }
 
+    .message{
+        padding: 15px;
+        border-radius: 15px;
+        color: #fff;
+        width: 320px;
+
+        
+    }
+
+    .success{
+        background: lime;
+    }
+
+    .fail {
+        background: red;
+    }
+
+    
     form{
         display:flex;
         flex-direction: column;

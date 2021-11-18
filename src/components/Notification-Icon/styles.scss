@@ -1,0 +1,37 @@
+.header-buttons{
+    width: 45px;
+    display:flex;
+    text-align: center;
+    align-items: center;
+    gap: 1.3em;
+
+    > button{
+        border:none;
+        background: none;
+        
+
+        > img {
+            width: 25px;
+            cursor: pointer;
+        }
+    }
+}
+
+.notifications{
+    position:relative;
+    display:flex;
+    justify-content: center;
+    text-align: center;
+    width:auto;
+    height:30px;
+
+    span{
+        position:absolute;
+        border-radius:50%;
+        background: #ff6f6f;
+        bottom:0;
+        right:0;
+        font-size: 0.8em;
+        padding: 0 0.4em;
+    }
+}

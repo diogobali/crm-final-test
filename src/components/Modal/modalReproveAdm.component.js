@@ -211,6 +211,8 @@ const ModalReproveAdm = () => {
         }
     }
 
+    const [ documentMissing, setDocumentMissing ] = useState('');
+
     const sendPendencia = (e) => {
         e.preventDefault();
         const optionsForm = {
@@ -223,6 +225,7 @@ const ModalReproveAdm = () => {
                 docsUnreadable: docsUnreadable,
                 docsGeralPendentes: docsGeralPendentes,
                 docsEmpresaPendentes: docsEmpresaPendentes,
+                documentMissing: documentMissing,   
             })
         };
         fetch('https://moplanseguros.com.br/sendpendencia.php', optionsForm)
@@ -310,7 +313,15 @@ const ModalReproveAdm = () => {
                                             }
                                         </ul>
                                     </div>
+                                    
                                 </div>  
+                            }
+                            {divWhichDoc === '2' &&
+                                <input
+                                    type="text"
+                                    placeholder="Qual documento?"
+                                    onChange={(e) => setDocumentMissing(e.target.value)}
+                                />
                             }
                             
                                 

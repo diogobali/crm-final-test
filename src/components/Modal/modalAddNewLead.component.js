@@ -3,6 +3,8 @@ import { Modal as ModalComponent } from 'antd';
 import { useModalContextAddNewLead } from './modalAddNewLead.context'
 import { MdAddAlarm, MdSentimentVeryDissatisfied, MdSettingsPower } from 'react-icons/md';
 import { useUserContext } from '../../contexts/userContext';
+import origins from '../../jsons/origins.json';
+import tipos_de_contrato from '../../jsons/tipos_de_contrato.json'
 
 const ModalAddNewLead = () => {
 
@@ -39,8 +41,8 @@ const ModalAddNewLead = () => {
                 vidas: vidas,
                 uf: uf,
                 cidade: cidade,
-                user: userData.id,
-                team: userData.team,
+                user: userData.user.id,
+                team: userData.user.team,
             })
         };
         fetch('https://moplanseguros.com.br/addnewlead.php', optionsForm)
@@ -78,12 +80,18 @@ const ModalAddNewLead = () => {
                                 onChange={(e) => setOrigem(e.target.value)}
                             >
                                 <option value="">Selecione uma opção</option>
-                                <option value="lual">Lual</option>
-                                <option value="indicacao">Indicação</option>
+                            {
+                                origins.sort((a,b) => a.label > b.label ? 1 : -1).map(origin => {
+                                    return(
+                                        <option value={origin.name}>{origin.label}</option>
+                                    )
+                                })
+                            }
+                            
                             </select>
                         </div>
                         <div>
-                            <span>Tipo</span>
+                            <span>Tipo do Lead</span>
                             <select
                                 onChange={(e) => setTipo(e.target.value)}
                             >

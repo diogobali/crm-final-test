@@ -1,0 +1,80 @@
+[
+    {
+        "label": "PME",
+        "name": "PME",
+        "type": "cnpj",
+        "id": "1"
+    },
+    {
+        "label": "PF",
+        "name": "PF",
+        "type": "cpf",
+        "id": "2"
+    },
+    {
+        "label": "PME Odonto",
+        "type": "cnpj",
+        "name": "PMEOdonto",
+        "id": "3"
+    },
+    {
+        "label": "PF Odonto",
+        "name": "PFOdonto",
+        "type": "cpf",
+        "id": "4"
+    },
+    {
+        "label": "Adesao Qualicorp",
+        "name": "ADESAO-QUALICORP",
+        "type": "cpf",
+        "id": "5"
+    },
+    {
+        "label": "Adesao Allcare",
+        "name": "ADESAO-ALLCARE",
+        "type": "cpf",
+        "id": "6"
+    },
+    {
+        "label": "Adesao Corpore",
+        "name": "ADESAO-CORPORE",
+        "type": "cpf",
+        "id": "7"
+    },
+    {
+        "label": "Adesao Affix",
+        "name": "ADESAO-AFFIX",
+        "type": "cpf",
+        "id": "8"
+    },
+    {
+        "label": "Adesao Tec Saude",
+        "name": "ADESAO-TEC SAUDE",
+        "type": "cpf",
+        "id": "9"
+    },
+    {
+        "label": "Adesao Hapvida",
+        "name": "ADESAO-HAPVIDA",
+        "type": "cpf",
+        "id": "10"
+    },
+    {
+        "label": "Adesao Ameron",
+        "name": "ADESAO-AMERON",
+        "type": "cpf",
+        "id": "11"
+    },
+    {
+        "label": "Adesao Allcross",
+        "name": "ADESAO-ALLCROSS",
+        "type": "cpf",
+        "id": "12"
+    },
+    {
+        "label": "Adesao Plural",
+        "name": "ADESAO-PLURAL",
+        "type": "cpf",
+        "id": "13"
+    }
+]

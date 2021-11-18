@@ -1,0 +1,30 @@
+[
+    {
+        "name": "DECLINADA",
+        "label": "Declinada"
+    },
+    {
+        "name": "ANALISE OPERADORA",
+        "label": "Analise Operadora"
+    },
+    {
+        "name": "EMISSAO E ASSINATURA",
+        "label": "Emissao e Assinatura"
+    },
+    {
+        "name": "AGUARDANDO PAGAMENTO",
+        "label": "Aguardando Pagamento"
+    },
+    {
+        "name": "IMPLANTADA",
+        "label": "Implantada"
+    },
+    {
+        "name": "IMPLANTADA INATIVA",
+        "label": "Implantada Inativa"
+    },
+    {
+        "name": "DECLINADA PELA OPERADORA",
+        "label": "Declinada pela Operadora"
+    }
+]

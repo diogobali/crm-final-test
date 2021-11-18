@@ -159,6 +159,7 @@ const Modal4 = () => {
                                                         className="showOrcamento"
                                                         onClick={() => selectOrcamento(r)}
                                                     >
+                                                        <span>Tipo: {r[8]}</span>
                                                         <span>Operadora: {r[0]}</span>
                                                         <span>Plano: {r[1]}</span>
                                                         <span>Acomodação: {r[2]}</span>

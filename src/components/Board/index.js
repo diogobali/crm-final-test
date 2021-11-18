@@ -45,6 +45,7 @@ export default function Board(props){
                 <List title="Informações coletadas" index="2"data={dataOk}/>
                 <List title="Orçamento Enviado / Ag. Retorno" index="3" data={dataOk}/>
                 <List title="Ag. Documento" index="4" data={dataOk} sendAdm={true}/>
+                <List title="Ag. Cancelamento" index="10" data={dataOk} isWaitingCancel={true}/>
                 <List title="Documentos em análise" index="5" data={dataOk} adm={true} isAdmAction={true} />
                 <List title="Em implantação" index="6" data={dataOk} adm={true} hasStatus={true}/>
                 <List title="Implantados" index="9" data={dataOk} adm={true} />

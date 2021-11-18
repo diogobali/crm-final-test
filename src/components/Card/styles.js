@@ -121,21 +121,37 @@ export const Container= styled.div`
         }
     `}
 
-    ${props => props.hasStatus == 'Ag. Emissão de Contrato' && css`
+    ${props => props.hasStatus == 'DECLINADA' && css`
         background-color:red;
     `}
     
-    ${props => props.hasStatus == 'Ag. Contrato Assinado' && css`
+    ${props => props.hasStatus == 'ANALISE OPERADORA' && css`
+        background-color:orange;
+    `}
+
+    ${props => props.hasStatus == 'EMISSAO E ASSINATURA' && css`
         background-color:yellow;
     `}
 
-    ${props => props.hasStatus == 'Ag. Analise de Documentos' && css`
+    ${props => props.hasStatus == 'AGUARDANDO PAGAMENTO' && css`
+        background-color:blue;
+    `}
+
+    ${props => props.hasStatus == 'IMPLANTADA' && css`
         background-color:lime;
     `}
 
-    ${props => props.hasStatus == 'Ag. Pagamento 1 Parcela' && css`
-        background-color:orange;
+    ${props => props.hasStatus == 'IMPLANTADA INATIVA' && css`
+        background-color:purple;
     `}
+
+    ${props => props.isScheduled && (props.moment2 - 3600000) < props.moment && css`
+        background-color:yellow;
+    `}
+
+    ${props => props.isScheduled && (props.moment2) < props.moment && css`
+    background-color:red;
+`}
 
 
 `;

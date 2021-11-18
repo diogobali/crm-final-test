@@ -52,16 +52,25 @@ export function Crm(){
 
     const [data, setData] = useState([]);
 
+    const [notificacoes, setNotificacoes] = useState([]);
+
 
     const optionsForm = {
         method: 'POST',
         body: JSON.stringify({
-            user: userData.id,
-            nome: userData.user,
-            perfil: userData.perfil
+            user: userData.user.id,
+            nome: userData.user.user,
+            perfil: userData.user.perfil
 
         })
     };
+
+    const optionsGetNotificacoes = {
+        method: 'POST',
+        body: JSON.stringify({
+            user: userData.user.id,
+        })
+    }
 
 
     const getProdutos= async () => {
@@ -71,15 +80,24 @@ export function Crm(){
             const objData = Object.values(responseJson);
             setData(objData);
         });
+    }
 
+    const getNotificacoes = async () => {
+        await fetch("https://moplanseguros.com.br/getnotificacoes", optionsGetNotificacoes)
+        .then((response) => response.json())
+        .then((responseJson) => {
+            const notificacoes = Object.values(responseJson);
+            setNotificacoes(notificacoes);
+        })
     }
 
     useEffect(() => {
         getProdutos();
+        getNotificacoes();
     },[])
 
     const tesste = () => {
-        console.log(data)
+        console.log(userData)
     }
     
     return(
@@ -108,9 +126,9 @@ export function Crm(){
                     <HeaderComponent />
                     {data ?
                         <Board dadosleads={data}/>
+                        
                     : null
                     }
-                     
                     <Modal0 />
                     <Modal1 />
                     <Modal2 />

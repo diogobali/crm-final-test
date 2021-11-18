@@ -1,0 +1,34 @@
+[
+    {
+        "name": "BOX LG",
+        "label": "Box LG"
+    },
+    {
+        "name": "HOT LG",
+        "label": "Hot LG"
+    },
+    {
+        "name": "BOX GESTOR",
+        "label": "Box Gestor"
+    },
+    {
+        "name": "HOT GESTOR",
+        "label": "Hot Gestor"
+    },
+    {
+        "name": "RETRABALHO LG",
+        "label": "Retrabalho LG"
+    },
+    {
+        "name": "INDICACAO",
+        "label": "Indicação"
+    },
+    {
+        "name": "LISTAGEM",
+        "label": "Listagem"
+    },
+    {
+        "name": "A CONFIRMAR",
+        "label": "A Confirmar"
+    }
+]

@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Modal as ModalComponent } from 'antd';
 import { useModalContextApproveAdm } from './modalApproveAdm.context'
+import platforms from '../../jsons/platforms.json';
+import { platform } from 'os';
 
 const ModalApproveAdm = () => {
     const {
@@ -52,11 +54,48 @@ const ModalApproveAdm = () => {
 
     }
 
-    if(counterCalls === 0) fetchApi();
-
-    const teste = () => {
-        console.log(data)
+    function handleValor(e){
+        setValor(mask(e.target.value, "###################", "value"))
     }
+
+    function handleProposta(e){
+        setProposta(mask(e.target.value, "###################", "number"))
+    }
+
+    function mask(value, pattern, type) {
+        let i = 0;
+        var v = '';
+        if(type === "number")
+        {
+            v = value.toString().replace(/[^0-9_]/g, "");
+        } else if(type ==="name"){
+            v = value.toString().replace(/[^a-z A-Z_]/g, "");
+        } else if(type === "value"){
+            v = value+ '';
+            v = parseInt(v.replace(/[\D]+/g, ''))
+            v = v + '';
+            v = v.replace(/([0-9]{2})$/g, ",$1");
+            if (v.length > 6) {
+                v = v.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+            }
+
+            if (v == 'NaN'){
+                v = '';
+            }
+
+            v = 'R$ ' + v;
+
+        } else {
+            v = value.toString().replace(/[^a-z A-Z0-9_]/g, "");
+        }
+        return pattern.replace(/#/g, () => {
+
+        let charactere = v[i++];
+        return charactere || "";
+        });
+    }
+
+    if(counterCalls === 0) fetchApi();
 
     return(
         <ModalComponent
@@ -66,7 +105,6 @@ const ModalApproveAdm = () => {
                 <div className="container">
                     <div className="title">
                         <h1>Aprovar Venda</h1>
-                        <button type="button" onClick={teste}>Teste</button>
                     </div>
                     <div className="content">
                         <form>
@@ -127,8 +165,9 @@ const ModalApproveAdm = () => {
                                 <div> 
                                     <span>Valor Real: </span>
                                     <input
-                                        type="number"
-                                        onChange={(e) => setValor(e.target.value)}
+                                        type="text"
+                                        onChange={handleValor}
+                                        value={valor}
                                     />
                                 </div>
                                 <div>
@@ -137,7 +176,13 @@ const ModalApproveAdm = () => {
                                         onChange={(e) => setPlataforma(e.target.value)}
                                     >
                                         <option value="">Selecione...</option>
-                                        <option value="viva">Viva</option>
+                                        {
+                                            platforms.sort((a,b) => a.label > b.label ? 1 : -1).map((platform) => {
+                                                return(
+                                                    <option value={platform.name}>{platform.label}</option>
+                                                )
+                                            })
+                                        }
                                     </select>
 
                                 </div>
@@ -145,7 +190,8 @@ const ModalApproveAdm = () => {
                                     <span>Nº da Proposta</span>
                                     <input 
                                         type="text"
-                                        onChange={(e) => setProposta(e.target.value)}
+                                        onChange={handleProposta}
+                                        value={proposta}
                                     />
                                 </div>
 

@@ -54,7 +54,7 @@ const Modal3 = () => {
             <div className="modal">
                 <div className="container">
                     <div className="title">
-                        <h1>Enviar Orçamentos</h1>
+                        <h1>Enviar Orçasmentos</h1>
                     </div>
                     <div className="content">
                         <form onSubmit={sendForm}>

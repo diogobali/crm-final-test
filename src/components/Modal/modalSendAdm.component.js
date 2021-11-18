@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Modal as ModalComponent } from 'antd';
 import { useModalContextSendAdm } from './modalSendAdm.context'
+import * as yup from 'yup';
 import { MdAddAlarm } from 'react-icons/md';
 
 const ModalSendAdm = () => {
@@ -11,6 +12,7 @@ const ModalSendAdm = () => {
     function refreshPage(){
         window.location.reload();
     } 
+
 
     const [responseApi, setResponseApi] = useState([])
     const [fileName, setFileName] = useState()
@@ -98,6 +100,8 @@ const ModalSendAdm = () => {
             method: 'POST',
             body: JSON.stringify({  
                 leadId: itemId,
+                cancelamos: shallWeCancel,
+                dateToCancel: dateToCancel,
             })
         };
         fetch('https://moplanseguros.com.br/sendadm.php', optionsForm)
@@ -105,6 +109,142 @@ const ModalSendAdm = () => {
             console.log(response);
         })
     }
+
+    const [peso, setPeso] = useState();
+    const [altura, setAltura] = useState();
+    const [nascDate, setNascDate] = useState();
+
+    const calcImc = (index) => {
+        var imc = 0;
+        var result = '';
+        imc = peso / (altura * altura)
+        console.log(imc);
+
+        if(imc < 18.5){
+            result = 'Peso Baixo'
+        } else if (imc >= 18.5 && imc <= 24.9){
+            result = 'Peso Normal'
+        } else if (imc >= 25 && imc <= 29.9){
+            result = 'Sobrepeso'
+        } else if (imc >= 30 && imc <= 34.9){
+            result = 'Obesidade (Grau 1)'
+        } else if (imc >= 35 && imc <= 39.9){
+            result = 'Obesidade Severa (Grau 2)'
+        } else if (imc >= 40){
+            result = 'Obesidade Morbida (Grau 3)'
+        }
+    }
+
+    function mask(value, pattern, type) {
+        let i = 0;
+        var v = '';
+        if(type === "number")
+        {
+            v = value.toString().replace(/[^0-9_]/g, "");
+        } else if(type ==="name"){
+            v = value.toString().replace(/[^a-z A-Z_]/g, "");
+        } else if(type === "value"){
+            v = value+ '';
+            v = parseInt(v.replace(/[\D]+/g, ''))
+            v = v + '';
+            v = v.replace(/([0-9]{2})$/g, ",$1");
+            if (v.length > 6) {
+                v = v.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+            }
+
+            if (v == 'NaN'){
+                v = '';
+            }
+
+            v = 'R$ ' + v;
+
+        } else {
+            v = value.toString().replace(/[^a-z A-Z0-9_]/g, "");
+        }
+        return pattern.replace(/#/g, () => {
+
+        let charactere = v[i++];
+        return charactere || "";
+        });
+    }
+
+    const [ shallWeCancel, setShallWeCancel ] = useState(0);
+    const [ dateToCancel, setDateToCancel ] = useState(0);
+
+    const [ peopleData, setPeopleData ] = useState([]);
+
+    const handlePeopleData = useCallback((peopleName) => {
+        setPeopleData((prevState) => [
+            ...prevState,
+            {
+                id: prevState.length + 1,
+                nome: peopleName,
+                peso: peso,
+                altura: altura,
+                nasc: nascDate,
+            }
+        ])
+
+        console.log(peopleData);
+    }, [peso, altura])
+
+    const [ ageGroupValue1, setAgeGroupValue1 ] = useState();
+    const [ ageGroupValue2, setAgeGroupValue2 ] = useState();
+    const [ ageGroupValue3, setAgeGroupValue3 ] = useState();
+    const [ ageGroupValue4, setAgeGroupValue4 ] = useState();
+    const [ ageGroupValue5, setAgeGroupValue5 ] = useState();
+    const [ ageGroupValue6, setAgeGroupValue6 ] = useState();
+    const [ ageGroupValue7, setAgeGroupValue7 ] = useState();
+    const [ ageGroupValue8, setAgeGroupValue8 ] = useState();
+    const [ ageGroupValue9, setAgeGroupValue9 ] = useState();
+    const [ ageGroupValue10, setAgeGroupValue10 ] = useState();
+    const [ totalValue, setTotalValue ] = useState();
+    const [ valueTotal, setValueTotal ] = useState();
+    const [ discountValue, setDiscountValue ] = useState('R$ 0,00');
+
+    useEffect(() => {
+        setTotalValue((ageGroupValue1 + ageGroupValue2 + ageGroupValue3 + ageGroupValue4 + ageGroupValue5 + ageGroupValue6 + ageGroupValue7 + ageGroupValue8 + ageGroupValue9 + ageGroupValue10) - discountValue)
+    }, discountValue, ageGroupValue1, ageGroupValue10, ageGroupValue2, ageGroupValue3, ageGroupValue4, ageGroupValue5, ageGroupValue6, ageGroupValue7, ageGroupValue8, ageGroupValue9)
+
+    function handleAgeGroupValue1(e){
+        setAgeGroupValue1(mask(e.target.value, "###################", "value"))
+    }
+    function handleAgeGroupValue2(e){
+        setAgeGroupValue2(mask(e.target.value, "###################", "value"))
+    }
+    function handleAgeGroupValue3(e){
+        setAgeGroupValue3(mask(e.target.value, "###################", "value"))
+    }
+    function handleAgeGroupValue4(e){
+        setAgeGroupValue4(mask(e.target.value, "###################", "value"))
+    }
+    function handleAgeGroupValue5(e){
+        setAgeGroupValue5(mask(e.target.value, "###################", "value"))
+    }
+    function handleAgeGroupValue6(e){
+        setAgeGroupValue6(mask(e.target.value, "###################", "value"))
+    }
+    function handleAgeGroupValue7(e){
+        setAgeGroupValue7(mask(e.target.value, "###################", "value"))
+    }
+    function handleAgeGroupValue8(e){
+        setAgeGroupValue8(mask(e.target.value, "###################", "value"))
+    }
+    function handleAgeGroupValue9(e){
+        setAgeGroupValue9(mask(e.target.value, "###################", "value"))
+    }
+    function handleAgeGroupValue10(e){
+        setAgeGroupValue10(mask(e.target.value, "###################", "value"))
+    }
+
+    function handleDiscountValue(e){
+        setDiscountValue(mask(e.target.value, "###################", "value"))
+    }
+
+    if(data.titulares && data.dependentes){  
+        var newArray = data.titulares.concat(data.dependentes);
+    }
+    
 
     const teste = () => {
         console.log(data);
@@ -137,7 +277,15 @@ const ModalSendAdm = () => {
                                         </div>
                                         <div>
                                             <span>Valor Fechado:</span>
-                                            <span>{data.[4]}</span>
+                                            <span>{data[4]}</span>
+                                        </div>
+                                        <div>
+                                            <span>Valor de Desconto:</span>
+                                            <input
+                                                type="text"
+                                                onChange={handleDiscountValue}
+                                                value={discountValue}
+                                            />
                                         </div>
                                         </>
                                     )
@@ -145,6 +293,166 @@ const ModalSendAdm = () => {
                            
                             )
                         })}
+
+                            <div>
+                                <span>Cancelamento por nós?</span>
+                                <div>
+                                    <select
+                                        onChange={(e) => {setShallWeCancel(e.target.value)}}
+                                    >
+                                        <option value="0">Não</option>
+                                        <option value="1">Sim</option>
+                                    </select>
+
+                                    <input
+                                        type="date"
+                                        onChange={(e) => {setDateToCancel(e.target.value)}}
+                                    />
+                                </div>
+                            </div>
+                    <div className="title">
+                        <h1>Valores por faixa etaria</h1>
+                    </div>
+                    <div className="content valores-por-faixa-etaria">
+                        <div>
+                            <div>
+                                <span>0-18</span>
+                                <input
+                                    type="text"
+                                    onChange={handleAgeGroupValue1}
+                                    value={ageGroupValue1}
+                                />
+                            </div>
+                            <div>
+                                <span>19-23</span>
+                                <input 
+                                    type="text"
+                                    onChange={handleAgeGroupValue2}
+                                    value={ageGroupValue2}
+                                />
+                            </div>
+                            <div>
+                                <span>24-28</span>
+                                <input 
+                                    type="text"
+                                    onChange={handleAgeGroupValue3}
+                                    value={ageGroupValue3}
+                                />
+                            </div>
+                            <div>
+                                <span>29-33</span>
+                                <input 
+                                    type="text"
+                                    onChange={handleAgeGroupValue4}
+                                    value={ageGroupValue4}
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <span>34-38</span>
+                                <input 
+                                    type="text"
+                                    onChange={handleAgeGroupValue5}
+                                    value={ageGroupValue5}
+                                />
+                            </div>
+                            <div>
+                                <span>39-43</span>
+                                <input 
+                                    type="text"
+                                    onChange={handleAgeGroupValue6}
+                                    value={ageGroupValue6}
+                                />
+                            </div>
+                            <div>
+                                <span>44-48</span>
+                                <input 
+                                    type="text"
+                                    onChange={handleAgeGroupValue7}
+                                    value={ageGroupValue7}
+                                />
+                            </div>
+                            <div>
+                                <span>49-53</span>
+                                <input 
+                                    type="text"
+                                    onChange={handleAgeGroupValue8}
+                                    value={ageGroupValue8}
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <div>
+                                <span>54-58</span>
+                                <input 
+                                    type="text"
+                                    onChange={handleAgeGroupValue9}
+                                    value={ageGroupValue9}
+                                />
+                            </div>
+                            <div>
+                                <span>59+</span>
+                                <input 
+                                    type="text"
+                                    onChange={handleAgeGroupValue10}
+                                    value={ageGroupValue10}
+                                />
+                            </div>
+                        </div>
+                            
+                    </div>
+                    <div className="title">
+                        <h1>Beneficiarios</h1>
+                    </div>
+                    <div className="content">
+                        {newArray &&
+                        newArray.map((item, index) => {
+                            return(
+                                item.map((item, index) => {
+                                    return(
+                                        <>
+                                        <div>
+                                            {item[0]}
+                                            
+                                            <div className="dataToIMC">
+                                                <span>
+                                                    Data de Nascimento
+                                                </span>
+                                                <input
+                                                    type="date"
+                                                    onChange={(e) => setNascDate(e.target.value)}
+                                                />
+                                                <input
+                                                    type="text"
+                                                    placeholder="Peso em quilos. Ex: 82.30"
+                                                    onChange={(e) => setPeso(e.target.value)}
+                                                />
+                                                <input
+                                                    type="text"
+                                                    placeholder="Altura em metros. Ex: 1.82"
+                                                    onChange={(e) => setAltura(e.target.value)}
+                                                    onBlur={calcImc(index)}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handlePeopleData(item[0])}
+                                                >Confirmar</button>
+                                                {/* <input
+                                                    type="text"
+                                                    name={"teste"+index}
+                                                /> */}
+                                            </div>
+                                        </div>
+                                        </>
+                                    )
+                                })
+                            )
+                        })}
+                        
+                    </div>
+
+
                             
                         <form onSubmit={sendAdm}>
                         <div id="msg" className="msg">
@@ -170,6 +478,7 @@ const ModalSendAdm = () => {
                                 <option value="CNH">CNH</option>
                                 <option value="Comprov">COMPROVANTE DE RESIDENCIA</option>
                                 <option value="CARTEIRINHA">CARTEIRINHA</option>
+                                <option value="COMPROV. PAGAMENTO">COMPROV. PAGAMENTO</option>
                             </select>
                             <select
                                 onChange={(e) => setFileOwner(e.target.value)}

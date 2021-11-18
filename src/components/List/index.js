@@ -7,9 +7,10 @@ import { useDrag, useDrop } from 'react-dnd';
 import { Container } from './styles';
 import { useUserContext } from '../../contexts/userContext';
 import { useModalContextAddNewLead} from '../Modal/modalAddNewLead.context';
+import { isShorthandPropertyAssignment } from 'typescript';
 
 
-export default function List({ title, data, index: listIndex, adm, sendAdm, isAdmAction, isRegularizarAction, hasStatus, isScheduled}){
+export default function List({ title, data, index: listIndex, adm, sendAdm, isAdmAction, isRegularizarAction, hasStatus, isScheduled, isWaitingCancel}){
 
     const { userData, setUserData } = useUserContext();
 
@@ -18,7 +19,7 @@ export default function List({ title, data, index: listIndex, adm, sendAdm, isAd
 
     var aux = 0;
     return(
-        <Container adm={adm} sendAdm={sendAdm} userData={userData} isAdmAction={isAdmAction} isRegularizarAction={isRegularizarAction} hasStatus={hasStatus} isScheduled={isScheduled}>
+        <Container adm={adm} sendAdm={sendAdm} userData={userData} isAdmAction={isAdmAction} isRegularizarAction={isRegularizarAction} hasStatus={hasStatus} isScheduled={isScheduled} isWaitingCancel={isWaitingCancel}>
             <header>
                 <h2>{title}</h2>
                 {listIndex == 0 &&
@@ -48,6 +49,7 @@ export default function List({ title, data, index: listIndex, adm, sendAdm, isAd
                                 isRegularizarAction={isRegularizarAction}
                                 hasStatus={hasStatus}
                                 isScheduled={isScheduled}
+                                isWaitingCancel={isWaitingCancel}
                             />
                             )
                         }

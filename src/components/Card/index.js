@@ -24,7 +24,7 @@ import { useModalContextChangeStatus} from '../Modal/modalChangeStatus.context';
 import { useUserContext } from '../../contexts/userContext';
 
 
-export default function Card({ data, index, listIndex, button, status, sendAdm, key, className, isAdmAction, isRegularizarAction, hasStatus, isScheduled }){
+export default function Card({ data, index, isWaitingCancel, listIndex, button, status, sendAdm, key, className, isAdmAction, isRegularizarAction, hasStatus, isScheduled }){
 
     const { userData, setUserData } = useUserContext();
 
@@ -142,7 +142,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 }
 
                 if(targetListIndex == 8){
-                    if(userData.perfil == 0){
+                    if(userData.user.perfil == 0){
                         openModalDeclineds(itemId);
                     } else {
                         alert("Apenas vendedores podem declinar leads");
@@ -165,7 +165,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             }
 
             if(targetListIndex == 1){
-                if(userData.perfil == 0 || userData.perfil == 1){
+                if(userData.user.perfil == 0 || userData.user.perfil == 1){
                     openModalZero(itemId);
                 } else {
                     alert("Apenas vendedores podem criar um agendamento.");
@@ -174,7 +174,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             }
 
             if(targetListIndex == 2){
-                if(userData.perfil == 0 || userData.perfil == 1){
+                if(userData.user.perfil == 0 || userData.user.perfil == 1){
                    openModalUm(itemId);
                 } else {
                     alert("Apenas vendedores podem coletar informações");
@@ -182,8 +182,8 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 }
             }
             if(targetListIndex == 3){
-                console.log(userData.perfil)
-                if(userData.perfil == 0 || userData.perfil == 1){
+                console.log(userData.user.perfil)
+                if(userData.user.perfil == 0 || userData.user.perfil == 1){
                     openModalDois(itemId);
                 } else {
                     alert("Apenas vendedores podem enviar orçamentos");
@@ -191,7 +191,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 }
             }
             if(targetListIndex == 4){
-                if(userData.perfil == 0 || userData.perfil == 1){
+                if(userData.user.perfil == 0 || userData.user.perfil == 1){
                     openModalQuatro(itemId);
                 } else {
                     alert("Apenas vendedores podem aprovar orçamentos");
@@ -199,7 +199,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 }
             }
             if(targetListIndex == 5){
-                if(userData.perfil == 2){
+                if(userData.user.perfil == 2){
                     // openModalCinco(itemId);
                 } else {
                     alert("Apenas o administrativo pode usar essa coluna");
@@ -208,7 +208,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             }
 
             if(targetListIndex == 6){
-                if(userData.perfil == 2){
+                if(userData.user.perfil == 2){
                     // openModalSeis(itemId);
                 } else {
                     alert("Apenas o administrativo pode usar essa coluna");
@@ -216,7 +216,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 }
             }
             if(targetListIndex == 7){
-                if(userData.perfil == 2){
+                if(userData.user.perfil == 2){
                     // openModalSete(itemId);
                 } else {
                     alert("Apenas o administrativo pode usar essa coluna");
@@ -240,6 +240,36 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             })
         }
 
+        const [ dateToCancel, setDateToCancel ] = useState();
+
+        const changeDateToCancel = async (id) => {
+           const optionsForm = {
+               method: 'POST',
+               body: JSON.stringify({
+                   leadId: id,
+                   newDate: dateToCancel
+               })
+           };
+           fetch('https://moplanseguros.com.br/setnewdatetocancel.php', optionsForm)
+           .then(function(response) {
+            window.location.reload();
+           })
+        }
+
+        const approveCancel = async (id) => {
+            const optionsForm = {
+                method: 'POST',
+                body: JSON.stringify({
+                    leadId: id,
+                })
+            };
+            fetch('https://moplanseguros.com.br/sendadm.php', optionsForm)
+            .then(function(response){
+                window.location.reload();
+            })
+        }
+        
+
         const sendComprovante = (file, itemId) => {
             const form_data = new FormData();
             form_data.append('attachment', file);
@@ -254,14 +284,25 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             })
         }
 
+        const now = new Date();
+        var moment = 0;
+        const now2 = new Date(data.agendamento);
+        var moment2 = 0;
 
-    
+        if(isScheduled){
+            
+            moment = now.getTime();
+            
+            moment2 = now2.getTime();
+        }
+        
+        
 
     dragRef(dropRef(ref));
 
     return(
         
-        <Container ref={ref} isDragging={isDragging} className={className} hasStatus={data.status_implantacao} isScheduled={isScheduled}>
+        <Container ref={ref} isDragging={isDragging} className={className} hasStatus={data.status_implantacao} isScheduled={isScheduled} moment={moment} moment2={moment2}>
             <header>
             </header>
             <p>
@@ -269,18 +310,20 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 {/* {status} */}
 
             </p>
-            {data.status &&
+            {data.status && 
                     <div className="card-info">
                         <p className="card--status">{data.nome}</p>
                         <button type="button" className="btn-info" onClick={() => openModalInfos(data.id, data.status)}><img src="../../../info-icon.svg" alt="Informações" /></button>
                     </div>
             }
 
+
+
             {hasStatus &&
                 
             <>
                 <span><strong>{data.status_implantacao}</strong></span>
-                {userData.perfil == 2 &&
+                {userData.user.perfil == 2 &&
                 data.status_implantacao != 'Ag. Contrato Assinado' &&
             
                 
@@ -290,7 +333,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 >Alterar Status</button>
                 }
                 {data.status_implantacao === 'Ag. Contrato Assinado' &&
-                    userData.perfil == 0 &&
+                    userData.user.perfil == 0 &&
                 <>
                     <span>
                         <input
@@ -308,7 +351,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
                 </>
                 }
                 {data.status_implantacao === 'Ag. Pagamento 1 Parcela' &&
-                    userData.perfil == 2 &&
+                    userData.user.perfil == 2 &&
                 <>
                 <span>
                     <input
@@ -328,16 +371,43 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             </>
             }
 
-            {isScheduled &&
-                <span>{isScheduled}</span>
+            {isScheduled && 
+
+               <>
+                <span>Agendado para:</span>
+                <span>{data.agendamento}</span>
+                </>
+            
+            }
+
+            {isWaitingCancel &&
+                <>
+                    <span>Data p/ cancelar</span>
+                    <input
+                        type="date"
+                        onChange={(e) => {setDateToCancel(e.target.value)}}
+                        defaultValue={data.date_to_cancel}
+                    />
+                    <button
+                        type="button"
+                        onClick={() => changeDateToCancel(data.id)}
+                    >Alterar</button>
+                    {userData.user.perfil == 2 &&
+                        <button
+                            type="button"
+                            onClick={() => approveCancel(data.id)}
+                        >Aprovar Cancelamento</button>
+                    }
+                </>
             }
 
             {sendAdm &&
+                userData.user.perfil == 0 &&
                 <button type="button" className="btn-sendAdm" onClick={() => openModalSendAdms(data.id)}>Enviar para ADM</button>
             }
 
             {isAdmAction &&
-                userData.perfil == 2 &&
+                userData.user.perfil == 2 &&
                 <>
                 <div className="buttonsAdm">
                     <button
@@ -353,6 +423,7 @@ export default function Card({ data, index, listIndex, button, status, sendAdm, 
             }
 
             {isRegularizarAction &&
+                userData.user.perfil == 0 &&
                 <>
                 <div className="buttonsAdm">
                     <button

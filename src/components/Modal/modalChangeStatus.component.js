@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { Modal as ModalComponent } from 'antd';
 import { useModalContextChangeStatus } from './modalChangeStatus.context'
+import proposal_status from '../../jsons/proposal_status.json';
 
 
 
@@ -48,35 +49,15 @@ const ModalChangeStatus = () => {
                                 onChange={(e) => setNewStatus(e.target.value)}
                             >
                                 <option value="">Selecione uma opção...</option>
-                                <option value="Ag. Emissão de Contrato">Aguardando Emissão de Contrato</option>
-                                <option value="Ag. Contrato Assinado">Aguardando Contrato Assinado</option>
-                                <option value="Ag. Pagamento 1 Parcela">Aguardando Pagamento da 1ª Parcela</option>
+                            {
+                                proposal_status.sort((a,b) => a.label > b.label ? 1 : -1).map(status => {
+                                    return(
+                                        <option value={status.name}>{status.label}</option>
+                                    )
+                                })
+                            }
                             </select>
                         </div>
-                        {newStatus === "Ag. Contrato Assinado" &&
-                            <div>
-                                <input
-                                    type="file"
-                                    accept=".jpg,.jpeg,.png,.pdf"
-                                    id="selectfile"
-                                    // onChange={handleSetAttachment}
-                                    name="attachment"
-                                    onChange={(e) => setFile(e.target.files[0])}
-                                />
-                            </div>
-                        }
-                        {newStatus === "Ag. Contrato Assinado" &&
-                            <div>
-                                <input
-                                    type="file"
-                                    accept=".jpg,.jpeg,.png,.pdf"
-                                    id="selectfile"
-                                    // onChange={handleSetAttachment}
-                                    name="attachment"
-                                    onChange={(e) => setFile(e.target.files[0])}
-                                />
-                            </div>
-                        }
                         
 
                         <div className="content-buttons">

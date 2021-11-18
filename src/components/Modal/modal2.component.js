@@ -37,6 +37,7 @@ const Modal2 = () => {
     } 
 
     const [formInfo, setFormInfo] = useState({
+        tipo: '',
         operadora: '',
         plano: '',
         cobertura: '',
@@ -54,6 +55,7 @@ const Modal2 = () => {
                 ...prevState,
                 {
                     id: prevState.length + 1,
+                    tipo: formInfo.tipo,
                     operadora: formInfo.operadora,
                     plano: formInfo.plano,
                     cobertura: formInfo.cobertura,
@@ -71,6 +73,8 @@ const Modal2 = () => {
         [orcamentos]
     );
     
+    const [image, setImage] = useState();
+
 
     const sendForm = async (e) => {
 
@@ -105,6 +109,52 @@ const Modal2 = () => {
     }
     console.log(companies);
 
+    function handlePlan(e){
+        setFormInfo({ ...formInfo, "plano": mask(e.target.value, "###################", "text")})
+    }
+
+
+    function mask(value, pattern, type) {
+        let i = 0;
+        var v = '';
+        if(type === "number")
+        {
+            v = value.toString().replace(/[^0-9_]/g, "");
+        } else if(type ==="name"){
+            v = value.toString().replace(/[^a-z A-Z_]/g, "");
+        } else {
+            v = value.toString().replace(/[^a-z A-Z0-9_]/g, "");
+        }
+        return pattern.replace(/#/g, () => {
+
+        let charactere = v[i++];
+        return charactere || "";
+        });
+    }
+
+    const [ value, handleValue ] = useState(0);
+    var valor = 0;
+    function valueMask(e) {
+        
+        valor = e+ '';
+        valor = parseInt(valor.replace(/[\D]+/g, ''))
+        valor = valor + '';
+        valor = valor.replace(/([0-9]{2})$/g, ",$1");
+        if (valor.length > 6) {
+            valor = valor.replace(/([0-9]{3}),([0-9]{2}$)/g, ".$1,$2");
+        }
+
+        if (valor == 'NaN'){
+            valor = '';
+        }
+        const finalValue = 'R$ ' + valor;
+        console.log(valor)
+        handleValue(finalValue)
+    }
+    const teste = () => {
+        console.log(companies);
+    }
+
     return(
         <ModalComponent2 
             visible={visible}
@@ -113,9 +163,21 @@ const Modal2 = () => {
                 <div className="container">
                     <div className="title">
                         <h1>Enviar Orçamentos</h1>
+                        <button type="button" onClick={teste}>Teste</button>
                     </div>
-                    <div className="content">
+                    <div className="content send-orçamento">
                         <form onSubmit={sendForm}>
+                        <div>
+                            <span>Tipo de Orçamento</span>
+                            <select
+                                name="tipo"
+                                onChange={valorInput}
+                            >
+                                <option value="">Selecione...</option>
+                                <option value="odonto">Odonto</option>
+                                <option value="saude">Saúde</option>
+                            </select>
+                        </div>
                         <div>
                             {itemId &&
                                 <input 
@@ -125,15 +187,17 @@ const Modal2 = () => {
                                     style={{display:'none'}}
                                 />
                             }
+
                             <span>Operadora: </span>
                             <select
                                 name="operadora"
                                 onChange={valorInput}
                             >
+                                <option value="">Selecione...</option>
                                 {
-                                    companies.map(company => {
+                                    companies.sort((a,b) => a.label > b.label ? 1:-1).map((company) => {
                                         return(
-                                            <option value={company.value}>{company.name}</option>
+                                            <option value={company.name}>{company.label}</option>
                                         )
                                     })
                                 }
@@ -145,7 +209,8 @@ const Modal2 = () => {
                                 type="text" 
                                 placeholder="AMIL 300"
                                 name="plano"
-                                onChange={valorInput}
+                                onChange={handlePlan}
+                                value={formInfo.plano}
                             ></input>
                         </div>
                         <div>
@@ -178,7 +243,9 @@ const Modal2 = () => {
                                     type="text" 
                                     placeholder="Valor"
                                     name="valor"
-                                    onChange={valorInput}
+                                    value={value}
+                                    onBlur={valorInput}
+                                    onChange={(e) => valueMask(e.target.value)}
                                 ></input>
                             </div>
                         </div>
@@ -189,6 +256,17 @@ const Modal2 = () => {
                                 name="primeiroretorno"
                                 onChange={valorInput} 
                             ></input>
+                        </div>
+                        <div>
+                            <span>Anexar proposta</span>
+                            <input
+                                type="file"
+                                accept=".jpg,.jpeg,.png,.pdf"
+                                id="selectfile"
+                                // onChange={handleSetAttachment}
+                                name="attachment"
+                                onChange={(e) => setImage(e.target.files[0])}
+                            />
                         </div>
                         <div>
                                 <button
@@ -206,6 +284,7 @@ const Modal2 = () => {
                                                 
                                                 <div>
                                                     <div className="showOrcamento">
+                                                        <span>Tipo: {r.tipo}</span>
                                                         <span>Operadora: {r.operadora}</span>
                                                         <span>Plano: {r.plano}</span>
                                                         <span>Acomodação: {r.cobertura}</span>

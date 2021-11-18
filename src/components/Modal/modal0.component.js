@@ -18,7 +18,10 @@ let validateForm = yup.object().shape({
 
 
 const Modal0 = () => {
-
+    const { 
+        modal0State: { visible, itemId }, 
+        closeModal0,
+    } = useModalContext0();
 
     const valorInput = e => setFormInfo({ ...formInfo, [e.target.name]: e.target.value })
 
@@ -30,6 +33,9 @@ const Modal0 = () => {
     });
 
     const sendForm = async (e) => {
+
+        e.preventDefault();
+
         try {
             await validateForm.validate(formInfo);
             console.log("Deu bom");
@@ -39,26 +45,23 @@ const Modal0 = () => {
             return;
         }
 
-
-        const lead = document.querySelector('.lead').value
         const optionsForm = {
             method: 'POST',
             body: JSON.stringify({
                 contactWay: formInfo.contactWay,
                 date: formInfo.date,
-                leadId: lead,
+                leadId: itemId,
             })
         };
         fetch('https://moplanseguros.com.br/recieveform.php', optionsForm)
         .then(function(response) {
+            window.location.reload();
         })
+        
 
     }
 
-    const { 
-        modal0State: { visible, itemId }, 
-        closeModal0,
-    } = useModalContext0();
+
 
 
 
@@ -78,7 +81,7 @@ const Modal0 = () => {
                         <h1>Agendar Retorno</h1>
                     </div>
                     <div className="content">
-                        <form onSubmit={sendForm}>
+                        <form>
                         <div>
                             {itemId &&
                                 <input 
@@ -109,7 +112,7 @@ const Modal0 = () => {
                         </div>
                         <div className="content-buttons">
                             <button type="button" className="btn-cancelar" onClick={refreshPage}><img src="../../../btn-cancel.svg"></img> </button>
-                            <button type="submit" className="btn-confirmar"><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button>
+                            <button type="button" className="btn-confirmar" onClick={sendForm}><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button>
                         </div>
                         </form>
                     </div>

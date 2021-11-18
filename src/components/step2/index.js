@@ -4,6 +4,7 @@ import React, { createContext, useState, useContext, useCallback, useEffect } fr
 import CurrencyFormat from 'react-currency-format';
 import * as yup from 'yup';
 import ReactTooltip from 'react-tooltip';
+import tipos_de_contrato from '../../jsons/tipos_de_contrato.json';
 
 import './styles.scss';
 // import nextStep from '../Signup';
@@ -17,7 +18,7 @@ let validateForm1 = yup.object().shape({
             is: (selectedType) => selectedType == 'adesao',
             then: yup
                 .string()
-                .test('len', 'Insira um CPF válido.', titularId => titularId.length == 0 || titularId.length == 11)
+                .test('len', 'Insira um CPF válido.', titularId => titularId.length == 0 || titularId.length == 14)
         })
         .when('selectedType', {
             is: (selectedType) => selectedType == 'empresarial',
@@ -123,17 +124,14 @@ const Step2 = ({ nextStep, itemId }) => {
         window.location.reload();
     } 
 
-    function Previous1(){
-        document.querySelector('.step2').style.display = 'none';
-        document.querySelector('.step1').style.display = 'block';
+    const [stepvisibility, setStepVisibility] = useState(1);
+
+    function Previous(){
+        setStepVisibility(stepvisibility-1);
     }
 
-    function Previous2(){
-        document.querySelector('.step3').style.display = 'none';
-        document.querySelector('.step2').style.display = 'block';
-    }
 
-    const Continue1 = async () => {
+    const Continue = async () => {
         console.log(formInfo)
 
         try {
@@ -146,27 +144,9 @@ const Step2 = ({ nextStep, itemId }) => {
         }
         
 
-        document.querySelector('.step1').style.display = 'none';
-        document.querySelector('.step2').style.display = 'block';
+        setStepVisibility(stepvisibility+1);
     }
 
-    const Continue2 = async () => {
-
-        console.log(formInfo)
-
-        try {
-            await validateForm2.validate(formInfo);
-            console.log("Deu bom");
-        } catch (err) {
-            console.log(err);
-            alert(err);
-            return;
-        }
-
-
-        document.querySelector('.step2').style.display = 'none';
-        document.querySelector('.step3').style.display = 'block';
-    }
 
     const valorInput = e => setFormInfo({ ...formInfo, [e.target.name]: e.target.value })
 
@@ -248,6 +228,7 @@ const Step2 = ({ nextStep, itemId }) => {
     }
 
     const [parenteType, setParenteType] = useState();
+    const [auxParenteType, setAuxParenteType] = useState();
     const [parenteName, setParenteName] = useState();
     const [titularForParente, setTitularForParente] = useState();
     const [parentes, setParentes] = useState([]);
@@ -392,11 +373,70 @@ const Step2 = ({ nextStep, itemId }) => {
         if (valor == 'NaN'){
             valor = '';
         }
-
         const finalValue = 'R$ ' + valor;
         console.log(valor)
         handleValue(finalValue)
     }
+
+    const [ document, setDocument ] = useState();
+    var valor = 0;
+    function handleDocumentCPF(e){
+        setDocument(mask(e.target.value, "###.###.###-##", "number"));
+    }
+    function handleDocumentCNPJ(e){
+        setDocument(mask(e.target.value, "##.###.###/####-##", "number"));
+    }
+
+    function handleTitularName(e){
+        setTitularName(mask(e.target.value, "####################################################", "name"))
+    }
+
+    function handleParenteName(e){
+        setParenteName(mask(e.target.value, "####################################################", "name"))
+    }
+
+    function handleZone(e){
+        setFormInfo({ ...formInfo, "zone": mask(e.target.value, "###################", "name")})
+    }
+
+    function handleHospitals(e){
+        setFormInfo({ ...formInfo, "hospitals": mask(e.target.value, "###################", "name")})
+    }
+
+    function handleLabs(e){
+        setFormInfo({ ...formInfo, "labs": mask(e.target.value, "###################", "name")})
+    }
+
+    function handleIllness(e){
+        setFormInfo({ ...formInfo, "illness": mask(e.target.value, "###################", "name")})
+    }
+
+    function handlePlan(e){
+        setFormInfo({ ...formInfo, "plan": mask(e.target.value, "###################", "text")})
+    }
+
+    function handleOperator(e){
+        setFormInfo({ ...formInfo, "operator": mask(e.target.value, "###################", "name")})
+    }
+
+    function mask(value, pattern, type) {
+        let i = 0;
+        var v = '';
+        if(type === "number")
+        {
+            v = value.toString().replace(/[^0-9_]/g, "");
+        } else if(type ==="name"){
+            v = value.toString().replace(/[^a-z A-Z_]/g, "");
+        } else {
+            v = value.toString().replace(/[^a-z A-Z0-9_]/g, "");
+        }
+        return pattern.replace(/#/g, () => {
+
+        let charactere = v[i++];
+        return charactere || "";
+        });
+    }
+
 
     useEffect(() => { 
         console.log(formInfo.isComp.construtor)
@@ -405,35 +445,54 @@ const Step2 = ({ nextStep, itemId }) => {
         console.log(formInfo.isComp)
       }, [formInfo.isComp]);
 
+    const [auxDocumentVisibility, setAuxDocumentVisibility] = useState();
+
     const checkSelected = (e) =>{
-        const selected = e.target.value;
-        if(selected === 'adesao'){
-            document.querySelector('#divCPF').style.display = 'flex';
-            document.querySelector('#divCNPJ').style.display = 'none';
+        const selected = e.target.selectedOptions[0].getAttribute("data-type");
+        if(selected === 'cpf'){
+            setAuxDocumentVisibility('adesao');
+            console.log(auxDocumentVisibility)
         
-        } else if (selected === 'empresarial'){
-            document.querySelector('#divCPF').style.display = 'none';
-            document.querySelector('#divCNPJ').style.display = 'flex';
+        } else if (selected === 'cnpj'){
+            setAuxDocumentVisibility('empresarial');
             
         } else if (selected === ''){
-            document.querySelector('#divCPF').style.display = 'none';
-            document.querySelector('#divCNPJ').style.display = 'none';
+            setAuxDocumentVisibility('hidden');
         }
-
     }
 
+    const [auxParenteTypeVisibility, setAuxParenteTypeVisibility] = useState(false);
 
+    const checkParentesOutros = () => {
+        const selected = auxParenteType;
+        if(selected == null){
+            return;
+        }
+        if(selected === 'Outros'){
+            setAuxParenteTypeVisibility(true);
+        } else {
+            setAuxParenteTypeVisibility(false);
+            setParenteType(selected);
+        }
+    }
 
+    
+    useEffect(() => {
+        checkParentesOutros();
+    }, [auxParenteType])
 
     return(
             <div className="modal">
                 <div className="container">
                 <form onSubmit={sendFormx}>
+                    {stepvisibility === 1 &&
+                    
+                    
                     <div className="step1"
                         onKeyPress={ (e) => {
                             if(e.key === 'Enter' && e.target.id !== 'insertPeople' && e.target.id !== 'insertParente'){
                                 e.preventDefault();
-                                Continue1();
+                                Continue();
                             }
 
                         }}
@@ -459,38 +518,46 @@ const Step2 = ({ nextStep, itemId }) => {
                                     onChange={checkSelected}
                                     name="selectedType"
                                 >
+                                <option value="">Selecione...</option>
+                                 {tipos_de_contrato.map(item => {
+                                     return(
+                                         <option value={item.name} data-type={item.type}>{item.label}</option>
+                                     )
+                                 })}   
                                     
-                                    <option value="">Selecione...</option>
-                                    <option value="adesao">Adesão</option>
-                                    <option value="empresarial">Empresarial</option>
                                 </select>
                             </div>
+                            {auxDocumentVisibility === 'adesao' &&
                             <div
-                                id="divCPF"
+
                             >
                                 <span>CPF do Titular:</span>
                                 <input
                                     type="text"
                                     placeholder="000.000.000-00"
                                     name="titularId"
-                                    onChange={(e) => {e.target.value = e.target.value.replace(/\D/g, '')}}
+                                    value={document}
+                                    onInput={handleDocumentCPF}
                                     onBlur={valorInput}
-                                    maxlength="11"
                                 />
                             </div>
-                            <div
-                                id="divCNPJ"
-                            >
-                                <span>CNPJ do Titular:</span>
-                                <input
-                                    type="text"
-                                    placeholder="00.000.000/0000-00"
-                                    name="titularId"
-                                    onChange={(e) => {e.target.value = e.target.value.replace(/\D/g, '')}}
-                                    onBlur={valorInput}
-                                    maxlength="14"
-                                />
-                            </div>
+                            }
+                            {auxDocumentVisibility === 'empresarial' &&
+                                <div
+
+                                >
+                                    <span>CNPJ do Titular:</span>
+                                    <input
+                                        type="text"
+                                        placeholder="00.000.000/0000-00"
+                                        name="titularId"
+                                        value={document}
+                                        onInput={handleDocumentCNPJ}
+                                        onBlur={valorInput}
+                                    />
+                                </div>
+                            }
+                            
 
                             <div
                                 id="divParentescos"
@@ -504,7 +571,9 @@ const Step2 = ({ nextStep, itemId }) => {
                                         type="text"
                                         placeholder="Nome"
                                         id="insertPeople"
-                                        onChange={(e) => {setTitularName(e.target.value)}}
+                                        value={titularName}
+                                        onChange={handleTitularName}
+                                        onBlur={(e) => {setTitularName(e.target.value)}}
                                         onKeyPress={(e) => {
                                             if(e.key == 'Enter'){
                                                 newTitular();
@@ -635,13 +704,15 @@ const Step2 = ({ nextStep, itemId }) => {
                                 <div>
                                     <div>
                                         <span>
-                                            Insira os parentes
+                                            Insira os dependentes
                                         </span>
                                             <input
                                                 type="text"
                                                 placeholder="Nome"
                                                 id="insertParente"
-                                                onChange={(e) => {setParenteName(e.target.value)}}
+                                                value={parenteName}
+                                                onChange={handleParenteName}
+                                                onBlur={(e) => {setParenteName(e.target.value)}}
                                                 onKeyPress={(e) => {
                                                     if(e.key == 'Enter'){
                                                         newParente();
@@ -650,11 +721,12 @@ const Step2 = ({ nextStep, itemId }) => {
                                                 }}
                                             ></input>
                                             <select
-                                                onChange={(e) => {setParenteType(e.target.value)}}
+                                                onChange={(e) => {setAuxParenteType(e.target.value)}}
                                             >
                                                 <option value="">Parentesco</option>
                                                 <option value="Pai">Pai</option>
                                                 <option value="Mãe">Mãe</option>
+                                                <option value="Irmao">Irmão (ã)</option>
                                                 <option value="Avo">Avô (a)</option>
                                                 <option value="Filho">Filho (a)</option>
                                                 <option value="Tio">Tio (a)</option>
@@ -664,7 +736,16 @@ const Step2 = ({ nextStep, itemId }) => {
                                                 <option value="Conjuge">Conjuge</option>
                                                 <option value="Cunhado">Cunhado (a)</option>
                                                 <option value="Enteado">Enteado (a)</option>
+                                                <option value="Outros">Outros</option>
                                             </select>
+                                            {auxParenteTypeVisibility &&
+                                            <input
+                                                type="text"
+                                                onChange={(e) => {setParenteType(e.target.value)}}
+                                                id="inputParentesOutros"
+                                            />
+                                            }
+                                            
                                             <span>de</span>
                                             <select
                                                 onChange={(e) => {setTitularForParente(e.target.value); console.log(parentes)}}
@@ -821,7 +902,7 @@ const Step2 = ({ nextStep, itemId }) => {
                                 </ul>
                             </div>
                             <div className="title">
-                                <h2>Parentes</h2>
+                                <h2>Dependentes</h2>
                             </div>
                             <div
                                 id="showTitulares"
@@ -973,7 +1054,8 @@ const Step2 = ({ nextStep, itemId }) => {
                                     type="text" 
                                     placeholder="Ipiranga ou Zona Sul"
                                     name="zone"
-                                    onChange={valorInput}
+                                    value={formInfo.zone}
+                                    onChange={handleZone}
                                  />
                             </div>
 
@@ -983,7 +1065,8 @@ const Step2 = ({ nextStep, itemId }) => {
                                     type="text" 
                                     placeholder="Oswaldo Cruz"
                                     name="hospitals"
-                                    onChange={valorInput}
+                                    value={formInfo.hospitals}
+                                    onChange={handleHospitals}
                                  />
                             </div>
 
@@ -993,7 +1076,8 @@ const Step2 = ({ nextStep, itemId }) => {
                                     type="text" 
                                     placeholder="Fleury" 
                                     name="labs"
-                                    onChange={valorInput}
+                                    onChange={handleLabs}
+                                    value={formInfo.labs}
                                 />
                             </div>
 
@@ -1012,21 +1096,26 @@ const Step2 = ({ nextStep, itemId }) => {
                                     type="text" 
                                     placeholder="Esôfagite"
                                     name="illness"
-                                    onChange={valorInput}
+                                    onChange={handleIllness}
+                                    value={formInfo.illness}
                                 />
                                 
                             </div> 
                             <div className="content-buttons">
                                 <button type="button" className="btn-cancelar" onClick={ refreshPage }><img src="../../../btn-cancel.svg"></img> </button>
-                                <button type="button" className="btn-confirmar" onClick={Continue1}><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button>
+                                <button type="button" className="btn-confirmar" onClick={Continue}><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button>
                             </div>
                     </div>
                     </div>
+                    }
+                    {stepvisibility === 2 &&
+                    
+                    
                     <div className="step2"
                         onKeyPress={ (e) => {
                             if(e.key === 'Enter'){
                                 e.preventDefault();
-                                Continue2();
+                                Continue();
                             }
 
                         }}
@@ -1056,7 +1145,9 @@ const Step2 = ({ nextStep, itemId }) => {
                                         placeholder="Escreva o nome da operadora" 
                                         disabled={previousPlan == "false" || previousPlan == "none" ? "true" : ""}
                                         name="operator"
-                                        onChange={valorInput}
+                                        onChange={handleOperator}
+                                        value={formInfo.operator}
+
                                     />
                                 </div>
 
@@ -1067,12 +1158,23 @@ const Step2 = ({ nextStep, itemId }) => {
                                         placeholder="Escreva o nome do plano" 
                                         disabled={previousPlan == "false" || previousPlan == "none" ? "false" : ""}
                                         name="plan"
-                                        onChange={valorInput}
+                                        onChange={handlePlan}
+                                        value={formInfo.plan}
                                     />
                                 </div>
 
                                 <div>
-                                    <span>Valor</span>  
+                                    <div className="in-illness-span">
+                                        <span>Valor</span>
+                                        <p
+                                            data-tip='Escreva "0" se não souber'
+                                            className="info-span"
+                                        ><img
+                                            src="../../../info-icon.svg"
+                                        ></img></p>
+                                        <ReactTooltip />
+                                    </div>
+                                      
 
                                     <input 
                                         type="text"
@@ -1082,26 +1184,34 @@ const Step2 = ({ nextStep, itemId }) => {
                                         maxLength="13"
                                         name="value"
                                     />
+                                    
                                 </div>
 
                                 <div>   
                                     <span>Tempo</span>
-                                    <input 
-                                        type="text" 
-                                        placeholder="Escreva a quanto tempo possui o plano" 
+                                    <select
+                                        type="text"
                                         disabled={previousPlan == "false" || previousPlan == "none" ? "false" : ""} 
                                         name="time"
                                         onChange={valorInput}
-                                    />
+                                    >
+                                        <option value="menos de 12 meses">Menos de 12 meses</option>
+                                        <option value="de 12 a 23 meses">De 12 a 23 meses</option>
+                                        <option value="mais de 24 meses">Mais de 24 meses</option>
+                                    </select>
                                 </div>
 
                                 <div className="content-buttons">
                                     <button type="button" className="btn-cancelar" onClick={ refreshPage }><img src="../../../btn-cancel.svg"></img> </button>
-                                    <button type="button" className="btn-cancelar" onClick={ Previous1 }><img src="../../../back-arrow.svg"></img> </button>
-                                    <button type="button" className="btn-confirmar" onClick={ Continue2 }><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button>
+                                    <button type="button" className="btn-cancelar" onClick={ Previous }><img src="../../../back-arrow.svg"></img> </button>
+                                    <button type="button" className="btn-confirmar" onClick={ Continue }><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button>
                                 </div>
                         </div>
                         </div>
+                        }
+                        {stepvisibility === 3 &&
+                        
+                        
                         <div className="step3"
                         
                         >
@@ -1191,12 +1301,13 @@ const Step2 = ({ nextStep, itemId }) => {
                             
                             <div className="content-buttons">
                                 <button type="button" className="btn-cancelar" onClick={ refreshPage }><img src="../../../btn-cancel.svg"></img> </button>
-                                <button type="button" className="btn-cancelar" onClick={ Previous2 }><img src="../../../back-arrow.svg"></img> </button>
+                                <button type="button" className="btn-cancelar" onClick={ Previous }><img src="../../../back-arrow.svg"></img> </button>
                                 <button type="submit" className="btn-confirmar"><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button>
                             </div>
                         
                             </div>
                         </div>
+                        }
                     
                     </form>
                 </div>

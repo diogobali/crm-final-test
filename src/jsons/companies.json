@@ -1,24 +1,254 @@
 [
     {
-      "name": "Selecione...",
-      "value": ""
+      "name": "UNIMED BH",
+      "label": "Unimed BH"
     },
     {
-      "name": "Bradesco",
-      "value": "bradesco",
-      "docs": [
-        "RG",
-        "CNH",
-        "RES"
-      ]
+      "name": "BRADESCO",
+      "label": "Bradesco"
     },
     {
-      "name": "Amil",
-      "value": "amil",
-      "docs": [
-        "RG",
-        "RES"
-      ]
+      "name": "SULAMERICA",
+      "label": "Sulamerica"
+    },
+    {
+      "name": "CRUZ AZUL",
+      "label": "Cruz Azul"
+    },
+    {
+      "name": "AMIL",
+      "label": "Amil"
+    },
+    {
+      "name": "VITALLIS",
+      "label": "Vitallis"
+    },
+    {
+      "name": "CLUDE",
+      "label": "Clude"
+    },
+    {
+      "name": "GNDI",
+      "label": "GNDI"
+    },
+    {
+      "name": "PROMED",
+      "label": "Promed"
+    },
+    {
+      "name": "UNIHOSP",
+      "label": "Unihosp"
+    },
+    {
+      "name": "SAO CRISTOVAO",
+      "label": "São Cristovão"
+    },
+    {
+      "name": "TRASMONTANO",
+      "label": "Trasmontano"
+    },
+    {
+      "name": "PREVENT SENIOR",
+      "label": "Prevent Senior"
+    },
+    {
+      "name": "CNU",
+      "label": "CNU"
+    },
+    {
+      "name": "UNIMED",
+      "label": "Unimed"
+    },
+    {
+      "name": "INTERCLINICAS",
+      "label": "Interclinicas"
+    },
+    {
+      "name": "AMEPLAN",
+      "label": "Ameplan"
+    },
+    {
+      "name": "HAPVIDA",
+      "label": "Hapvida"
+    },
+    {
+      "name": "SEGUROS UNIMED",
+      "label": "Seguros Unimed"
+    },
+    {
+      "name": "GOLDEN CROSS",
+      "label": "Golden Cross"
+    },
+    {
+      "name": "SANTA CASA SANTOS",
+      "label": "Santa casa Santos"
+    },
+    {
+      "name": "UNIMED RIO",
+      "label": "Unimed Rio"
+    },
+    {
+      "name": "SAO MIGUEL",
+      "label": "Sao Miguel"
+    },
+    {
+      "name": "ASSIM SAUDE",
+      "label": "Assim Saude"
+    },
+    {
+      "name": "QSAUDE",
+      "label": "QSaude"
+    },
+    {
+      "name": "TOTAL MEDCARE",
+      "label": "Total Medcare"
+    },
+    {
+      "name": "BIOSAUDE",
+      "label": "Biosaude"
+    },
+    {
+      "name": "NOSSA SAUDE",
+      "label": "Nossa Saude"
+    },
+    {
+      "name": "UNIMED PORTO VELHO",
+      "label": "Unimed Porto Velho"
+    },
+    {
+      "name": "GOOD LIFE",
+      "label": "Good Life"
+    },
+    {
+      "name": "CLINIPAM",
+      "label": "Clinipam"
+    },
+    {
+      "name": "UNIMED FORTALEZA",
+      "label": "Unimed Fortaleza"
+    },
+    {
+      "name": "SAUDE BENEFICENCIA",
+      "label": "Saude Beneficencia"
+    },
+    {
+      "name": "SANTA CASA SJC",
+      "label": "Santa Casa SJC"
+    },
+    {
+      "name": "MED TOUR",
+      "label": "Med Tour"
+    },
+    {
+      "name": "CCG",
+      "label": "CCG"
+    },
+    {
+      "name": "PREMIUM SAUDE",
+      "label": "Premium Saude"
+    },
+    {
+      "name": "UNIMED SALVADOR",
+      "label": "Unimed Salvador"
+    },
+    {
+      "name": "UNIMED CEARA",
+      "label": "Unimed Ceara"
+    },
+    {
+      "name": "UNIMED BELEM",
+      "label": "Unimed Belem"
+    },
+    {
+      "name": "BLUEMED",
+      "label": "Bluemed"
+    },
+    {
+      "name": "YOU SAUDE",
+      "label": "You Saude"
+    },
+    {
+      "name": "ODONTOPREV",
+      "label": "Odontoprev"
+    },
+    {
+      "name": "BLUEMED SENIOR",
+      "label": "Bluemed Senior"
+    },
+    {
+      "name": "OMINT",
+      "label": "OMint"
+    },
+    {
+      "name": "PORTO SEGURO",
+      "label": "Porto Seguro"
+    },
+    {
+      "name": "SAO FRANCISCO",
+      "label": "São Francisco"
+    },
+    {
+      "name": "SAMOC",
+      "label": "Samoc"
+    },
+    {
+      "name": "SMILE",
+      "label": "Smile"
+    },
+    {
+      "name": "SAMP",
+      "label": "SAMP"
+    },
+    {
+      "name": "CNU BH",
+      "label": "CNU BH"
+    },
+    {
+      "name": "SANTA CASA DE MAUA",
+      "label": "Santa Casa de Maua"
+    },
+    {
+      "name": "AMERON",
+      "label": "Ameron"
+    },
+    {
+      "name": "UNIMED SAO LUIS",
+      "label": "Unimed Sao Luis"
+    },
+    {
+      "name": "ANA COSTA",
+      "label": "Ana Costa"
+    },
+    {
+      "name": "HAP VIDA",
+      "label": "Hap Vida"
+    },
+    {
+      "name": "ATIVIA SAUDE",
+      "label": "Ativia Saude"
+    },
+    {
+      "name": "BIOVIDA",
+      "label": "Biovida"
+    },
+    {
+      "name": "PLAMED",
+      "label": "Plamed"
+    },
+    {
+      "name": "SANTA CASA RIBEIRAO PRETO",
+      "label": "Santa Casa Ribeirao Preto"
+    },
+    {
+      "name": "KIPP SAUDE",
+      "label": "Kipp Saude"
+    },
+    {
+      "name": "UNIMED ILHEUS ITABUNA",
+      "label": "Unimed Ilheus Itabuna"
+    },
+    {
+      "name": "MED SENIOR",
+      "label": "Med Senior"
     }
-    
 ]

@@ -10,13 +10,31 @@ const UserProvider = ({ children }) => {
     const [userData, setUserData] = useState(function () {
         const storedUser = localStorage.getItem('user');
 
+
         if(!storedUser){
             return null;
         }
 
+        const now = new Date();
+        const expiry = now.getTime() + 720000;
+
         try{
             const user = JSON.parse(storedUser);
-            return user;
+            console.log(user.expiry)
+            console.log(now.getTime());
+
+            localStorage.setItem('user', JSON.stringify({
+                user: user.user,
+                expiry: expiry
+            }));
+
+            if(now.getTime() > user.expiry){
+                localStorage.clear('user');
+                return null;
+            } else {
+                return user;
+            }
+            
         } catch (error) {
             console.log(error);
             return null;

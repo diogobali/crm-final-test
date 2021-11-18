@@ -60,6 +60,16 @@
         }
     }
 
+    
+
+    .dataToIMC{
+        display:flex;
+        gap: 0.7em;
+        input{
+            width: 200px !important;
+        }
+    }
+
     .showDocumentsMissing{
         display:flex;
         justify-content: flex-start;
@@ -222,6 +232,21 @@
             text-align:center;
         }
 
+        .valores-por-faixa-etaria{
+            div{
+                display:flex;
+                gap: 1.2em !important;
+                justify-content: start !important;
+                div{
+                    width: 250px;
+                    input{
+                        width: 150px !important;
+                    }
+                }
+                
+            }
+            
+        }
 
         .content, .content_orcamento{
             display:flex;

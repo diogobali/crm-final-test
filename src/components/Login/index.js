@@ -6,11 +6,15 @@ import { useUserContext } from '../../contexts/userContext';
 
 import { Container } from './styles'
 import { domain } from 'process';
+import { networkInterfaces } from 'os';
+import { tsTypeLiteral } from '@babel/types';
 
 export default function Login(){
 
     const [user, setUser] = useState();
     const [password, setPassword] = useState();
+
+    const [loginStatus, setLoginStatus]  = useState();
 
     const { userData, setUserData } = useUserContext();
 
@@ -30,14 +34,23 @@ export default function Login(){
         fetch("https://moplanseguros.com.br/login/login.php", optionsForm)
         .then((response) => response.json())
         .then((responseJson) => {
-            setUserData(Object.values(responseJson));
-            const user = Object.values(responseJson)[0];
-            console.log(user);
-            localStorage.setItem('user', JSON.stringify(
-                user
-            ));
-            console.log(userData)
-            history.push("/crm");
+            if(responseJson === "false"){
+                history.push("/login");
+                setLoginStatus("fail");
+            } else {
+                setLoginStatus("success");
+                const now = new Date()
+                const expiry = now.getTime() + 720000;
+                setUserData(Object.values(responseJson));
+                const user = Object.values(responseJson)[0];
+                console.log(user);
+                localStorage.setItem('user', JSON.stringify({
+                    user: user,
+                    expiry: expiry
+                }));
+                console.log(userData)
+                history.push("/crm");
+            }
             });
     }  
 
@@ -47,6 +60,16 @@ export default function Login(){
             
             <div>
             <h1>Acesso ao sistema CRM</h1>
+            {loginStatus === "fail" &&
+                <div>
+                    <span className="message fail">Usuário ou senha incorretos.</span>
+                </div>
+            }
+            {loginStatus === "success" &&
+                <div>
+                    <span className="message success">Login realizado com sucesso.</span>
+                </div>
+            }
             <form onSubmit={getUser}>
                 <input
                     type="text"
