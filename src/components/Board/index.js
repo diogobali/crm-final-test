@@ -41,7 +41,7 @@ export default function Board(props){
         <BoardContext.Provider value={{ dataOk, move }}>
             <Container>
                 {/* {dataOk.map((list, index) => <List key="A contatar" index={index} data={list}/>)} */}
-                {userData.user.perfil === '0' || userData.user.perfil === '1' &&
+                {(userData.user.perfil === '0' || userData.user.perfil === '1') &&
                 <>
                     <List title="A contatar" index="0" data={dataOk}/>
                     <List title="Agendamento" index="1"data={dataOk} isScheduled={true}/>

@@ -1049,7 +1049,7 @@ const Step2 = ({ nextStep, itemId }) => {
                             </div>
 
                             <div>
-                                <span>Bairro ou Zona (*):</span>
+                                <span>Bairro, Zona ou Cidade de atendimento (*):</span>
                                 <input 
                                     type="text" 
                                     placeholder="Ipiranga ou Zona Sul"
