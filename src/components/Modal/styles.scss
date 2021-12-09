@@ -275,6 +275,17 @@
                 }
 
             }
+
+            .errorBox{
+                padding: 1.2em;
+                background: red;
+                border-radius:12px;
+                text-align:start;
+
+                span{
+                    font-weight:700;
+                }
+            }
             
             .content-buttons{
                 display:flex;

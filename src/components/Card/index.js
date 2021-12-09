@@ -402,7 +402,7 @@ export default function Card({ data, index, isWaitingCancel, listIndex, button, 
             }
 
             {sendAdm &&
-                userData.user.perfil == 0 &&
+                userData.user.perfil == 0 || sendAdm && userData.user.perfil == 1 &&
                 <button type="button" className="btn-sendAdm" onClick={() => openModalSendAdms(data.id)}>Enviar para ADM</button>
             }
 

@@ -19,6 +19,9 @@ const ModalAddNewLead = () => {
         window.location.reload();
     } 
 
+    const [result, setResult] = useState([]);
+    const [resultError, setResultError] = useState(0);
+
     const [nome, setNome] = useState();
     const [origem, setOrigem] = useState();
     const [tipo, setTipo] = useState();
@@ -50,9 +53,17 @@ const ModalAddNewLead = () => {
         };
         fetch('https://moplanseguros.com.br/addnewlead.php', optionsForm)
         .then(function(response) {
-            console.log(response);
-            window.location.reload();
+            return response;
+        }).then(response => response.json())
+        .then(response => {
+            setResult(response)
         })
+
+        if(result.result === "0"){
+            setResultError(1)
+        } else if(result.result === "1"){
+            window.location.reload();
+        }
     }
 
     const handleUf = (e) => {
@@ -80,6 +91,11 @@ const ModalAddNewLead = () => {
                         <button type="button" onClick={teste}>Teste</button>
                     </div>
                     <div className="content">
+                        {resultError === 1 &&
+                        <div className="errorBox">
+                            <span>Lead não pôde ser inserido. Telefone ou e-mail já existente</span>
+                        </div>
+                        }
                         <div>
                             <span>Nome</span>
                             <input

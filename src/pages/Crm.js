@@ -64,15 +64,12 @@ export function Crm(){
 
         })
     };
-
     const optionsGetNotificacoes = {
         method: 'POST',
         body: JSON.stringify({
             user: userData.user.id,
         })
     }
-
-
     const getProdutos= async () => {
         await fetch("https://moplanseguros.com.br/index.php", optionsForm)
         .then((response) => response.json())
@@ -91,10 +88,12 @@ export function Crm(){
         })
     }
 
-    useEffect(() => {
+    
+
+     useEffect(() => {
         getProdutos();
         getNotificacoes();
-    },[])
+     },[])
 
     const tesste = () => {
         console.log(userData)
