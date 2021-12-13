@@ -38,6 +38,18 @@ const ModalSendAdm = () => {
         });
     }
 
+
+    const [ isFileNameOthers, setIsFileNameOthers ] = useState(false)
+
+    const handleFileName = (e) => {
+        if(e === "OUTROS"){
+            setIsFileNameOthers(true);
+            setFileName('');
+        } else {
+            setFileName(e)
+        }
+    }
+
     const [people, setPeople] = useState([]);
     async function load_people() {
         const optionsForm = {
@@ -445,10 +457,10 @@ const ModalSendAdm = () => {
                                                     onChange={(e) => setAltura(e.target.value)}
                                                     onBlur={calcImc(index)}
                                                 />
-                                                <button
+                                                {/* <button
                                                     type="button"
                                                     onClick={() => handlePeopleData(item[0])}
-                                                >Confirmar</button>
+                                                >Confirmar</button> */}
                                                 {/* <input
                                                     type="text"
                                                     name={"teste"+index}
@@ -480,7 +492,7 @@ const ModalSendAdm = () => {
                                 />
                             }
                             <select
-                                onChange={(e) => setFileName(e.target.value)}
+                                onChange={(e) => handleFileName(e.target.value)}
                                 value={fileName}
                                 id="selectFileName"
                             >
@@ -490,7 +502,15 @@ const ModalSendAdm = () => {
                                 <option value="Comprov">COMPROVANTE DE RESIDENCIA</option>
                                 <option value="CARTEIRINHA">CARTEIRINHA</option>
                                 <option value="COMPROV. PAGAMENTO">COMPROV. PAGAMENTO</option>
+                                <option value="OUTROS">OUTROS</option>
                             </select>
+                            {isFileNameOthers &&
+                                <input 
+                                    type="text"
+                                    onChange={(e) => setFileName(e.target.value)}
+                                    placeholder="Nome do documento. Ex: Frente do RG"
+                                />
+                            }
                             <select
                                 onChange={(e) => setFileOwner(e.target.value)}
                             >

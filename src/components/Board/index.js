@@ -11,6 +11,7 @@ import List from '../List';
 import { LoadLists } from '../../services/api';
 
 import { Container } from './styles';
+import { useSelectedSellers } from '../crm_filter/selectedSellers.context';
 
 const data = LoadLists()
 
@@ -28,6 +29,7 @@ export default function Board(props){
 
     const dataOk = Object.values(data2);
 
+    const { selectedSellers, setSelectedSellers } = useSelectedSellers({});
 
 
 

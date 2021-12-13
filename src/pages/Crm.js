@@ -19,6 +19,7 @@ import ModalEditInfo from '../components/Modal/modalEditInfo.component';
 import ModalChangeStatus from '../components/Modal/modalChangeStatus.component';
 import ModalAddNewLead from '../components/Modal/modalAddNewLead.component';
 
+
 import { ModalProvider0 } from '../components/Modal/modal0.context';
 import { ModalProvider1 } from '../components/Modal/modal1.context';
 import { ModalProvider2 } from '../components/Modal/modal2.context';
@@ -34,11 +35,15 @@ import { ModalProviderRegularizarAction } from '../components/Modal/modalRegular
 import { ModalProviderEditInfo } from '../components/Modal/modalEditInfo.context';
 import { ModalProviderChangeStatus } from '../components/Modal/modalChangeStatus.context';
 import { ModalProviderAddNewLead } from '../components/Modal/modalAddNewLead.context';
+import { SelectedSellersProvider, useSelectedSellers } from '../components/crm_filter/selectedSellers.context';
+
+
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import SaveFormProvider, { SaveFormContext } from '../contexts/SaveFormContext';
 
 import { useUserContext } from '../contexts/userContext';
+import { CrmFilter } from '../components/crm_filter';
 
 
 
@@ -53,6 +58,7 @@ export function Crm(){
     const [data, setData] = useState([]);
 
     const [notificacoes, setNotificacoes] = useState([]);
+
 
 
     const optionsForm = {
@@ -95,10 +101,6 @@ export function Crm(){
         getNotificacoes();
      },[])
 
-    const tesste = () => {
-        console.log(userData)
-    }
-    
     return(
 
         
@@ -124,8 +126,12 @@ export function Crm(){
 
                     <HeaderComponent />
                     {data ?
-                        <Board dadosleads={data}/>
-                        
+                        <>
+                        <SelectedSellersProvider>
+                            <CrmFilter/>
+                            <Board dadosleads={data}/>
+                        </SelectedSellersProvider>
+                        </>
                     : null
                     }
                     <Modal0 />
