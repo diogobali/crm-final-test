@@ -27,22 +27,34 @@ import { useUserContext } from '../../contexts/userContext';
 export default function Card({ data, index, isWaitingCancel, listIndex, button, status, sendAdm, key, className, isAdmAction, isRegularizarAction, hasStatus, isScheduled }){
 
     const { userData, setUserData } = useUserContext();
+
+
+    const ref = useRef();
     const{ move } = useContext(BoardContext);
 
 
 
 
-        
+        const { openModal0 } = useModalContext0();
+        const openModalZero = (itemId) => openModal0({ itemId: itemId });
+
+        const { openModal1 } = useModalContext1();
+        const openModalUm = (itemId) =>  openModal1({ message: 'Modal 1', itemId: itemId });
+
+        const { openModal2 } = useModalContext2();
+        const openModalDois = (itemId) => openModal2({ message: 'Modal 2', itemId: itemId });
 
         const { openModal3 } = useModalContext3();
         const openModalTres = (itemId) => openModal3({ message: 'Modal 3', itemId: itemId });
 
-
+        const { openModal4 } = useModalContext4();
+        const openModalQuatro = (itemId) => openModal4({ message: 'Modal 4', itemId: itemId });
 
         const { openModalInfo } = useModalContextInfo();
         const openModalInfos = (itemId, status) => openModalInfo({ message: 'Modal Info', itemId: itemId, status: status  });
 
-
+        const { openModalDeclined } = useModalContextDeclined();
+        const openModalDeclineds = (itemId) => openModalDeclined({ message: 'Modal Declined', itemId: itemId });
 
         const { openModalSendAdm } = useModalContextSendAdm();
         const openModalSendAdms = (itemId) => openModalSendAdm({ message: 'Send Adm', itemId: itemId});
@@ -58,20 +70,6 @@ export default function Card({ data, index, isWaitingCancel, listIndex, button, 
         
         const { openModalChangeStatus } = useModalContextChangeStatus();
         const openModalChangeStatuss = (itemId) => openModalChangeStatus({ message: 'Alterar Status', itemId: itemId});
-
-
-
-
-    const [{ isDragging }, dragRef] = useDrag({
-        type: 'CARD',
-        item: { id: data.id, index, listIndex, end: data.end, status },
-        collect: monitor => ({
-            isDragging: monitor.isDragging(),
-        }),
-        
-    })
-
-
 
         const sendFile = (file, itemId) => {
             const form_data = new FormData();
@@ -143,11 +141,18 @@ export default function Card({ data, index, isWaitingCancel, listIndex, button, 
             moment2 = now2.getTime();
         }
         
-    
-    
+        const [{ isDragging }, dragRef] = useDrag({
+            type: "CARD",
+            item: {id: data.id},
+            collect: monitor => ({
+                isDragging: monitor.isDragging(),
+            })
+        })
+        
+
     return(
         
-        <Container ref={dragRef} isDragging={isDragging} className={className} hasStatus={data.status_implantacao} isScheduled={isScheduled} moment={moment} moment2={moment2}>
+        <Container ref={dragRef} className={className} hasStatus={data.status_implantacao} isScheduled={isScheduled} moment={moment} moment2={moment2}>
             <header>
             </header>
             <p>

@@ -502,6 +502,9 @@ const ModalSendAdm = () => {
                                 <option value="Comprov">COMPROVANTE DE RESIDENCIA</option>
                                 <option value="CARTEIRINHA">CARTEIRINHA</option>
                                 <option value="COMPROV. PAGAMENTO">COMPROV. PAGAMENTO</option>
+                                <option value="CONTRATO SOCIAL">CONTRATO SOCIAL</option>
+                                <option value="CARTAO CNPJ">CARTAO CNPJ</option>
+                                <option value="CERT. MICROEMPRESARIO">CERTIFICADO DE MICROEMPRESÁRIO</option>
                                 <option value="OUTROS">OUTROS</option>
                             </select>
                             {isFileNameOthers &&
