@@ -320,6 +320,24 @@
     display:none;
 }
 
+.reasonToReprove_1{
+    div{
+        display:flex;
+        flex-direction: column;
+        text-align: start;
+        font-size: 0.8em;
+    }
+}
+
+.message {
+    border-radius: 5px;
+    padding: 1.2em;
+}
+
+.success {
+    background: lime;
+}
+
 #listPeoples{
     list-style: none;
     width: 300px;

@@ -88,7 +88,6 @@ const ModalAddNewLead = () => {
                 <div className="container">
                     <div className="title">
                         <h1>Adicionar Novo Lead</h1>
-                        <button type="button" onClick={teste}>Teste</button>
                     </div>
                     <div className="content">
                         {resultError === 1 &&

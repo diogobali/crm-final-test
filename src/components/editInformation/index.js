@@ -524,7 +524,6 @@ const EditInfo = ({ nextStep, itemId, status }) => {
                     >
                     <div className="title">
                         <h1>Coleta de Informações</h1>
-                        <button type="button" onClick={teste}>Teste</button>
                     </div>
                     <div className="content">
                         

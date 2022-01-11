@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { MdAdd } from 'react-icons/md';
 
-import Card from '../Card/indexcopia';
+import Card from '../Card/index';
 import { useDrag, useDrop } from 'react-dnd';
 import { Container } from './styles';
 import { useUserContext } from '../../contexts/userContext';
@@ -45,7 +45,7 @@ export default function List({ title, data, index: listIndex, adm, sendAdm, isAd
     const [, dropRef] = useDrop({
         accept: 'CARD',
         drop(item, monitor,){
-            console.log(item.status)
+            
 
             const itemId = item.id;
 
@@ -145,6 +145,10 @@ export default function List({ title, data, index: listIndex, adm, sendAdm, isAd
             }
          }
         })
+
+        const teste = () => {
+            console.log(data)
+        }
     
     return(
         <Container ref={dropRef} adm={adm} sendAdm={sendAdm} userData={userData} isAdmAction={isAdmAction} isRegularizarAction={isRegularizarAction} hasStatus={hasStatus} isScheduled={isScheduled} isWaitingCancel={isWaitingCancel}>
@@ -156,7 +160,6 @@ export default function List({ title, data, index: listIndex, adm, sendAdm, isAd
                         onClick={openModalAddNewLeads}
                     >+</button>
                 }
-                
             </header>
             <ul>
                     { data.map((card, index) => {                    

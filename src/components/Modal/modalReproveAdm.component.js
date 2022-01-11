@@ -15,41 +15,11 @@ const ModalReproveAdm = () => {
     } 
 
     const [divWhichDoc, setDivWhichDoc] = useState()
-    const [docNonExistent, setDocNonexistent] = useState()
-    const [docOwnerId, setDocOwnerId] = useState()
-    const [docOwner, setDocOwner] = useState()
-    const [docsNonexistent, setDocsNonexistent] = useState([])
-    const [docParentesNonExistent, setDocParentesNonexistent] = useState()
-    const [docParentesOwnerId, setDocParentesOwnerId] = useState()
-    const [docParentesOwner, setDocParentesOwner] = useState()
-    const [docParentesFileName, setDocParentesFileName] = useState();
-    const [docFileName, setDocFileName] = useState();
-    const [docsParentesNonexistent, setDocsParentesNonexistent] = useState([])
-    const [docUnreadable, setDocUnreadable] = useState()
-    const [docsUnreadable, setDocsUnreadable] = useState([])
+   
 
     const [titulares, setTitulares] = useState()
     const [parentes, setParentes] = useState()
 
-    const [responseApi, setResponseApi] = useState([])
-    
-    const load_image = () => {
-        const form_data = new FormData();
-        form_data.append('leadId', itemId);
-        fetch('https://moplanseguros.com.br/attachdocuments.php', {
-            method: "POST",
-            body: form_data
-        }).then(function(response){
-            console.log(response);
-            return response;
-        }).then(response => response.json())
-        .then(response => {
-            setResponseApi(response);
-        });
-    }
-    useEffect(() => {
-        load_image() 
-    }, [itemId]);
 
     const load_titulares = () => {
         const form_data = new FormData();
@@ -91,141 +61,14 @@ const ModalReproveAdm = () => {
         load_parentes() 
     }, [itemId]);
 
-    const newDocUnreadable = (r) => {
-
-        if(r.target.checked){
-            setDocUnreadable(r.target.value);
-            newDocUnreadableCallback();
-        } else {
-            removeDocsUnreadable(r.target.value)
-        }
-        
-        
-
-    }
-    const newDocUnreadableCallback = useCallback(() => {
-        if(docUnreadable){
-        setDocsUnreadable((prevState) => [
-            ...prevState,
-            {
-                id: prevState.length + 1,
-                document: docUnreadable
-            }
-        ]);
-    }
-    }, [docUnreadable, docsUnreadable]);
-
-
-    
-    const removeDocsUnreadable = useCallback(
-        (id) => {
-            setDocsUnreadable(docsUnreadable.filter((c) => c.document !== id));
-        },
-        [docsUnreadable]
-    );
-    
-    const tesste = () => {
-        console.log(docsUnreadable)
-    }
-
-
-   const newDocNonexistent = useCallback(() => {
-        setDocsNonexistent((prevState) => [
-            ...prevState,
-            {
-                id: prevState.length + 1,
-                ownerId: docOwnerId,
-                owner: docOwner,
-                doc: docNonExistent,
-                file_name: docFileName,
-            }
-        ]);
-        console.log(docsNonexistent)
-    }, [docsNonexistent, docNonExistent, docOwner]);
-
-    const removeDocsNonexistent = useCallback(
-        (id) => {
-            setDocsNonexistent(docsNonexistent.filter((c) => c.id !== id));
-        },
-        [docsNonexistent]
-    );
-
-    const newDocParentesNonexistent = useCallback(() => {
-        setDocsParentesNonexistent((prevState) => [
-            ...prevState,
-            {
-                id: prevState.length + 1,
-                ownerId: docParentesOwnerId,
-                owner: docParentesOwner,
-                doc: docParentesNonExistent,
-                file_name: docParentesFileName,
-            }
-        ]);
-    }, [docsParentesNonexistent, docParentesNonExistent, docParentesOwner]);
-
-    const removeDocsParentesNonexistent = useCallback(
-        (id) => {
-            setDocsParentesNonexistent(docsParentesNonexistent.filter((c) => c.id !== id));
-        },
-        [docsParentesNonexistent]
-    );
-
-    const docOwnerAux = (r) => {
-        console.log(r);
-        setDocOwnerId(r);
-        titulares.map(item => {
-            const label = item.find(item => item[1] == r);
-            setDocOwner(label[0])
-        })
-    }
-    const docParentesOwnerAux = (r) => {
-        setDocParentesOwnerId(r);
-        parentes.map(item => {
-            const label = item.find(item => item[1] == r);
-            setDocParentesOwner(label[0])
-        })
-    }
-
-    const [docsGeralPendentes, setDocsGeralPendentes] = useState([]);
-    const [docsEmpresaPendentes, setDocsEmpresaPendentes] = useState([]);
-
-    const auxDocsGeralPendentes = (e) => {
-        if(e.target.checked){
-            setDocsGeralPendentes((prevState) => [
-                ...prevState,
-                e.target.value
-            ])
-        } else {
-            setDocsGeralPendentes(docsGeralPendentes.filter((c) => c != e.target.value))
-        }
-    }
-
-    const auxDocsEmpresaPendentes = (e) => {
-        if(e.target.checked){
-            setDocsEmpresaPendentes((prevState) => [
-                ...prevState,
-                e.target.value
-            ])
-        } else {
-            setDocsEmpresaPendentes(docsEmpresaPendentes.filter((c) => c != e.target.value))
-        }
-    }
-
-    const [ documentMissing, setDocumentMissing ] = useState('');
-
     const sendPendencia = (e) => {
         e.preventDefault();
         const optionsForm = {
             method: 'POST',
             body: JSON.stringify({  
                 leadId: itemId,
-                reason: divWhichDoc,
-                docsParentesNonExistent: docsParentesNonexistent,
-                docsTitularesNonExistent: docsNonexistent,
-                docsUnreadable: docsUnreadable,
-                docsGeralPendentes: docsGeralPendentes,
-                docsEmpresaPendentes: docsEmpresaPendentes,
-                documentMissing: documentMissing,   
+                reason_id: divWhichDoc,
+
             })
         };
         fetch('https://moplanseguros.com.br/sendpendencia.php', optionsForm)
@@ -235,6 +78,41 @@ const ModalReproveAdm = () => {
 
     }
 
+    const [ selectedReason, setSelectedReason ] = useState();
+    const [ selectedDocument, setSelectedDocument ] = useState();
+    const [ selectedPeople, setSelectedPeople ] = useState();
+
+    const [ pendencies, setPendencies ] = useState([])
+
+    const handleSelectedReason = (e) => {
+        setSelectedReason(e.value)
+    }
+
+    const handleSelectedDocument = (e) => {
+        setSelectedDocument(e.value)
+    }
+
+    const handleSelectedPeople = (e) => {
+        setSelectedPeople(e.value)
+    }
+
+    const AddNewPendency = useCallback(() => {
+        setPendencies((prevState) => [
+            ...prevState,
+            {
+                id: prevState.length + 1,
+                document: selectedDocument,
+                people: selectedPeople
+            }     
+        ]);
+    }, [pendencies]);
+
+   const removePendency = useCallback(
+       (id) => {
+           setPendencies(pendencies.filter((c) => c.id !== id))
+       },
+       [pendencies]
+   )
 
 
     return(
@@ -249,87 +127,83 @@ const ModalReproveAdm = () => {
                     <div className="content">
                         <form>
                             <div>
-                                <span>
-                                    Motivo:
-                                </span>
-                                <select
-                                    onChange={(e) => setDivWhichDoc(e.target.value)}
+                                <span>Motivo</span>
+                                <select 
+                                    onChange={(e) => handleSelectedReason(e.target)}
                                 >
                                     <option value="">Selecione...</option>
-                                    {
-                                        reasonsToReprove.map(item => {
-                                            return(
-                                                <option value={item.id}>{item.name}</option>
-                                            )
-                                        })
-                                    }
+                                    <option value="1">Documento faltando/ilegivel</option>
+                                    <option value="2">Informação incorreta</option>
+                                    <option value="3">Outros</option>
                                 </select>
                             </div>
-                            {divWhichDoc === "1" &&
-                                <div className="divWhichDocUnreadable">
+
+                            {selectedReason === "1" &&
+                            <>
+                                <div className="reasonToReprove_1">
                                     <div>
-                                        <h3>Documentos Empresa</h3>
-                                        <ul id="listDir">
-                                            {responseApi.empresa &&
-                                                responseApi.empresa.map((item, index) => index > 1 &&   
-                                                <li>
-                                                    <input 
-                                                        type="checkbox"
-                                                        name="documentosPendentes"
-                                                        id={item[1]}
-                                                        value={item[1]}
-                                                        onChange={(e) => auxDocsEmpresaPendentes(e)}
-                                                    />
-                                                    <label
-                                                        for={item[1]}
-                                                    >
-                                                    {item[1]}
-                                                    </label>
-                                                </li>
-                                                )
-                                            }
-                                        </ul>
+                                        <span>
+                                            Documento:
+                                        </span>
+                                        <select
+                                            onChange={(e) => handleSelectedDocument(e.target)}
+                                        >
+                                            <option value="">Selecione</option>
+                                            <option value="CNH">CNH</option>
+                                        </select>
                                     </div>
                                     <div>
-                                        <h3>Documentos Titulares e Dependentes</h3>
-                                        <ul id="listDir">
-                                            {responseApi.geral &&
-                                                responseApi.geral.map((item, index) => index > 1 &&   
-                                                <li>
-                                                    <input
-                                                        type="checkbox"
-                                                        name="documentosPendentes"
-                                                        id={item[1]}
-                                                        value={item[1]}
-                                                        onChange={(e) => auxDocsGeralPendentes(e)}
-                                                    />
-                                                    <label
-                                                        for={item[1]}
-                                                    >
-                                                    {item[1]}
-                                                    </label>
-                                                </li>
-                                                )
-                                            }
-                                        </ul>
+                                        <span>
+                                            De quem:
+                                        </span>
+                                        <select
+                                            onChange={(e) => handleSelectedPeople(e.target)}
+                                        >
+                                            <option value="">Selecione</option>
+                                            <option value="Maria">Maria</option>
+                                        </select>
                                     </div>
-                                    
-                                </div>  
+                                    <div>
+                                        <span>
+                                            Inserir
+                                        </span>
+                                        <button
+                                            type="button"
+                                            onClick={
+                                                AddNewPendency
+                                            }
+                                        >
+                                        Add
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <ul>
+                                        {pendencies.map(item => {
+                                            return(
+                                                <li>
+                                                    <span>{item.document} de {item.people}</span>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removePendency(item.id)}
+                                                    >X</button>
+                                                </li>
+                                            )
+                                        })}
+                                        <li>RG do Joao</li>
+                                        <li>RG do Joao</li>
+                                        <li>RG do Joao</li>
+                                    </ul>
+                                </div>
+                            </>
                             }
-                            {divWhichDoc === '2' &&
-                                <input
-                                    type="text"
-                                    placeholder="Qual documento?"
-                                    onChange={(e) => setDocumentMissing(e.target.value)}
-                                />
-                            }
-                            
                                 
                             <div className="content-buttons">
                                 <button type="button" className="btn-cancelar" onClick={refreshPage} title="Voltar"><img src="../../../btn-cancel.svg"></img> </button>
                                 <button type="submit" className="btn-confirmar" onClick={(e) => sendPendencia(e)} title="Aprovar orçamento"><img src="../../../btn-confirm.svg" alt="Botão de confirmar"></img></button>
                             </div>
-                            </form>
+                        </form>
                     </div>
                 </div>
             </div>

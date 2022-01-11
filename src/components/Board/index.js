@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import BoardContext from './context';
 import produce from 'immer';
 import { useUserContext } from '../../contexts/userContext';
-import List from '../List';
+import List from '../List/index';
 
 
 
@@ -58,7 +58,7 @@ export default function Board(props){
                 <List title="Em implantação" index="6" data={dataOk} adm={true} hasStatus={true}/>
                 <List title="Implantados" index="9" data={dataOk} adm={true} />
                 <List title="Com pendência" index="7" data={dataOk} isRegularizarAction={true} />
-                {userData.user.perfil === '0' || userData.user.perfil === '1' &&
+                {(userData.user.perfil === '0' || userData.user.perfil === '1') &&
                  <List title="Lead Declinado" index="8" data={dataOk} />
                 }
             </Container>

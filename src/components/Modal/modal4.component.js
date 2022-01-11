@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Modal as ModalComponent4 } from 'antd';
 import { useModalContext4 } from './modal4.context';
 import companies from '../../jsons/companies.json';
+import * as yup from 'yup';
+
+let validateValor = yup.string().min(8, "Valor invalido").required("Informe o valor fechado")
+
 
 const Modal4 = () => {
     const { 
@@ -52,7 +56,19 @@ const Modal4 = () => {
         
     }
 
-    const acceptOrcamento = () => {
+    const acceptOrcamento = async (e) => {
+
+        e.preventDefault();
+
+        try {
+            await validateValor.validate(valorFechado);
+        } catch (err) {
+            console.log(err);
+            alert(err);
+            return;
+        }
+
+        console.log('Deu fetch');
         const optionsForm = {
             method: 'POST',
             body: JSON.stringify({  
@@ -66,7 +82,6 @@ const Modal4 = () => {
         window.location.reload();
             
         })
-
     }
 
     const [ value, handleValue ] = useState(0);
@@ -141,7 +156,6 @@ const Modal4 = () => {
                 <div className="container_orcamento">
                             <div className="title">
                                 <h2>Orçamentos em aberto</h2>
-                                <button type="button" onClick={teste}>Teste</button>
                             </div>
                             <div className="showOrcamentos">
                             

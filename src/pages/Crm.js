@@ -128,7 +128,9 @@ export function Crm(){
                     {data ?
                         <>
                         <SelectedSellersProvider>
-                            <CrmFilter/>
+                            {userData.user.perfil === 1 &&
+                                <CrmFilter/>
+                            }
                             <Board dadosleads={data}/>
                         </SelectedSellersProvider>
                         </>

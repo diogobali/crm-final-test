@@ -95,11 +95,6 @@ const ModalInfo = () => {
         loadObservacao()
     }, [itemId]);   
 
-
-    const teste = () => {
-        console.log(infos);
-    }
-
     if(!infos.id && counterCalls === 0) fetchApi();
     if(!visible) return null;
 
@@ -113,10 +108,15 @@ const ModalInfo = () => {
                 <div className="container">
                     <div className="title">
                         <h1>Geral</h1>
-                        <button type="button" onClick={teste}>Teste</button>
                     </div>
 
                     <div className="content">
+                        <div className="content-buttons">
+                            {infos.vidas_total &&
+                                <button type="button" className="btn-edit"  onClick={openModaleditInfo} title="Editar informações"><img src="../../../btn-edit.svg"></img></button>  
+                            }
+                            <button type="button" className="btn-cancelar" onClick={refreshPage}><img src="../../../btn-cancel.svg"></img> </button>
+                        </div>
                         <form>
                         <div className="infos-final">
                             {infos.origem &&
@@ -621,7 +621,9 @@ const ModalInfo = () => {
 
 
                         <div className="content-buttons">
-                            <button type="button" className="btn-edit"  onClick={openModaleditInfo} title="Editar informações"><img src="../../../btn-edit.svg"></img></button>  
+                            {infos.vidas_total &&
+                                <button type="button" className="btn-edit"  onClick={openModaleditInfo} title="Editar informações"><img src="../../../btn-edit.svg"></img></button>  
+                            }
                             <button type="button" className="btn-cancelar" onClick={refreshPage}><img src="../../../btn-cancel.svg"></img> </button>
                         </div>
                         </form>

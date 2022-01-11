@@ -5,6 +5,7 @@ import styled from 'styled-components';
 export const Container= styled.div`
     padding: 0 15px;
     height: 100%;
+    min-height: 80vh;
     flex: 1;
     opacity: ${props => 
         ((props.adm && props.userData.perfil == 0) ? 0.6 

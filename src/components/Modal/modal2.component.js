@@ -1,28 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { Modal as ModalComponent2 } from 'antd';
 import { useModalContext2 } from './modal2.context'
 import * as yup from 'yup';
 import companies from '../../jsons/companies.json'
 
 let validateForm = yup.object().shape({
-    operadora: yup
-        .string()
-        .required("Selecione uma operadora válida"),
-    plano: yup
-        .string()
-        .required("Informe um plano"),
-    cobertura: yup
-        .string()
-        .required("Informe um tipo de cobertura"),
-    coparticipacao: yup
-        .string()
-        .required("Selecione uma opção em Coparticipacao"),
-    valor: yup
-        .string()
-        .required("Informe um valor"),
-    primeiroretorno: yup
-        .string()
-        .required("Informe uma data para o primeiro retorno")
+    orcamentos: yup
+        .array()
+        .min(1, "Informe ao menos um orçamento")
     });
         
 
@@ -36,6 +21,12 @@ const Modal2 = () => {
         window.location.reload();
     } 
 
+    const [showMessage, setShowMessage] = useState({
+        show: false,
+        type: '',
+        message: '',
+    })
+
     const [formInfo, setFormInfo] = useState({
         tipo: '',
         operadora: '',
@@ -47,6 +38,18 @@ const Modal2 = () => {
     });
 
     const valorInput = e => setFormInfo({ ...formInfo, [e.target.name]: e.target.value })
+
+    useEffect(() => {
+        if(showMessage.show){
+            setInterval(() => {
+                setShowMessage({
+                    show: false,
+                    type: '',
+                    message: '',
+                })
+            }, 3000)
+        }
+    }, [showMessage])
 
     const [orcamentos, setOrcamentos] = useState([])
 
@@ -63,7 +66,23 @@ const Modal2 = () => {
                     valor: formInfo.valor,
                 }
             ]);
-            console.log(orcamentos)
+
+            setFormInfo({
+                tipo: '',
+                operadora: '',
+                plano: '',
+                cobertura: '',
+                coparticipacao: '',
+                valor: '',
+            })
+            handleValue(0)
+
+            setShowMessage({
+                show: true,
+                type: 'message success',
+                message: 'Orçamento criado com sucesso.'
+            })
+
     }, [orcamentos, setOrcamentos, formInfo]);
 
     const removeOrcamento = useCallback(
@@ -75,6 +94,8 @@ const Modal2 = () => {
     
     const [image, setImage] = useState();
 
+    
+
 
     const sendForm = async (e) => {
 
@@ -82,7 +103,6 @@ const Modal2 = () => {
 
         try {
             await validateForm.validate(formInfo);
-            console.log("Deu bom");
         } catch (err) {
             console.log(err);
             alert(err);
@@ -111,6 +131,17 @@ const Modal2 = () => {
 
     function handlePlan(e){
         setFormInfo({ ...formInfo, "plano": mask(e.target.value, "###################", "text")})
+    }
+
+    const [ auxOperadora, setAuxOperadora ] = useState();
+
+    function handleOperadora(e){
+        if(e.target.value === 'Outra'){
+            setAuxOperadora(e.target.value);
+        } else {
+            setAuxOperadora('');
+            setFormInfo({ ...formInfo, "operadora": e.target.value})
+        }
     }
 
 
@@ -151,9 +182,6 @@ const Modal2 = () => {
         console.log(valor)
         handleValue(finalValue)
     }
-    const teste = () => {
-        console.log(companies);
-    }
 
     return(
         <ModalComponent2 
@@ -163,15 +191,21 @@ const Modal2 = () => {
                 <div className="container">
                     <div className="title">
                         <h1>Enviar Orçamentos</h1>
-                        <button type="button" onClick={teste}>Teste</button>
                     </div>
                     <div className="content send-orçamento">
+                        {showMessage.show &&
+                            <div className={showMessage.type}>
+                                <span>{showMessage.message}</span>
+                            </div>
+                        }
+                        
                         <form onSubmit={sendForm}>
                         <div>
                             <span>Tipo de Orçamento</span>
                             <select
                                 name="tipo"
                                 onChange={valorInput}
+                                value={formInfo.tipo}
                             >
                                 <option value="">Selecione...</option>
                                 <option value="odonto">Odonto</option>
@@ -191,7 +225,8 @@ const Modal2 = () => {
                             <span>Operadora: </span>
                             <select
                                 name="operadora"
-                                onChange={valorInput}
+                                onChange={handleOperadora}
+                                value={formInfo.operadora}
                             >
                                 <option value="">Selecione...</option>
                                 {
@@ -201,7 +236,15 @@ const Modal2 = () => {
                                         )
                                     })
                                 }
+                                <option value="Outra">Outra</option>
                             </select>
+                            {auxOperadora === 'Outra' &&
+                                <input 
+                                    placeholder="Qual?"
+                                    onChange={valorInput}
+                                    name="operadora"
+                                />
+                            }
                         </div>
                         <div>
                             <span>Plano: </span>
@@ -216,9 +259,9 @@ const Modal2 = () => {
                         <div>
                             <span>Acomodação: </span>
                             <select
-                        
                                 name="cobertura"
                                 onChange={valorInput}
+                                value={formInfo.cobertura}
                             >
                                 <option value="">Selecione....</option>
                                 <option value="apartamento">Apartamento</option>
@@ -230,6 +273,7 @@ const Modal2 = () => {
                             <select
                                 name="coparticipacao"
                                 onChange={valorInput}
+                                value={formInfo.coparticipacao}
                             >
                                 <option value="">Selecione...</option>
                                 <option value="sim">Sim</option>

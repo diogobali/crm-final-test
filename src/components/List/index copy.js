@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { MdAdd } from 'react-icons/md';
 
-import Card from '../Card';
+import Card from '../Card/indexcopia';
 import { useDrag, useDrop } from 'react-dnd';
 import { Container } from './styles';
 import { useUserContext } from '../../contexts/userContext';

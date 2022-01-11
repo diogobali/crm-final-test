@@ -7,13 +7,10 @@ import BoardContext from '../Board/context';
 
 import { Container } from './styles';
 
-import { useModalContext0 } from '../Modal/modal0.context';
-import { useModalContext1 } from '../Modal/modal1.context';
-import { useModalContext2 } from '../Modal/modal2.context';
+
+
 import { useModalContext3 } from '../Modal/modal3.context';
-import { useModalContext4 } from '../Modal/modal4.context';
 import { useModalContextInfo } from '../Modal/modalInfo.context';
-import { useModalContextDeclined } from '../Modal/modalDeclined.context';
 import { useModalContextSendAdm } from '../Modal/modalSendAdm.context';
 import { useModalContextReproveAdm } from '../Modal/modalReproveAdm.context';
 import { useModalContextApproveAdm } from '../Modal/modalApproveAdm.context';
@@ -149,6 +146,7 @@ export default function Card({ data, index, isWaitingCancel, listIndex, button, 
         
         <Container ref={dragRef} isDragging={isDragging} className={className} hasStatus={data.status_implantacao} isScheduled={isScheduled} moment={moment} moment2={moment2}>
             <header>
+            
             </header>
             <p>
                 {data.content}
@@ -247,7 +245,7 @@ export default function Card({ data, index, isWaitingCancel, listIndex, button, 
             }
 
             {sendAdm &&
-                userData.user.perfil == 0 || sendAdm && userData.user.perfil == 1 &&
+                (sendAdm && userData.user.perfil == 0 || sendAdm && userData.user.perfil == 1) &&
                 <button type="button" className="btn-sendAdm" onClick={() => openModalSendAdms(data.id)}>Enviar para ADM</button>
             }
 
