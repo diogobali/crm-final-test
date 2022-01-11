@@ -140,6 +140,9 @@ export default function Card({ data, index, isWaitingCancel, listIndex, button, 
             moment2 = now2.getTime();
         }
         
+        const teste = () => {
+            console.log(data)
+        }
     
     
     return(
@@ -151,6 +154,8 @@ export default function Card({ data, index, isWaitingCancel, listIndex, button, 
             <p>
                 {data.content}
                 {/* {status} */}
+                
+                <p className="card--status"><strong>{data.owner_name}</strong></p>
 
             </p>
             {data.status && 

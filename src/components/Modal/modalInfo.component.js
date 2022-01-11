@@ -98,7 +98,9 @@ const ModalInfo = () => {
     if(!infos.id && counterCalls === 0) fetchApi();
     if(!visible) return null;
 
-
+    const teste = () => {
+        console.log(infos)
+    }
 
     return( 
         <ModalComponent
@@ -108,6 +110,7 @@ const ModalInfo = () => {
                 <div className="container">
                     <div className="title">
                         <h1>Geral</h1>
+                        <button type="button" onClick={teste}>Teste</button>
                     </div>
 
                     <div className="content">
